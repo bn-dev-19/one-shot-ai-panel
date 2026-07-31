@@ -1,0 +1,71 @@
+{
+  "name": "one-shot-ai-panel",
+  "version": "1.0.0",
+  "description": "OneShotAiPanel package manifest: required UI primitives, runtime dependencies and integration modes (npm / CLI installer / source copy).",
+  "pathAlias": "@/",
+  "modes": {
+    "npm": "pnpm add one-shot-ai-panel — compiled package (dist). Requires a shadcn theme (CSS tokens) + tailwind v4 + tw-animate-css; add an @source directive in globals.css so Tailwind scans the package.",
+    "cli": "npx one-shot-ai-panel install — copies the module source + primitives into the host project (src/external-modules/ai-panel).",
+    "copy": "Copy src/module into your project then install the primitives listed below (shadcn philosophy: you own the source code)."
+  },
+  "requiredPrimitives": [
+    {
+      "import": "@/components/ui/button",
+      "exports": ["Button", "buttonVariants"]
+    },
+    {
+      "import": "@/components/ui/badge",
+      "exports": ["Badge", "badgeVariants"]
+    },
+    {
+      "import": "@/components/ui/checkbox",
+      "exports": ["Checkbox"]
+    },
+    {
+      "import": "@/components/ui/dialog",
+      "exports": ["Dialog", "DialogClose", "DialogContent", "DialogDescription", "DialogFooter", "DialogHeader", "DialogOverlay", "DialogPortal", "DialogTitle"]
+    },
+    {
+      "import": "@/components/ui/empty",
+      "exports": ["Empty", "EmptyHeader", "EmptyTitle", "EmptyDescription", "EmptyContent", "EmptyMedia"]
+    },
+    {
+      "import": "@/components/ui/input",
+      "exports": ["Input"]
+    },
+    {
+      "import": "@/components/ui/label",
+      "exports": ["Label"]
+    },
+    {
+      "import": "@/components/ui/select",
+      "exports": ["Select", "SelectContent", "SelectGroup", "SelectItem", "SelectLabel", "SelectScrollDownButton", "SelectScrollUpButton", "SelectSeparator", "SelectTrigger"]
+    },
+    {
+      "import": "@/components/ui/sheet",
+      "exports": ["Sheet", "SheetTrigger", "SheetClose", "SheetContent", "SheetHeader", "SheetFooter", "SheetTitle", "SheetDescription"]
+    },
+    {
+      "import": "@/components/ui/switch",
+      "exports": ["Switch"]
+    },
+    {
+      "import": "@/components/ui/textarea",
+      "exports": ["Textarea"]
+    },
+    {
+      "import": "@/components/loading-button",
+      "exports": ["LoadingButton"]
+    }
+  ],
+  "runtimeDependencies": {
+    "@base-ui/react": "UI primitives (>= 1.6)",
+    "@opencode-ai/sdk": "OpenCode adapter (>= 1.18)",
+    "class-variance-authority": "primitives (cva)",
+    "clsx": "cn() utility (lib/utils.ts)",
+    "tailwind-merge": "cn() utility (lib/utils.ts)",
+    "lucide-react": "icons",
+    "zod": "response schema validation (>= 4.4)",
+    "tw-animate-css": "primitive animations (imported in globals.css)"
+  }
+}

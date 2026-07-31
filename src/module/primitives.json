@@ -1,0 +1,63 @@
+{
+  "name": "one-shot-ai-panel",
+  "version": "1.0.0",
+  "description": "UI primitives and dependencies required by the OneShotAiPanel module in the host project.",
+  "pathAlias": "@/",
+  "requiredPrimitives": [
+    {
+      "import": "@/components/ui/button",
+      "exports": ["Button"]
+    },
+    {
+      "import": "@/components/ui/badge",
+      "exports": ["Badge"]
+    },
+    {
+      "import": "@/components/ui/checkbox",
+      "exports": ["Checkbox"]
+    },
+    {
+      "import": "@/components/ui/dialog",
+      "exports": ["Dialog", "DialogPortal", "DialogOverlay", "DialogContent", "DialogHeader", "DialogTitle", "DialogDescription", "DialogFooter"]
+    },
+    {
+      "import": "@/components/ui/empty",
+      "exports": ["Empty", "EmptyHeader", "EmptyTitle", "EmptyDescription", "EmptyContent", "EmptyMedia"]
+    },
+    {
+      "import": "@/components/ui/input",
+      "exports": ["Input"]
+    },
+    {
+      "import": "@/components/ui/label",
+      "exports": ["Label"]
+    },
+    {
+      "import": "@/components/ui/select",
+      "exports": ["Select", "SelectTrigger", "SelectContent", "SelectItem"]
+    },
+    {
+      "import": "@/components/ui/sheet",
+      "exports": ["Sheet", "SheetTrigger", "SheetContent", "SheetHeader", "SheetTitle", "SheetDescription"]
+    },
+    {
+      "import": "@/components/ui/switch",
+      "exports": ["Switch"]
+    },
+    {
+      "import": "@/components/ui/textarea",
+      "exports": ["Textarea"]
+    },
+    {
+      "import": "@/components/loading-button",
+      "exports": ["LoadingButton"]
+    }
+  ],
+  "runtimeDependencies": {
+    "@opencode-ai/sdk": "OpenCode adapter (>= 1.18)",
+    "clsx": "cn() utility (lib/utils.ts)",
+    "tailwind-merge": "cn() utility (lib/utils.ts)",
+    "lucide-react": "icons",
+    "zod": "response schema validation (>= 4.4)"
+  }
+}

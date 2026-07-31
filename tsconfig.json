@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/components/loading-button": ["./src/primitives/loading-button"],
+      "@/components/ui/*": ["./src/primitives/*"],
+      "@/lib/utils": ["./src/primitives/lib/utils"]
+    }
+  },
+  "include": ["src"]
+}
