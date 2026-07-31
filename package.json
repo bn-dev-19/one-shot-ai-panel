@@ -31,8 +31,7 @@
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
-    "pack": "pnpm build && pnpm pack",
-    "prepare": "pnpm build"
+    "pack": "pnpm build && pnpm pack"
   },
   "peerDependencies": {
     "react": ">=18",
