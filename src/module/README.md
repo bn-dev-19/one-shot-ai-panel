@@ -7,6 +7,7 @@ Reusable React module: language-model-driven generation with source files, ticke
 The module depends on UI primitives and a `@/` path alias in the host project. The exact list is in [`primitives.json`](./primitives.json):
 
 - shadcn/ui primitives: `badge`, `button`, `checkbox`, `dialog`, `empty`, `input`, `label`, `select`, `sheet`, `switch`, `textarea`
+- these primitives are **base-ui** based (`@base-ui/react`) — see the root README for the radix vs base-ui integration rule
 - `@/components/loading-button`
 - `cn()` (provided in `lib/utils.ts`, based on `clsx` + `tailwind-merge`)
 - Runtime: `lucide-react`, `zod` (>= 4.4), `@opencode-ai/sdk` (>= 1.18, OpenCode adapter)

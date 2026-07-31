@@ -31,7 +31,7 @@ Three ways to add the panel to your project. The package is distributed **via Gi
 ```bash
 pnpm add github:bn-dev-19/one-shot-ai-panel
 # or: npm install github:bn-dev-19/one-shot-ai-panel / yarn add / bun add
-# pin a release: pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.1
+# pin a release: pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.3
 ```
 
 `dist/` is committed to the repository, so no build step runs on your machine — every package manager works out of the box.
@@ -101,7 +101,7 @@ Then install the primitives listed in [`primitives.json`](./primitives.json) int
 ### Next.js without shadcn
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.1
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.3
 pnpm exec one-shot-ai-panel install
 ```
 
@@ -110,7 +110,7 @@ The CLI copies the module + primitives + `cn()`, patches `globals.css` (`tw-anim
 ### Next.js with shadcn
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.1
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.3
 ```
 
 Theme, primitives and dependencies are already present — only add an `@source` directive to `globals.css`:
@@ -124,7 +124,7 @@ Theme, primitives and dependencies are already present — only add an `@source`
 ### Vite + React with shadcn
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.1
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.3
 ```
 
 The `@` alias is already configured (required by shadcn + Vite). Add `@source` to `src/index.css`:
@@ -136,7 +136,7 @@ The `@` alias is already configured (required by shadcn + Vite). Add `@source` t
 ### Vite + React without shadcn
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.1
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.3
 pnpm exec one-shot-ai-panel install
 ```
 
@@ -151,6 +151,18 @@ The CLI copies everything and **prints the steps below as warnings** — apply t
 3. **Path alias** in `tsconfig.json` (editor + typecheck): `"paths": { "@/*": ["./src/*"] }` with `"baseUrl": "."`.
 
 > Strict TS configs (`noUnusedLocals`/`noUnusedParameters`, as in Vite templates) are supported by the panel source.
+
+### radix vs base-ui (shadcn base)
+
+The panel module is built against **base-ui** primitives (`@base-ui/react`): `render`, `forceRender`, `Dialog.Popup`, … It cannot be swapped to radix without rewriting the module.
+
+| Your project | Recommended mode |
+| --- | --- |
+| **Existing shadcn project with radix components** | **Compiled (GitHub dependency).** The `dist` bundles the panel's own base-ui primitives internally — your `src/components/ui/*` is never touched. |
+| **Fresh project, no shadcn yet** | **CLI installer / source copy.** The panel installs its base-ui primitives into `src/components/ui/`. |
+| **Fresh project where you also want radix components** | Either mode. In source mode, only add radix components whose names **don't collide** with the panel primitives: `button`, `dialog`, `select`, `sheet`, `switch`, `checkbox`, `badge`, `input`, `label`, `textarea`, `empty` (+ `loading-button`). Re-adding a colliding name overwrites the base-ui version and breaks the panel. |
+
+> **Rule of thumb: a project with existing radix/shadcn components → use the compiled package.** Never run `one-shot-ai-panel install --force` over an existing radix `src/components/ui/*`: it overwrites shared files (`button.tsx`, `dialog.tsx`, …) with base-ui versions and breaks every radix consumer of those files (`asChild` ≠ `render`).
 
 ---
 
@@ -304,3 +316,9 @@ The module source keeps its `@/` imports: the bundler (tsup) resolves them to `s
 ## Exports
 
 `OneShotAiPanel`, `StatusBar`, `PromptSection`, `FilesSection`, `TicketsSection`, `TicketItem`, `ResponseSection`, `FeedbackSection`, `InfoSheet`, `useAiPanel`, `useStreaming`, adapters, `PROVIDER_META`, `ProviderType`, `AiPanelJsonType`, `AiPanelInvalidMode`, `defaultLabels`, `translations`, `AI_PANEL_PROJECT_LINKS`.
+
+---
+
+## Roadmap
+
+- [ ] **Self-contained source mode** — make `one-shot-ai-panel install` vendor the primitives *inside* `src/external-modules/ai-panel/primitives/` and rewrite the module's `@/components/ui/*` imports to relative paths. The source mode would then never touch the host's `src/components/ui/*`, so it becomes safe for existing radix projects too (no overwrite, no collision). Scope: installer rewrite map (11 `ui/*` + `loading-button` + `cn` in the primitives), `--force` reduced to the module dir, migration note for existing source-mode installs.
