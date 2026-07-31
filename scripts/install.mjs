@@ -61,6 +61,7 @@ Options:
 function parseArgs(argv) {
   const args = { dir: process.cwd(), force: false, noInstall: false, noCss: false, pm: null, moduleDir: "src/external-modules/ai-panel" }
   const rest = [...argv]
+  if (rest[0] === "install") rest.shift()
   while (rest.length) {
     const a = rest.shift()
     if (a === "--help" || a === "-h") {
