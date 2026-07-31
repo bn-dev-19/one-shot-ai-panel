@@ -31,7 +31,7 @@ Three ways to add the panel to your project. The package is distributed **via Gi
 ```bash
 pnpm add github:bn-dev-19/one-shot-ai-panel
 # or: npm install github:bn-dev-19/one-shot-ai-panel / yarn add / bun add
-# pin a release: pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.0
+# pin a release: pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.1
 ```
 
 `dist/` is committed to the repository, so no build step runs on your machine — every package manager works out of the box.
@@ -86,6 +86,71 @@ cp -R src/module <your-project>/src/external-modules/ai-panel
 ```
 
 Then install the primitives listed in [`primitives.json`](./primitives.json) into your project (via `npx shadcn@latest add` or by copying them from `src/primitives`), create `src/lib/utils.ts` (`cn()`) and install the runtime dependencies.
+
+---
+
+## Integration by project type
+
+| Project | Fastest path |
+| --- | --- |
+| **Next.js without shadcn** | CLI installer (copies module + primitives + theme) |
+| **Next.js with shadcn** | GitHub dependency + one `@source` line |
+| **Vite + React with shadcn** | GitHub dependency + one `@source` line |
+| **Vite + React without shadcn** | CLI installer + 3 guided steps (Tailwind, `@` alias, tsconfig paths) |
+
+### Next.js without shadcn
+
+```bash
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.1
+pnpm exec one-shot-ai-panel install
+```
+
+The CLI copies the module + primitives + `cn()`, patches `globals.css` (`tw-animate-css` + theme tokens) and installs the dependencies. Next.js already maps `@/*` → `src/*`, so it compiles as-is.
+
+### Next.js with shadcn
+
+```bash
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.1
+```
+
+Theme, primitives and dependencies are already present — only add an `@source` directive to `globals.css`:
+
+```css
+@source "../node_modules/one-shot-ai-panel/dist/index.js";
+```
+
+(The CLI installer also works here: it only adds the primitives that are missing, nothing is overwritten.)
+
+### Vite + React with shadcn
+
+```bash
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.1
+```
+
+The `@` alias is already configured (required by shadcn + Vite). Add `@source` to `src/index.css`:
+
+```css
+@source "../../node_modules/one-shot-ai-panel/dist/index.js";
+```
+
+### Vite + React without shadcn
+
+```bash
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.1
+pnpm exec one-shot-ai-panel install
+```
+
+The CLI copies everything and **prints the steps below as warnings** — apply them, then compile:
+
+1. **Tailwind v4** — `pnpm add tailwindcss @tailwindcss/vite`, register `tailwindcss()` in `vite.config.ts`, and add `@import "tailwindcss";` at the top of `src/index.css` (the CLI already added `tw-animate-css` + the theme tokens).
+2. **`@` alias** in `vite.config.ts` (add `@types/node` to devDependencies):
+   ```ts
+   import { fileURLToPath, URL } from "node:url"
+   // resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } }
+   ```
+3. **Path alias** in `tsconfig.json` (editor + typecheck): `"paths": { "@/*": ["./src/*"] }` with `"baseUrl": "."`.
+
+> Strict TS configs (`noUnusedLocals`/`noUnusedParameters`, as in Vite templates) are supported by the panel source.
 
 ---
 

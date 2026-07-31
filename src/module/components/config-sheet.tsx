@@ -338,7 +338,6 @@ function ShadcnFields({
 
 function FallbackFields({
   config,
-  labels,
   info,
   onChange,
 }: FieldProps & { config: FallbackAdapterConfig; onChange: (c: AiAdapterConfig) => void }) {

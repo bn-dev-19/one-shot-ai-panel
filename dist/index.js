@@ -3192,7 +3192,6 @@ function ShadcnFields({
 }
 function FallbackFields({
   config,
-  labels,
   info,
   onChange
 }) {

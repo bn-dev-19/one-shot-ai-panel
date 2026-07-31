@@ -41,7 +41,7 @@ function log(icon, msg) {
 
 function help() {
   process.stdout.write(
-    `one-shot-ai-panel install — Integrates OneShotAiPanel into your React/Next.js project.
+    `one-shot-ai-panel install — Integrates OneShotAiPanel into your React/Next.js or Vite project.
 
 Usage:
   one-shot-ai-panel install [dir] [options]
@@ -94,12 +94,79 @@ function detectPackageManager(target) {
   return "pnpm"
 }
 
+function detectFramework(target) {
+  const files = readdirSync(target)
+  const has = (...names) => names.some((n) => files.includes(n))
+  if (has("next.config.ts", "next.config.mjs", "next.config.js", "next.config.mts", "next.config.cjs")) return "next"
+  if (has("vite.config.ts", "vite.config.mjs", "vite.config.js", "vite.config.mts")) return "vite"
+  return null
+}
+
+function checkAlias(target, framework, warnings) {
+  const tsconfigPath = join(target, "tsconfig.json")
+  let hasPathAlias = false
+  if (existsSync(tsconfigPath)) {
+    try {
+      const paths = JSON.parse(readFileSync(tsconfigPath, "utf8")).compilerOptions?.paths
+      hasPathAlias = !!(paths && paths["@/*"])
+    } catch {
+      /* ignore unreadable tsconfig */
+    }
+  }
+
+  if (framework === "next") {
+    if (!hasPathAlias) {
+      warnings.push(
+        `tsconfig.json: no "@/*" path alias found. The panel imports "@/" (module + primitives).\n` +
+          `  Add to tsconfig.json: "compilerOptions": { "baseUrl": ".", "paths": { "@/*": ["./src/*"] } }`
+      )
+    }
+    return
+  }
+
+  if (framework === "vite") {
+    const viteConfig = ["vite.config.ts", "vite.config.mjs", "vite.config.js", "vite.config.mts"]
+      .map((f) => join(target, f))
+      .find((p) => existsSync(p))
+    let hasViteAlias = false
+    if (viteConfig) {
+      const content = readFileSync(viteConfig, "utf8")
+      hasViteAlias = /\balias\s*:/.test(content) && /['"]@['"]/.test(content)
+    }
+    if (!hasViteAlias) {
+      warnings.push(
+        `vite.config: no "@" alias found. The panel imports "@/components/ui/*" and "@/lib/utils".\n` +
+          `  Add to vite.config.*: resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } }\n` +
+          `  (import fileURLToPath from "node:url"; add "@types/node" to devDependencies)`
+      )
+    }
+    if (!hasPathAlias) {
+      warnings.push(
+        `tsconfig.json: no "@/*" path alias found (for editor/typecheck).\n` +
+          `  Add to tsconfig.json: "compilerOptions": { "baseUrl": ".", "paths": { "@/*": ["./src/*"] } }`
+      )
+    }
+  }
+}
+
+function checkTailwind(cssPath, warnings) {
+  if (!cssPath) return
+  const css = readFileSync(cssPath, "utf8")
+  if (css.includes('@import "tailwindcss"')) return
+  warnings.push(
+    `Tailwind CSS v4 not detected in the stylesheet. The panel is styled with Tailwind classes — nothing will render without it.\n` +
+      `  Add "tailwindcss" + "@tailwindcss/vite" (Vite) or "@tailwindcss/postcss" (Next) and import "tailwindcss" at the top of your stylesheet.`
+  )
+}
+
 function findGlobalsCss(target) {
   const candidates = [
     join(target, "src", "app", "globals.css"),
     join(target, "app", "globals.css"),
     join(target, "src", "globals.css"),
     join(target, "globals.css"),
+    join(target, "src", "index.css"),
+    join(target, "index.css"),
   ]
   return candidates.find((p) => existsSync(p))
 }
@@ -116,8 +183,8 @@ function themeBlock() {
 function patchGlobalsCss(target, force) {
   const globals = findGlobalsCss(target)
   if (!globals) {
-    log("⚠️", `No globals.css found. Copy ${relative(target, THEME_SRC)} into your project or apply the theme manually.`)
-    return
+    log("⚠️", `No stylesheet found (looked for globals.css / index.css). Copy ${relative(target, THEME_SRC)} into your project or apply the theme manually.`)
+    return null
   }
   let css = readFileSync(globals, "utf8")
   const changed = []
@@ -147,6 +214,7 @@ function patchGlobalsCss(target, force) {
   } else {
     log("•", `${relative(target, globals)}: already compatible (tw-animate-css + theme tokens present)`)
   }
+  return globals
 }
 
 function copyFile(src, dest, force, root) {
@@ -210,13 +278,30 @@ function installDeps(target, pm) {
   return true
 }
 
-function printNextSteps(target) {
+function printNextSteps(target, framework, warnings) {
+  const isVite = framework === "vite"
   log("", "")
   log("🚀", "Integration complete! Next steps:")
-  log("", `  1. import:  import { OneShotAiPanel } from "@/external-modules/ai-panel"`)
-  log("", `  2. Use it in a client component: <OneShotAiPanel systemPrompt=... tickets=... adapter={...} />`)
-  log("", `  3. Make sure your globals.css imports 'tailwindcss' + 'tw-animate-css' and defines the shadcn theme tokens.`)
-  log("", `  4. No existing shadcn setup? Use the theme template: copy the package's themes/globals.css as a base.`)
+  if (isVite) {
+    log("", `  1. import:  import { OneShotAiPanel } from "@/external-modules/ai-panel"`)
+    log("", `  2. Use it in a client component: <OneShotAiPanel systemPrompt=... tickets=... adapter={...} />`)
+    log("", `  3. Make sure src/index.css imports 'tailwindcss' + 'tw-animate-css' and defines the shadcn theme tokens.`)
+    log("", `  4. No existing theme? import 'one-shot-ai-panel/theme.css' in your entry (main.tsx).`)
+    log("", `  5. Configure the '@' alias → src (see warnings below if any).`)
+  } else {
+    log("", `  1. import:  import { OneShotAiPanel } from "@/external-modules/ai-panel"`)
+    log("", `  2. Use it in a client component: <OneShotAiPanel systemPrompt=... tickets=... adapter={...} />`)
+    log("", `  3. Make sure your globals.css imports 'tailwindcss' + 'tw-animate-css' and defines the shadcn theme tokens.`)
+    log("", `  4. No existing shadcn setup? Use the theme template: copy the package's themes/globals.css as a base.`)
+  }
+  if (warnings.length) {
+    log("", "")
+    log("⚠️", `${warnings.length} warning(s) to review before compiling:`)
+    for (const w of warnings) {
+      for (const line of w.split("\n")) log("", `  ${line}`)
+      log("", "")
+    }
+  }
 }
 
 const args = parseArgs(process.argv.slice(2))
@@ -242,8 +327,12 @@ if (!existsSync(MODULE_SRC) || !existsSync(PRIMITIVES_SRC)) {
 }
 
 log("", `Integrating OneShotAiPanel → ${target}`)
+const framework = detectFramework(target)
 installModule(target, args.force)
 installPrimitives(target, args.force)
-if (!args.noCss) patchGlobalsCss(target, args.force)
+const cssPath = !args.noCss ? patchGlobalsCss(target, args.force) : undefined
+const warnings = []
+if (cssPath) checkTailwind(cssPath, warnings)
+checkAlias(target, framework, warnings)
 if (!args.noInstall) installDeps(target, args.pm)
-printNextSteps(target)
+printNextSteps(target, framework, warnings)
