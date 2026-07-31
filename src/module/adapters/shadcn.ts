@@ -1,4 +1,4 @@
-import type { AiPanelAdapter, ShadcnAdapterConfig } from "./types"
+import type { AiPanelAdapter } from "./types"
 import { ProviderType } from "./types"
 
 /**
@@ -7,8 +7,6 @@ import { ProviderType } from "./types"
  */
 export class ShadcnAdapter implements AiPanelAdapter {
   type = ProviderType.Shadcn
-
-  constructor(_config: ShadcnAdapterConfig) {}
 
   async send(prompt: string): Promise<ReadableStream<Uint8Array>> {
     const encoder = new TextEncoder()

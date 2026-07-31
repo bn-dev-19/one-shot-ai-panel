@@ -1,10 +1,10 @@
 import type { AiAdapterConfig, AiPanelSendHandler, AiPanelAdapter } from "./types"
 import { ProviderType } from "./types"
 
-const registry = new Map<ProviderType, new (config: any) => AiPanelAdapter>()
+const registry = new Map<ProviderType, new (config: AiAdapterConfig) => AiPanelAdapter>()
 
-export function register(type: ProviderType, factory: new (config: any) => AiPanelAdapter) {
-  registry.set(type, factory)
+export function register<C extends AiAdapterConfig>(type: ProviderType, factory: new (config: C) => AiPanelAdapter) {
+  registry.set(type, factory as new (config: AiAdapterConfig) => AiPanelAdapter)
 }
 
 export function buildSend(config: AiAdapterConfig): AiPanelSendHandler {

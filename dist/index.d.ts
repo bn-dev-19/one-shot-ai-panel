@@ -333,7 +333,7 @@ declare const ShadcnModels: {
 };
 declare function modelDisplayName(model: string): string;
 
-declare function register(type: ProviderType$1, factory: new (config: any) => AiPanelAdapter): void;
+declare function register<C extends AiAdapterConfig>(type: ProviderType$1, factory: new (config: C) => AiPanelAdapter): void;
 declare function buildSend(config: AiAdapterConfig): AiPanelSendHandler;
 
 declare function registerDefaultAdapters(): void;
@@ -354,7 +354,6 @@ declare class OpenCodeAdapter implements AiPanelAdapter {
  */
 declare class ShadcnAdapter implements AiPanelAdapter {
     type: "shadcn";
-    constructor(_config: ShadcnAdapterConfig);
     send(prompt: string): Promise<ReadableStream<Uint8Array>>;
 }
 

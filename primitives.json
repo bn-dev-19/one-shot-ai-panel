@@ -1,6 +1,6 @@
 {
   "name": "one-shot-ai-panel",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "OneShotAiPanel package manifest: required UI primitives, runtime dependencies and integration modes (GitHub dependency / CLI installer / source copy).",
   "pathAlias": "@/",
   "modes": {

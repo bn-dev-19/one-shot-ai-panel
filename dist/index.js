@@ -511,7 +511,7 @@ var FallbackAdapter = class {
 
 // src/module/adapters/shadcn.ts
 var ShadcnAdapter = class {
-  constructor(_config) {
+  constructor() {
     this.type = ProviderType.Shadcn;
   }
   async send(prompt) {

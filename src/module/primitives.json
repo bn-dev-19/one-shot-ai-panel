@@ -1,6 +1,6 @@
 {
   "name": "one-shot-ai-panel",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "UI primitives and dependencies required by the OneShotAiPanel module in the host project.",
   "pathAlias": "@/",
   "requiredPrimitives": [
