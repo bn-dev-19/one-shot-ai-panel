@@ -18,20 +18,23 @@ A **reusable AI assistant panel** for React/Next.js + shadcn/ui: schema-validate
 
 ## Integration modes
 
-Three ways to add the panel to your project:
+Three ways to add the panel to your project. The package is distributed **via GitHub** (npm publication is planned but not available yet):
 
-| Mode | Command | Result |
+| Mode | How | Result |
 | --- | --- | --- |
-| **Compiled package** | `pnpm add one-shot-ai-panel` | ESM bundle + types in `node_modules`. |
-| **CLI installer** | `npx one-shot-ai-panel install` | Copies the module source + primitives into your project (you own the code). |
+| **GitHub dependency** | `pnpm add github:bn-dev-19/one-shot-ai-panel` | ESM bundle + types in `node_modules`. |
+| **CLI installer** | `pnpm exec one-shot-ai-panel install` (or from a clone: `node scripts/install.mjs`) | Copies the module source + primitives into your project (you own the code). |
 | **Source copy** | `git clone` then copy `src/module` | shadcn philosophy: the code lives in your repository. |
 
-### 1. Compiled package
+### 1. GitHub dependency (compiled package)
 
 ```bash
-pnpm add one-shot-ai-panel
-# or: npm install one-shot-ai-panel / yarn add / bun add
+pnpm add github:bn-dev-19/one-shot-ai-panel
+# or: npm install github:bn-dev-19/one-shot-ai-panel / yarn add / bun add
+# pin a release: pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.0
 ```
+
+`dist/` is committed to the repository, so no build step runs on your machine — every package manager works out of the box.
 
 Host project prerequisites:
 
@@ -51,9 +54,13 @@ Host project prerequisites:
 ### 2. CLI installer (source into your project)
 
 ```bash
-# from your Next.js project directory
-npx one-shot-ai-panel install
-# or: pnpm dlx one-shot-ai-panel install
+# Option A — via the GitHub dependency's bin
+pnpm add github:bn-dev-19/one-shot-ai-panel
+pnpm exec one-shot-ai-panel install
+
+# Option B — directly from a clone (zero-dependency script, no install needed)
+git clone https://github.com/bn-dev-19/one-shot-ai-panel.git
+node one-shot-ai-panel/scripts/install.mjs /path/to/your-project
 ```
 
 The installer:
@@ -65,10 +72,10 @@ The installer:
 
 ```bash
 # options
-npx one-shot-ai-panel install --force        # overwrite existing files
-npx one-shot-ai-panel install --no-install   # skip dependency install
-npx one-shot-ai-panel install --no-css       # do not modify globals.css
-npx one-shot-ai-panel install --pm npm       # force the package manager
+one-shot-ai-panel install --force        # overwrite existing files
+one-shot-ai-panel install --no-install   # skip dependency install
+one-shot-ai-panel install --no-css       # do not modify globals.css
+one-shot-ai-panel install --pm npm       # force the package manager
 ```
 
 ### 3. Source copy (git clone)

@@ -1,11 +1,11 @@
 {
   "name": "one-shot-ai-panel",
   "version": "1.0.0",
-  "description": "OneShotAiPanel package manifest: required UI primitives, runtime dependencies and integration modes (npm / CLI installer / source copy).",
+  "description": "OneShotAiPanel package manifest: required UI primitives, runtime dependencies and integration modes (GitHub dependency / CLI installer / source copy).",
   "pathAlias": "@/",
   "modes": {
-    "npm": "pnpm add one-shot-ai-panel — compiled package (dist). Requires a shadcn theme (CSS tokens) + tailwind v4 + tw-animate-css; add an @source directive in globals.css so Tailwind scans the package.",
-    "cli": "npx one-shot-ai-panel install — copies the module source + primitives into the host project (src/external-modules/ai-panel).",
+    "github": "pnpm add github:bn-dev-19/one-shot-ai-panel — compiled package (dist, committed to the repo). Requires a shadcn theme (CSS tokens) + tailwind v4 + tw-animate-css; add an @source directive in globals.css so Tailwind scans the package.",
+    "cli": "pnpm exec one-shot-ai-panel install (or: node <clone>/scripts/install.mjs <project>) — copies the module source + primitives into the host project (src/external-modules/ai-panel).",
     "copy": "Copy src/module into your project then install the primitives listed below (shadcn philosophy: you own the source code)."
   },
   "requiredPrimitives": [
