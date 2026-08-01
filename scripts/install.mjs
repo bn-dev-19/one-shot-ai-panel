@@ -35,6 +35,8 @@ const RUNTIME_DEPS = [
   "tw-animate-css",
 ]
 
+const SHADCN_REGISTRY = "bn-dev-19/one-shot-ai-panel"
+
 function log(icon, msg) {
   process.stdout.write(`${icon} ${msg}\n`)
 }
@@ -51,15 +53,20 @@ Options:
   --force          Overwrite existing files (module, primitives)
   --no-install     Do not install runtime dependencies
   --no-css         Do not modify the target project's globals.css
+  --no-registry    Copy primitives directly instead of shadcn add (default when components.json is detected)
   --pm <pm>        Package manager: pnpm | npm | yarn | bun (default: auto-detected)
   --module-dir <d> Destination subdirectory for the module (default: src/external-modules/ai-panel)
   --help           Show this help
+
+When the target project has a components.json (shadcn), the panel primitives
+are added via the shadcn registry (npx shadcn add bn-dev-19/one-shot-ai-panel/<item>)
+so you get the native skip/overwrite prompts. Otherwise they are copied directly.
 `
   )
 }
 
 function parseArgs(argv) {
-  const args = { dir: process.cwd(), force: false, noInstall: false, noCss: false, pm: null, moduleDir: "src/external-modules/ai-panel" }
+  const args = { dir: process.cwd(), force: false, noInstall: false, noCss: false, noRegistry: false, pm: null, moduleDir: "src/external-modules/ai-panel" }
   const rest = [...argv]
   if (rest[0] === "install") rest.shift()
   while (rest.length) {
@@ -72,6 +79,8 @@ function parseArgs(argv) {
       args.noInstall = true
     } else if (a === "--no-css") {
       args.noCss = true
+    } else if (a === "--no-registry") {
+      args.noRegistry = true
     } else if (a === "--pm") {
       args.pm = rest.shift()
     } else if (a === "--module-dir") {
@@ -246,7 +255,46 @@ function installModule(target, force) {
   }
 }
 
-function installPrimitives(target, force) {
+function detectShadcn(target) {
+  return existsSync(join(target, "components.json"))
+}
+
+function shadcnRegistryItems() {
+  return [...REQUIRED_PRIMITIVES.map((f) => f.replace(/\.tsx$/, "")), "loading-button"]
+}
+
+function dlxRunner(pm) {
+  switch (pm) {
+    case "npm":
+      return ["npx", "--yes", "shadcn@latest"]
+    case "yarn":
+      return ["yarn", "dlx", "shadcn@latest"]
+    case "bun":
+      return ["bunx", "shadcn@latest"]
+    default:
+      return ["pnpm", "dlx", "shadcn@latest"]
+  }
+}
+
+function installPrimitivesViaRegistry(target, force) {
+  const pm = detectPackageManager(target)
+  const cmd = [...dlxRunner(pm), "add", ...shadcnRegistryItems().map((i) => `${SHADCN_REGISTRY}/${i}`)]
+  if (force) cmd.push("--overwrite")
+  log("⇣", `components.json detected — adding primitives via the shadcn registry:`)
+  log("", `  ${cmd.join(" ")}`)
+  const res = spawnSync(cmd[0], cmd.slice(1), { cwd: target, stdio: "inherit", shell: process.platform === "win32" })
+  return res.status === 0
+}
+
+function installPrimitives(target, force, viaRegistry) {
+  if (viaRegistry) {
+    if (installPrimitivesViaRegistry(target, force)) {
+      log("✓", "primitives installed via the shadcn registry (skip/overwrite handled by shadcn add)")
+      return
+    }
+    log("⚠️", "shadcn add failed — falling back to direct copy of the panel primitives.")
+  }
+
   const uiDir = join(target, "src", "components", "ui")
   for (const file of REQUIRED_PRIMITIVES) {
     copyFile(join(PRIMITIVES_SRC, file), join(uiDir, file), force, target)
@@ -329,8 +377,9 @@ if (!existsSync(MODULE_SRC) || !existsSync(PRIMITIVES_SRC)) {
 
 log("", `Integrating OneShotAiPanel → ${target}`)
 const framework = detectFramework(target)
+const viaRegistry = !args.noRegistry && detectShadcn(target)
 installModule(target, args.force)
-installPrimitives(target, args.force)
+installPrimitives(target, args.force, viaRegistry)
 const cssPath = !args.noCss ? patchGlobalsCss(target, args.force) : undefined
 const warnings = []
 if (cssPath) checkTailwind(cssPath, warnings)

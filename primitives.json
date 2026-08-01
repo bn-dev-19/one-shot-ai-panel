@@ -1,12 +1,13 @@
 {
   "name": "one-shot-ai-panel",
-  "version": "1.0.3",
-  "description": "OneShotAiPanel package manifest: required UI primitives, runtime dependencies and integration modes (GitHub dependency / CLI installer / source copy). The panel primitives are base-ui based.",
+  "version": "1.1.0",
+  "description": "OneShotAiPanel package manifest: required UI primitives, runtime dependencies and integration modes (GitHub dependency / CLI installer / shadcn registry / source copy). The panel primitives are base-ui based.",
   "pathAlias": "@/",
   "modes": {
     "github": "pnpm add github:bn-dev-19/one-shot-ai-panel — compiled package (dist, committed to the repo; bundles its own base-ui primitives). Recommended when the host already has radix/shadcn components. Requires a shadcn theme (CSS tokens) + tailwind v4 + tw-animate-css; add an @source directive in globals.css so Tailwind scans the package.",
-    "cli": "pnpm exec one-shot-ai-panel install (or: node <clone>/scripts/install.mjs <project>) — copies the module source + its base-ui primitives into the host project (src/external-modules/ai-panel). Only for fresh projects without existing radix components (overwrites shared ui/* names with --force).",
-    "copy": "Copy src/module into your project then install the primitives listed below (shadcn philosophy: you own the source code). Same base-ui caveat as the CLI installer."
+    "registry": "npx shadcn@latest add bn-dev-19/one-shot-ai-panel/<item> — the panel primitives are published as a GitHub source registry (root registry.json). shadcn projects get the native skip/overwrite prompt and automatic dependency install. Conflicts with existing radix components of the same name remain: for radix projects keep the compiled (github) mode.",
+    "cli": "pnpm exec one-shot-ai-panel install (or: node <clone>/scripts/install.mjs <project>) — auto-detects a components.json: when present it runs `shadcn add` for the primitives (skip/overwrite prompts), otherwise it falls back to copying the module source + its base-ui primitives (src/external-modules/ai-panel).",
+    "copy": "Copy src/module into your project then add the primitives via the shadcn registry or install them directly (shadcn philosophy: you own the source code). Same base-ui caveat as the CLI installer."
   },
   "requiredPrimitives": [
     {

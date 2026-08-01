@@ -1,6 +1,6 @@
 {
   "name": "one-shot-ai-panel",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Reusable OneShot AI assistant panel for React/Next.js + shadcn/ui: schema-validated JSON generation, live streaming, side-by-side diff review, and selective integration into your own project.",
   "license": "MIT",
   "type": "module",
@@ -22,6 +22,7 @@
     "src/primitives",
     "themes",
     "scripts",
+    "registry.json",
     "primitives.json",
     "README.md"
   ],

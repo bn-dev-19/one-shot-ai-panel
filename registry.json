@@ -1,0 +1,166 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "one-shot-ai-panel",
+  "homepage": "https://github.com/bn-dev-19/one-shot-ai-panel",
+  "items": [
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button (base-ui)",
+      "description": "Panel button primitive built on @base-ui/react (required by one-shot-ai-panel).",
+      "dependencies": ["@base-ui/react", "class-variance-authority", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/primitives/button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge (base-ui)",
+      "description": "Panel badge primitive used by the status indicator.",
+      "dependencies": ["@base-ui/react", "class-variance-authority", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/primitives/badge.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox (base-ui)",
+      "description": "Panel checkbox primitive built on @base-ui/react.",
+      "dependencies": ["@base-ui/react", "lucide-react", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/primitives/checkbox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog (base-ui)",
+      "description": "Panel dialog primitive built on @base-ui/react (uses panel button).",
+      "dependencies": ["@base-ui/react", "lucide-react", "clsx", "tailwind-merge"],
+      "registryDependencies": ["bn-dev-19/one-shot-ai-panel/button"],
+      "files": [
+        {
+          "path": "src/primitives/dialog.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "empty",
+      "type": "registry:ui",
+      "title": "Empty state",
+      "description": "Panel empty-state primitive used when there are no tickets.",
+      "dependencies": ["class-variance-authority", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/primitives/empty.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input (base-ui)",
+      "description": "Panel input primitive built on @base-ui/react.",
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/primitives/input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "description": "Panel label primitive.",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/primitives/label.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "loading-button",
+      "type": "registry:ui",
+      "title": "Loading Button",
+      "description": "Panel loading button (uses panel button + lucide loader).",
+      "dependencies": ["lucide-react", "clsx", "tailwind-merge"],
+      "registryDependencies": ["bn-dev-19/one-shot-ai-panel/button"],
+      "files": [
+        {
+          "path": "src/primitives/loading-button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select (base-ui)",
+      "description": "Panel select primitive built on @base-ui/react.",
+      "dependencies": ["@base-ui/react", "lucide-react", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/primitives/select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet (base-ui)",
+      "description": "Panel sheet primitive built on @base-ui/react (uses panel button).",
+      "dependencies": ["@base-ui/react", "lucide-react", "clsx", "tailwind-merge"],
+      "registryDependencies": ["bn-dev-19/one-shot-ai-panel/button"],
+      "files": [
+        {
+          "path": "src/primitives/sheet.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch (base-ui)",
+      "description": "Panel switch primitive built on @base-ui/react.",
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/primitives/switch.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "Panel textarea primitive.",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/primitives/textarea.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    }
+  ]
+}
