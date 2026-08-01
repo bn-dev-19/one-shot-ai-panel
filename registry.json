@@ -106,7 +106,7 @@
         {
           "path": "src/primitives/loading-button.tsx",
           "type": "registry:file",
-          "target": "@/components/loading-button.tsx"
+          "target": "src/components/loading-button.tsx"
         }
       ]
     },
