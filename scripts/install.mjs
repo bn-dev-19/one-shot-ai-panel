@@ -53,7 +53,7 @@ Options:
   --force          Overwrite existing files (module, primitives)
   --no-install     Do not install runtime dependencies
   --no-css         Do not modify the target project's globals.css
-  --no-registry    Copy primitives directly instead of shadcn add (default when components.json is detected)
+  --no-registry    Always copy primitives directly, even when components.json is detected
   --pm <pm>        Package manager: pnpm | npm | yarn | bun (default: auto-detected)
   --module-dir <d> Destination subdirectory for the module (default: src/external-modules/ai-panel)
   --help           Show this help

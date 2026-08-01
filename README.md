@@ -18,20 +18,35 @@ A **reusable AI assistant panel** for React/Next.js + shadcn/ui: schema-validate
 
 ## Integration modes
 
-Three ways to add the panel to your project. The package is distributed **via GitHub** (npm publication is planned but not available yet):
+Four ways to add the panel to your project. The package is distributed **via GitHub** (npm publication is planned but not available yet):
 
 | Mode | How | Result |
 | --- | --- | --- |
 | **GitHub dependency** | `pnpm add github:bn-dev-19/one-shot-ai-panel` | ESM bundle + types in `node_modules`. |
-| **CLI installer** | `pnpm exec one-shot-ai-panel install` (or from a clone: `node scripts/install.mjs`) | Copies the module source + primitives into your project (you own the code). |
+| **shadcn registry** | `npx shadcn@latest add bn-dev-19/one-shot-ai-panel/<item>` | The panel's primitives via the official shadcn CLI (skip/overwrite prompts, deps installed for you). |
+| **CLI installer** | `pnpm exec one-shot-ai-panel install` (or from a clone: `node scripts/install.mjs`) | Copies the module source + primitives into your project (you own the code). Auto-detects `components.json` → uses `shadcn add`. |
 | **Source copy** | `git clone` then copy `src/module` | shadcn philosophy: the code lives in your repository. |
+
+### 0. shadcn registry (the panel primitives via `shadcn add`)
+
+The panel primitives are published as a **GitHub source registry** (root `registry.json`, the repository is public). In any shadcn project:
+
+```bash
+# all 12 items in one command
+npx shadcn@latest add bn-dev-19/one-shot-ai-panel/button bn-dev-19/one-shot-ai-panel/badge bn-dev-19/one-shot-ai-panel/checkbox bn-dev-19/one-shot-ai-panel/dialog bn-dev-19/one-shot-ai-panel/empty bn-dev-19/one-shot-ai-panel/input bn-dev-19/one-shot-ai-panel/label bn-dev-19/one-shot-ai-panel/loading-button bn-dev-19/one-shot-ai-panel/select bn-dev-19/one-shot-ai-panel/sheet bn-dev-19/one-shot-ai-panel/switch bn-dev-19/one-shot-ai-panel/textarea
+
+# or a single primitive
+npx shadcn@latest add bn-dev-19/one-shot-ai-panel/button
+```
+
+`shadcn add` gives you the native **skip/overwrite** prompts when a file already exists, and installs `@base-ui/react`, `class-variance-authority`, `lucide-react`, … automatically. `dialog`, `sheet` and `loading-button` pull in `button` via `registryDependencies`. Only works in a project with a `components.json` — and note the base-ui collision rule below (same names as the official radix items).
 
 ### 1. GitHub dependency (compiled package)
 
 ```bash
 pnpm add github:bn-dev-19/one-shot-ai-panel
 # or: npm install github:bn-dev-19/one-shot-ai-panel / yarn add / bun add
-# pin a release: pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.3
+# pin a release: pnpm add github:bn-dev-19/one-shot-ai-panel#v1.1.0
 ```
 
 `dist/` is committed to the repository, so no build step runs on your machine — every package manager works out of the box.
@@ -66,7 +81,7 @@ node one-shot-ai-panel/scripts/install.mjs /path/to/your-project
 The installer:
 
 1. copies the module into `src/external-modules/ai-panel`;
-2. copies the required primitives into `src/components/ui/` + `src/components/loading-button.tsx` + `src/lib/utils.ts` (when missing);
+2. adds the required primitives — if the project has a `components.json`, via `shadcn add bn-dev-19/one-shot-ai-panel/<item>` (native skip/overwrite prompts, automatic deps), otherwise by direct copy into `src/components/ui/` + `src/components/loading-button.tsx` + `src/lib/utils.ts` (when missing);
 3. patches your `globals.css` (`tw-animate-css` import + theme tokens if missing);
 4. installs the runtime dependencies with your package manager (pnpm/npm/yarn/bun, auto-detected).
 
@@ -75,6 +90,7 @@ The installer:
 one-shot-ai-panel install --force        # overwrite existing files
 one-shot-ai-panel install --no-install   # skip dependency install
 one-shot-ai-panel install --no-css       # do not modify globals.css
+one-shot-ai-panel install --no-registry  # always copy primitives, even with components.json
 one-shot-ai-panel install --pm npm       # force the package manager
 ```
 
@@ -94,14 +110,14 @@ Then install the primitives listed in [`primitives.json`](./primitives.json) int
 | Project | Fastest path |
 | --- | --- |
 | **Next.js without shadcn** | CLI installer (copies module + primitives + theme) |
-| **Next.js with shadcn** | GitHub dependency + one `@source` line |
-| **Vite + React with shadcn** | GitHub dependency + one `@source` line |
+| **Next.js with shadcn** | GitHub dependency + one `@source` line, **or** CLI installer (auto `shadcn add`) |
+| **Vite + React with shadcn** | GitHub dependency + one `@source` line, **or** CLI installer (auto `shadcn add`) |
 | **Vite + React without shadcn** | CLI installer + 3 guided steps (Tailwind, `@` alias, tsconfig paths) |
 
 ### Next.js without shadcn
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.3
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.1.0
 pnpm exec one-shot-ai-panel install
 ```
 
@@ -110,7 +126,7 @@ The CLI copies the module + primitives + `cn()`, patches `globals.css` (`tw-anim
 ### Next.js with shadcn
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.3
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.1.0
 ```
 
 Theme, primitives and dependencies are already present — only add an `@source` directive to `globals.css`:
@@ -119,12 +135,17 @@ Theme, primitives and dependencies are already present — only add an `@source`
 @source "../node_modules/one-shot-ai-panel/dist/index.js";
 ```
 
-(The CLI installer also works here: it only adds the primitives that are missing, nothing is overwritten.)
+Prefer source mode instead (you own the code)? The CLI installer detects `components.json` and adds the panel primitives via `shadcn add` — it never touches your existing components unless you choose to overwrite:
+
+```bash
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.1.0
+pnpm exec one-shot-ai-panel install
+```
 
 ### Vite + React with shadcn
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.3
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.1.0
 ```
 
 The `@` alias is already configured (required by shadcn + Vite). Add `@source` to `src/index.css`:
@@ -136,7 +157,7 @@ The `@` alias is already configured (required by shadcn + Vite). Add `@source` t
 ### Vite + React without shadcn
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v1.0.3
+pnpm add github:bn-dev-19/one-shot-ai-panel#v1.1.0
 pnpm exec one-shot-ai-panel install
 ```
 
@@ -159,7 +180,7 @@ The panel module is built against **base-ui** primitives (`@base-ui/react`): `re
 | Your project | Recommended mode |
 | --- | --- |
 | **Existing shadcn project with radix components** | **Compiled (GitHub dependency).** The `dist` bundles the panel's own base-ui primitives internally — your `src/components/ui/*` is never touched. |
-| **Fresh project, no shadcn yet** | **CLI installer / source copy.** The panel installs its base-ui primitives into `src/components/ui/`. |
+| **Fresh project, no shadcn yet** | **CLI installer / shadcn registry.** The panel installs its base-ui primitives into `src/components/ui/` (`npx shadcn@latest add bn-dev-19/one-shot-ai-panel/<item>` or `one-shot-ai-panel install` which runs it automatically). |
 | **Fresh project where you also want radix components** | Either mode. In source mode, only add radix components whose names **don't collide** with the panel primitives: `button`, `dialog`, `select`, `sheet`, `switch`, `checkbox`, `badge`, `input`, `label`, `textarea`, `empty` (+ `loading-button`). Re-adding a colliding name overwrites the base-ui version and breaks the panel. |
 
 > **Rule of thumb: a project with existing radix/shadcn components → use the compiled package.** Never run `one-shot-ai-panel install --force` over an existing radix `src/components/ui/*`: it overwrites shared files (`button.tsx`, `dialog.tsx`, …) with base-ui versions and breaks every radix consumer of those files (`asChild` ≠ `render`).
@@ -321,4 +342,5 @@ The module source keeps its `@/` imports: the bundler (tsup) resolves them to `s
 
 ## Roadmap
 
+- [x] **shadcn registry** — panel primitives published as a GitHub source registry (`registry.json`, repo is public): `npx shadcn@latest add bn-dev-19/one-shot-ai-panel/<item>`, auto-detected by the CLI installer (`components.json` present). Shipped in v1.1.0.
 - [ ] **Self-contained source mode** — make `one-shot-ai-panel install` vendor the primitives *inside* `src/external-modules/ai-panel/primitives/` and rewrite the module's `@/components/ui/*` imports to relative paths. The source mode would then never touch the host's `src/components/ui/*`, so it becomes safe for existing radix projects too (no overwrite, no collision). Scope: installer rewrite map (11 `ui/*` + `loading-button` + `cn` in the primitives), `--force` reduced to the module dir, migration note for existing source-mode installs.
