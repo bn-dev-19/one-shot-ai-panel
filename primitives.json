@@ -1,6 +1,6 @@
 {
   "name": "one-shot-ai-panel",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "OneShotAiPanel package manifest: required UI primitives, runtime dependencies and integration modes (GitHub dependency / CLI installer / shadcn registry / source copy). The panel primitives are base-ui based.",
   "pathAlias": "@/",
   "modes": {
@@ -12,51 +12,105 @@
   "requiredPrimitives": [
     {
       "import": "@/components/ui/button",
-      "exports": ["Button", "buttonVariants"]
+      "exports": [
+        "Button",
+        "buttonVariants"
+      ]
     },
     {
       "import": "@/components/ui/badge",
-      "exports": ["Badge", "badgeVariants"]
+      "exports": [
+        "Badge",
+        "badgeVariants"
+      ]
     },
     {
       "import": "@/components/ui/checkbox",
-      "exports": ["Checkbox"]
+      "exports": [
+        "Checkbox"
+      ]
     },
     {
       "import": "@/components/ui/dialog",
-      "exports": ["Dialog", "DialogClose", "DialogContent", "DialogDescription", "DialogFooter", "DialogHeader", "DialogOverlay", "DialogPortal", "DialogTitle"]
+      "exports": [
+        "Dialog",
+        "DialogClose",
+        "DialogContent",
+        "DialogDescription",
+        "DialogFooter",
+        "DialogHeader",
+        "DialogOverlay",
+        "DialogPortal",
+        "DialogTitle"
+      ]
     },
     {
       "import": "@/components/ui/empty",
-      "exports": ["Empty", "EmptyHeader", "EmptyTitle", "EmptyDescription", "EmptyContent", "EmptyMedia"]
+      "exports": [
+        "Empty",
+        "EmptyHeader",
+        "EmptyTitle",
+        "EmptyDescription",
+        "EmptyContent",
+        "EmptyMedia"
+      ]
     },
     {
       "import": "@/components/ui/input",
-      "exports": ["Input"]
+      "exports": [
+        "Input"
+      ]
     },
     {
       "import": "@/components/ui/label",
-      "exports": ["Label"]
+      "exports": [
+        "Label"
+      ]
     },
     {
       "import": "@/components/ui/select",
-      "exports": ["Select", "SelectContent", "SelectGroup", "SelectItem", "SelectLabel", "SelectScrollDownButton", "SelectScrollUpButton", "SelectSeparator", "SelectTrigger"]
+      "exports": [
+        "Select",
+        "SelectContent",
+        "SelectGroup",
+        "SelectItem",
+        "SelectLabel",
+        "SelectScrollDownButton",
+        "SelectScrollUpButton",
+        "SelectSeparator",
+        "SelectTrigger"
+      ]
     },
     {
       "import": "@/components/ui/sheet",
-      "exports": ["Sheet", "SheetTrigger", "SheetClose", "SheetContent", "SheetHeader", "SheetFooter", "SheetTitle", "SheetDescription"]
+      "exports": [
+        "Sheet",
+        "SheetTrigger",
+        "SheetClose",
+        "SheetContent",
+        "SheetHeader",
+        "SheetFooter",
+        "SheetTitle",
+        "SheetDescription"
+      ]
     },
     {
       "import": "@/components/ui/switch",
-      "exports": ["Switch"]
+      "exports": [
+        "Switch"
+      ]
     },
     {
       "import": "@/components/ui/textarea",
-      "exports": ["Textarea"]
+      "exports": [
+        "Textarea"
+      ]
     },
     {
       "import": "@/components/loading-button",
-      "exports": ["LoadingButton"]
+      "exports": [
+        "LoadingButton"
+      ]
     }
   ],
   "runtimeDependencies": {

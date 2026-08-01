@@ -263,7 +263,29 @@ function shadcnRegistryItems() {
   return [...REQUIRED_PRIMITIVES.map((f) => f.replace(/\.tsx$/, "")), "loading-button"]
 }
 
-function dlxRunner(pm) {
+function hasLocalShadcn(target) {
+  const binDir = join(target, "node_modules", ".bin")
+  if (!existsSync(binDir)) return false
+  try {
+    return readdirSync(binDir).some((f) => f.startsWith("shadcn"))
+  } catch {
+    return false
+  }
+}
+
+function shadcnRunner(pm, target) {
+  if (hasLocalShadcn(target)) {
+    switch (pm) {
+      case "npm":
+        return ["npx", "shadcn"]
+      case "yarn":
+        return ["yarn", "exec", "shadcn"]
+      case "bun":
+        return ["bunx", "shadcn"]
+      default:
+        return ["pnpm", "exec", "shadcn"]
+    }
+  }
   switch (pm) {
     case "npm":
       return ["npx", "--yes", "shadcn@latest"]
@@ -278,9 +300,11 @@ function dlxRunner(pm) {
 
 function installPrimitivesViaRegistry(target, force) {
   const pm = detectPackageManager(target)
-  const cmd = [...dlxRunner(pm), "add", ...shadcnRegistryItems().map((i) => `${SHADCN_REGISTRY}/${i}`)]
+  const local = hasLocalShadcn(target)
+  if (!local) log("⏳", "first run downloads the shadcn CLI — this can take a moment (only the first time)")
+  const cmd = [...shadcnRunner(pm, target), "add", ...shadcnRegistryItems().map((i) => `${SHADCN_REGISTRY}/${i}`)]
   if (force) cmd.push("--overwrite")
-  log("⇣", `components.json detected — adding primitives via the shadcn registry:`)
+  log("⇣", `components.json detected — adding primitives via the shadcn registry${local ? " (using the project's shadcn)" : ""}:`)
   log("", `  ${cmd.join(" ")}`)
   const res = spawnSync(cmd[0], cmd.slice(1), { cwd: target, stdio: "inherit", shell: process.platform === "win32" })
   return res.status === 0
