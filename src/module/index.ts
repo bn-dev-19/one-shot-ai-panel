@@ -10,6 +10,7 @@ export { TicketItem } from "./components/ticket-item"
 export { ResponseSection } from "./components/response-section"
 export { FeedbackSection } from "./components/feedback-section"
 export { InfoSheet } from "./components/info-sheet"
+export { DiffDialog } from "./components/diff-dialog"
 export { AI_PANEL_PROJECT_LINKS } from "./project-links"
 
 // Hooks

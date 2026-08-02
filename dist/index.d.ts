@@ -491,6 +491,19 @@ interface InfoSheetProps {
 }
 declare function InfoSheet({ labels, showIntegration, showCredits }: InfoSheetProps): react.JSX.Element;
 
+interface DiffDialogProps {
+    labels: AiPanelLabels;
+    title: string;
+    subtitle?: string;
+    statusLabel?: string;
+    statusClass?: string;
+    oldValue: unknown;
+    newValue: unknown;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+}
+declare function DiffDialog({ labels, title, subtitle, statusLabel, statusClass, oldValue, newValue, open, onOpenChange, }: DiffDialogProps): react.JSX.Element;
+
 declare const AI_PANEL_PROJECT_LINKS: {
     landingPage: string;
     github: string;
@@ -532,4 +545,4 @@ declare const ProviderType: {
     readonly Fallback: "fallback";
 };
 
-export { AI_PANEL_LANGUAGES, AI_PANEL_PROJECT_LINKS, type AiAdapterConfig, type AiPanelAdapter, type AiPanelContextFile, AiPanelInvalidMode, type AiPanelJsonSchema, AiPanelJsonType, type AiPanelLabels, AiPanelLanguage, AiPanelLanguageNames, type AiPanelResponse, type AiPanelResponseParser, type AiPanelResponseValidation, type AiPanelSendHandler, AiPanelStatus, type AiPanelSubTicket, type AiPanelTicket, type AiPanelTicketValidationError, FallbackAdapter, type FallbackAdapterConfig, FeedbackSection, FilesSection, InfoSheet, OneShotAiPanel, type OneShotAiPanelProps, OpenCodeAdapter, type OpenCodeAdapterConfig, OpenCodeModels, PROVIDER_INFO, PROVIDER_META, PromptSection, type ProviderMeta, ProviderType, ResponseSection, ShadcnAdapter, type ShadcnAdapterConfig, ShadcnModels, StatusBar, TicketItem, TicketsSection, type UseAiPanelOptions, type UseAiPanelReturn, type UseStreamingReturn, aiPanelLanguageFromLocale, buildSend, defaultLabels, modelDisplayName, register, registerDefaultAdapters, translations, useAiPanel, useStreaming };
+export { AI_PANEL_LANGUAGES, AI_PANEL_PROJECT_LINKS, type AiAdapterConfig, type AiPanelAdapter, type AiPanelContextFile, AiPanelInvalidMode, type AiPanelJsonSchema, AiPanelJsonType, type AiPanelLabels, AiPanelLanguage, AiPanelLanguageNames, type AiPanelResponse, type AiPanelResponseParser, type AiPanelResponseValidation, type AiPanelSendHandler, AiPanelStatus, type AiPanelSubTicket, type AiPanelTicket, type AiPanelTicketValidationError, DiffDialog, FallbackAdapter, type FallbackAdapterConfig, FeedbackSection, FilesSection, InfoSheet, OneShotAiPanel, type OneShotAiPanelProps, OpenCodeAdapter, type OpenCodeAdapterConfig, OpenCodeModels, PROVIDER_INFO, PROVIDER_META, PromptSection, type ProviderMeta, ProviderType, ResponseSection, ShadcnAdapter, type ShadcnAdapterConfig, ShadcnModels, StatusBar, TicketItem, TicketsSection, type UseAiPanelOptions, type UseAiPanelReturn, type UseStreamingReturn, aiPanelLanguageFromLocale, buildSend, defaultLabels, modelDisplayName, register, registerDefaultAdapters, translations, useAiPanel, useStreaming };

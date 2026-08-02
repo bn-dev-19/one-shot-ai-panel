@@ -4464,6 +4464,7 @@ export {
   AiPanelJsonType,
   AiPanelLanguage,
   AiPanelLanguageNames,
+  DiffDialog,
   FallbackAdapter,
   FeedbackSection,
   FilesSection,
