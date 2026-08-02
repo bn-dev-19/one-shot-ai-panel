@@ -5,6 +5,7 @@ import { Bot, Sparkles, Eye, Copy, Check } from "lucide-react"
 import { cn } from "../lib/utils"
 import { AiPanelLanguage, translations } from "../i18n"
 import { useAiPanel } from "../hooks/useAiPanel"
+import { useSyncedState } from "../hooks/useSyncedState"
 import { buildSend, registerDefaultAdapters } from "../adapters"
 import type { AiPanelSendHandler } from "../adapters/types"
 import type {
@@ -139,12 +140,12 @@ export function OneShotAiPanel({
   showInfoButton = true,
   showSettingsButton = true,
 }: OneShotAiPanelProps) {
-  const [currentLanguage, setCurrentLanguage] = useState<AiPanelLanguage>(language)
+  const [currentLanguage, setCurrentLanguage] = useSyncedState<AiPanelLanguage>(language)
   const labels = useMemo(() => ({ ...translations[currentLanguage], ...labelsProp }), [currentLanguage, labelsProp])
-  const [currentAdapter, setCurrentAdapter] = useState<AiAdapterConfig | undefined>(adapter)
-  const [invalidMode, setInvalidMode] = useState<AiPanelInvalidMode>(invalidModeProp)
-  const [systemPrompt, setSystemPrompt] = useState(systemPromptProp ?? "")
-  const [userPrompt, setUserPrompt] = useState(initialUserPrompt ?? "")
+  const [currentAdapter, setCurrentAdapter] = useSyncedState<AiAdapterConfig | undefined>(adapter)
+  const [invalidMode, setInvalidMode] = useSyncedState<AiPanelInvalidMode>(invalidModeProp)
+  const [systemPrompt, setSystemPrompt] = useSyncedState<string>(systemPromptProp ?? "")
+  const [userPrompt, setUserPrompt] = useSyncedState<string>(initialUserPrompt ?? "")
   const [additionalContext, setAdditionalContext] = useState("")
   const [fileEnabled, setFileEnabled] = useState<Record<string, boolean>>({})
   const [ticketEnabled, setTicketEnabled] = useState<Record<string, boolean>>({})

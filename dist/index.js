@@ -1,5 +1,5 @@
 // src/module/components/OneShotAiPanel.tsx
-import { useState as useState11, useMemo as useMemo3, useCallback as useCallback4, useRef as useRef4 } from "react";
+import { useState as useState12, useMemo as useMemo3, useCallback as useCallback4, useRef as useRef4 } from "react";
 import { Bot as Bot2, Sparkles as Sparkles4, Eye, Copy, Check as Check4 } from "lucide-react";
 
 // src/module/lib/utils.ts
@@ -1973,6 +1973,18 @@ function useAiPanel(options) {
   };
 }
 
+// src/module/hooks/useSyncedState.ts
+import { useState as useState3 } from "react";
+function useSyncedState(prop) {
+  const [state, setState] = useState3(prop);
+  const [prevProp, setPrevProp] = useState3(prop);
+  if (prop !== prevProp) {
+    setPrevProp(prop);
+    setState(prop);
+  }
+  return [state, setState];
+}
+
 // src/primitives/loading-button.tsx
 import { forwardRef } from "react";
 
@@ -2145,7 +2157,7 @@ function SheetTitle({ className, ...props }) {
 }
 
 // src/module/components/status-bar.tsx
-import { useState as useState3 } from "react";
+import { useState as useState4 } from "react";
 import { Check, X, Minus, AlertTriangle, ChevronDown, ChevronRight } from "lucide-react";
 import { jsx as jsx4, jsxs as jsxs3 } from "react/jsx-runtime";
 function scoreSegment(label, ok, required, warning = false) {
@@ -2155,7 +2167,7 @@ function scoreSegment(label, ok, required, warning = false) {
   ] });
 }
 function StatusBar({ labels, promptPresent, userPromptPresent, additionalContextPresent, files, tickets, hasFeedback }) {
-  const [showStatus, setShowStatus] = useState3(false);
+  const [showStatus, setShowStatus] = useState4(false);
   const enabledFiles = (files ?? []).filter((f) => f.enabled !== false);
   const hasPresentFiles = enabledFiles.some((f) => f.present);
   const filesOk = enabledFiles.length === 0 || hasPresentFiles;
@@ -2211,7 +2223,7 @@ function StatusBar({ labels, promptPresent, userPromptPresent, additionalContext
 }
 
 // src/module/components/prompt-section.tsx
-import { useState as useState4 } from "react";
+import { useState as useState5 } from "react";
 import { Sparkles, FileText, ChevronDown as ChevronDown2, ChevronRight as ChevronRight2 } from "lucide-react";
 
 // src/primitives/textarea.tsx
@@ -2241,7 +2253,7 @@ function PromptSection({
   additionalContext,
   onAdditionalContextChange
 }) {
-  const [collapsed, setCollapsed] = useState4({
+  const [collapsed, setCollapsed] = useState5({
     system: true,
     user: true,
     context: true
@@ -2296,7 +2308,7 @@ function PromptSection({
 }
 
 // src/module/components/files-section.tsx
-import { useState as useState5 } from "react";
+import { useState as useState6 } from "react";
 import { Check as Check2, X as X2, Plus, FileText as FileText2 } from "lucide-react";
 
 // src/primitives/input.tsx
@@ -2423,7 +2435,7 @@ function FilesSection({
   onAddCustomFile,
   onRemoveCustomFile
 }) {
-  const [inputValue, setInputValue] = useState5("");
+  const [inputValue, setInputValue] = useState6("");
   function handleAdd() {
     const trimmed = inputValue.trim();
     if (!trimmed) return;
@@ -2502,12 +2514,12 @@ function FilesSection({
 import { Circle as Circle2 } from "lucide-react";
 
 // src/module/components/ticket-item.tsx
-import { useState as useState6, useId } from "react";
+import { useState as useState7, useId } from "react";
 import { Check as Check3, X as X3, ChevronDown as ChevronDown3, ChevronRight as ChevronRight3, Circle, TriangleAlert } from "lucide-react";
 import { jsx as jsx11, jsxs as jsxs7 } from "react/jsx-runtime";
 function TicketItem({ ticket, depth = 0, enabled, labels, onToggleEnabled }) {
-  const [expanded, setExpanded] = useState6(false);
-  const [showExisting, setShowExisting] = useState6(false);
+  const [expanded, setExpanded] = useState7(false);
+  const [showExisting, setShowExisting] = useState7(false);
   const contentId = useId();
   const hasExpandable = ticket.explication || ticket.responseSchema !== void 0 || ticket.subTickets && ticket.subTickets.length > 0;
   const hasExistingContent = ticket.existingContent !== void 0;
@@ -2628,11 +2640,11 @@ function TicketsSection({ labels, tickets, resolvedTickets, onToggleTicket }) {
 }
 
 // src/module/components/response-section.tsx
-import { useState as useState8, useRef as useRef3, useEffect, useCallback as useCallback3, useMemo as useMemo2 } from "react";
+import { useState as useState9, useRef as useRef3, useEffect, useCallback as useCallback3, useMemo as useMemo2 } from "react";
 import { Bot, Loader2 as Loader22, AlertTriangle as AlertTriangle3, Sparkles as Sparkles2, CircleCheck, CircleX, Brain, ChevronDown as ChevronDown4, ChevronRight as ChevronRight4 } from "lucide-react";
 
 // src/module/components/diff-section.tsx
-import { useState as useState7 } from "react";
+import { useState as useState8 } from "react";
 import { Plus as Plus2, Minus as Minus2, ArrowRight, AlertTriangle as AlertTriangle2, Expand } from "lucide-react";
 
 // src/primitives/checkbox.tsx
@@ -3195,7 +3207,7 @@ function DiffSection({
   onDeselectAll
 }) {
   const ticketErrors = response.validation?.ticketErrors ?? [];
-  const [openKey, setOpenKey] = useState7(null);
+  const [openKey, setOpenKey] = useState8(null);
   const entries = normalizeEntries(response).map(({ key, value }) => {
     const ticket = tickets.find((t) => t.key === key);
     const changes = diffJson(ticket?.existingContent, value);
@@ -3372,12 +3384,12 @@ function ResponseSection({
   const plugBlocked = invalidMode === "block" && !!validation && !validation.ok;
   const rawDisplay = streamingText || response?.raw || "";
   const displayText = useMemo2(() => formatJson(rawDisplay), [rawDisplay]);
-  const [elapsed, setElapsed] = useState8(0);
+  const [elapsed, setElapsed] = useState9(0);
   const startTimeRef = useRef3(null);
-  const [prevBusy, setPrevBusy] = useState8(false);
-  const [reasoningOpen, setReasoningOpen] = useState8(true);
-  const [selectedKeys, setSelectedKeys] = useState8([]);
-  const [prevResponse, setPrevResponse] = useState8(null);
+  const [prevBusy, setPrevBusy] = useState9(false);
+  const [reasoningOpen, setReasoningOpen] = useState9(true);
+  const [selectedKeys, setSelectedKeys] = useState9([]);
+  const [prevResponse, setPrevResponse] = useState9(null);
   if (isBusy && !prevBusy) {
     setElapsed(0);
   }
@@ -3546,7 +3558,7 @@ function FeedbackSection({ labels, feedback, enabled, onToggleEnabled }) {
 }
 
 // src/module/components/config-sheet.tsx
-import { useState as useState9 } from "react";
+import { useState as useState10 } from "react";
 import { Settings, ExternalLink, Info } from "lucide-react";
 
 // src/primitives/label.tsx
@@ -3740,7 +3752,7 @@ var DEFAULT_CONFIGS = {
   [ProviderType.Fallback]: { type: ProviderType.Fallback, enabled: false, apiUrl: "/api/ai/generate" }
 };
 function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterChange, invalidMode, onInvalidModeChange }) {
-  const [config, setConfig] = useState9(adapter ?? DEFAULT_CONFIGS[ProviderType.Opencode]);
+  const [config, setConfig] = useState10(adapter ?? DEFAULT_CONFIGS[ProviderType.Opencode]);
   const info = PROVIDER_INFO[language]?.[config.type];
   const meta = PROVIDER_META[config.type];
   const isEnabled = config.enabled ?? true;
@@ -3989,7 +4001,7 @@ function FallbackFields({
 }
 
 // src/module/components/info-sheet.tsx
-import { useState as useState10 } from "react";
+import { useState as useState11 } from "react";
 import {
   Info as Info2,
   Sparkles as Sparkles3,
@@ -4015,7 +4027,7 @@ var AI_PANEL_PROJECT_LINKS = {
 // src/module/components/info-sheet.tsx
 import { Fragment as Fragment3, jsx as jsx23, jsxs as jsxs16 } from "react/jsx-runtime";
 function InfoSheet({ labels, showIntegration = true, showCredits = true }) {
-  const [open, setOpen] = useState10(false);
+  const [open, setOpen] = useState11(false);
   const links = [
     { label: labels.infoCreditsLandingLabel, url: AI_PANEL_PROJECT_LINKS.landingPage },
     { label: labels.infoCreditsGithubLabel, url: AI_PANEL_PROJECT_LINKS.github }
@@ -4235,20 +4247,20 @@ function OneShotAiPanel({
   showInfoButton = true,
   showSettingsButton = true
 }) {
-  const [currentLanguage, setCurrentLanguage] = useState11(language);
+  const [currentLanguage, setCurrentLanguage] = useSyncedState(language);
   const labels = useMemo3(() => ({ ...translations[currentLanguage], ...labelsProp }), [currentLanguage, labelsProp]);
-  const [currentAdapter, setCurrentAdapter] = useState11(adapter);
-  const [invalidMode, setInvalidMode] = useState11(invalidModeProp);
-  const [systemPrompt, setSystemPrompt] = useState11(systemPromptProp ?? "");
-  const [userPrompt, setUserPrompt] = useState11(initialUserPrompt ?? "");
-  const [additionalContext, setAdditionalContext] = useState11("");
-  const [fileEnabled, setFileEnabled] = useState11({});
-  const [ticketEnabled, setTicketEnabled] = useState11({});
-  const [customFiles, setCustomFiles] = useState11([]);
+  const [currentAdapter, setCurrentAdapter] = useSyncedState(adapter);
+  const [invalidMode, setInvalidMode] = useSyncedState(invalidModeProp);
+  const [systemPrompt, setSystemPrompt] = useSyncedState(systemPromptProp ?? "");
+  const [userPrompt, setUserPrompt] = useSyncedState(initialUserPrompt ?? "");
+  const [additionalContext, setAdditionalContext] = useState12("");
+  const [fileEnabled, setFileEnabled] = useState12({});
+  const [ticketEnabled, setTicketEnabled] = useState12({});
+  const [customFiles, setCustomFiles] = useState12([]);
   const customIdRef = useRef4(0);
-  const [previewOpen, setPreviewOpen] = useState11(false);
-  const [copied, setCopied] = useState11(false);
-  const [feedbackEnabled, setFeedbackEnabled] = useState11(true);
+  const [previewOpen, setPreviewOpen] = useState12(false);
+  const [copied, setCopied] = useState12(false);
+  const [feedbackEnabled, setFeedbackEnabled] = useState12(true);
   const activeConfig = useMemo3(() => {
     if (currentAdapter && "enabled" in currentAdapter && !currentAdapter.enabled) return void 0;
     return currentAdapter;
