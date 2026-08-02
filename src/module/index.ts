@@ -62,4 +62,4 @@ export type {
 export { defaultLabels } from "./lib/defaults"
 
 // i18n
-export { AiPanelLanguage, translations, PROVIDER_INFO } from "./i18n"
+export { AiPanelLanguage, translations, PROVIDER_INFO, AiPanelLanguageNames, AI_PANEL_LANGUAGES, aiPanelLanguageFromLocale } from "./i18n"

@@ -103,7 +103,7 @@ Three adapters provided (`adapters/`): `opencode` (local server, optional Bearer
 
 ## Internationalization
 
-Every string goes through `AiPanelLabels` (French, English, defaults). Override via the `labels` prop:
+Every string goes through `AiPanelLabels` (French, English, Japanese, Simplified Chinese, Spanish, Arabic, defaults). Set the language via the `language` prop or the settings sheet; override individual strings via the `labels` prop:
 
 ```tsx
 <OneShotAiPanel labels={{ generate: "Launch", plugLabel: "Insert" }} />

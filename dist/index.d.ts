@@ -4,6 +4,10 @@ import * as react from 'react';
 declare const AiPanelLanguage: {
     readonly Fr: "fr";
     readonly En: "en";
+    readonly Ja: "ja";
+    readonly Zh: "zh";
+    readonly Es: "es";
+    readonly Ar: "ar";
 };
 type AiPanelLanguage = (typeof AiPanelLanguage)[keyof typeof AiPanelLanguage];
 
@@ -379,6 +383,10 @@ interface ProviderInfo {
 }
 declare const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType$1, ProviderInfo>>;
 
+declare const AiPanelLanguageNames: Record<AiPanelLanguage, string>;
+declare const AI_PANEL_LANGUAGES: ("fr" | "en" | "ja" | "zh" | "es" | "ar")[];
+declare function aiPanelLanguageFromLocale(locale: string): AiPanelLanguage;
+
 interface OneShotAiPanelProps {
     title?: string;
     systemPrompt?: string;
@@ -524,4 +532,4 @@ declare const ProviderType: {
     readonly Fallback: "fallback";
 };
 
-export { AI_PANEL_PROJECT_LINKS, type AiAdapterConfig, type AiPanelAdapter, type AiPanelContextFile, AiPanelInvalidMode, type AiPanelJsonSchema, AiPanelJsonType, type AiPanelLabels, AiPanelLanguage, type AiPanelResponse, type AiPanelResponseParser, type AiPanelResponseValidation, type AiPanelSendHandler, AiPanelStatus, type AiPanelSubTicket, type AiPanelTicket, type AiPanelTicketValidationError, FallbackAdapter, type FallbackAdapterConfig, FeedbackSection, FilesSection, InfoSheet, OneShotAiPanel, type OneShotAiPanelProps, OpenCodeAdapter, type OpenCodeAdapterConfig, OpenCodeModels, PROVIDER_INFO, PROVIDER_META, PromptSection, type ProviderMeta, ProviderType, ResponseSection, ShadcnAdapter, type ShadcnAdapterConfig, ShadcnModels, StatusBar, TicketItem, TicketsSection, type UseAiPanelOptions, type UseAiPanelReturn, type UseStreamingReturn, buildSend, defaultLabels, modelDisplayName, register, registerDefaultAdapters, translations, useAiPanel, useStreaming };
+export { AI_PANEL_LANGUAGES, AI_PANEL_PROJECT_LINKS, type AiAdapterConfig, type AiPanelAdapter, type AiPanelContextFile, AiPanelInvalidMode, type AiPanelJsonSchema, AiPanelJsonType, type AiPanelLabels, AiPanelLanguage, AiPanelLanguageNames, type AiPanelResponse, type AiPanelResponseParser, type AiPanelResponseValidation, type AiPanelSendHandler, AiPanelStatus, type AiPanelSubTicket, type AiPanelTicket, type AiPanelTicketValidationError, FallbackAdapter, type FallbackAdapterConfig, FeedbackSection, FilesSection, InfoSheet, OneShotAiPanel, type OneShotAiPanelProps, OpenCodeAdapter, type OpenCodeAdapterConfig, OpenCodeModels, PROVIDER_INFO, PROVIDER_META, PromptSection, type ProviderMeta, ProviderType, ResponseSection, ShadcnAdapter, type ShadcnAdapterConfig, ShadcnModels, StatusBar, TicketItem, TicketsSection, type UseAiPanelOptions, type UseAiPanelReturn, type UseStreamingReturn, aiPanelLanguageFromLocale, buildSend, defaultLabels, modelDisplayName, register, registerDefaultAdapters, translations, useAiPanel, useStreaming };

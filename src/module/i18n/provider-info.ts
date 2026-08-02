@@ -117,4 +117,200 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
       ],
     },
   },
+  [AiPanelLanguage.Ja]: {
+    [ProviderType.Opencode]: {
+      description: "OpenCode サーバーへのネイティブ接続",
+      help:
+        "ターミナルを開いてサーバーを起動：\n\n" +
+        "  opencode serve [--port <number>] [--hostname <string>] [--cors <origin>]\n\n" +
+        "デフォルト：port=4096、hostname=127.0.0.1。\n" +
+        "--cors は複数のオリジンを許可するために繰り返せます。\n\n" +
+        "認証を有効にするには、環境変数を設定します：\n" +
+        "  OPENCODE_SERVER_PASSWORD=あなたのパスワード\n\n" +
+        "その後、以下のパスワードを入力します。",
+      modelPlaceholder: "モデル（空のままにするとサーバーのデフォルト）",
+      apiKeyLabel: "パスワード（オプション）",
+      apiKeyPlaceholder: "OPENCODE_SERVER_PASSWORD",
+      baseUrlLabel: "サーバー URL",
+      baseUrlPlaceholder: "http://localhost:4096",
+      docLinks: [
+        { label: "OpenCode ドキュメント", url: "https://opencode.ai/docs" },
+        { label: "GitHub リポジトリ", url: "https://github.com/anomalyco/opencode" },
+      ],
+    },
+    [ProviderType.Shadcn]: {
+      description: "@shadcn/helpers SDK と AI プロバイダー（OpenAI、Anthropic...）を使用",
+      help:
+        "プロバイダー（OpenAI、Anthropic など）で API キーを設定し、以下に入力します。SDK は選択したモデルを使用してレスポンスを生成します。",
+      modelPlaceholder: "モデル（例: gpt-4o）",
+      apiKeyLabel: "API キー",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "ベース URL",
+      baseUrlPlaceholder: "https://api.openai.com/v1",
+      docLinks: [
+        { label: "@shadcn/helpers", url: "https://shadcn.com/docs/helpers/ai-sdk" },
+        { label: "OpenAI API キー", url: "https://platform.openai.com/api-keys" },
+      ],
+    },
+    [ProviderType.Fallback]: {
+      description: "外部 API への直接 HTTP リクエスト",
+      help:
+        "パネルは設定された URL に JSON ボディ { prompt } で POST リクエストを送信します。レスポンスは ReadableStream またはプレーンテキストである必要があります。OpenAI 互換 API やカスタムプロキシにこのモードを使用します。",
+      modelPlaceholder: "モデル（フォールバックでは未使用）",
+      apiKeyLabel: "API キー",
+      apiKeyPlaceholder: "オプション（Authorization ヘッダーで送信）",
+      baseUrlLabel: "API URL",
+      baseUrlPlaceholder: "/api/ai/generate",
+      docLinks: [
+        { label: "MDN fetch", url: "https://developer.mozilla.org/en-US/docs/Web/API/fetch" },
+      ],
+    },
+  },
+  [AiPanelLanguage.Zh]: {
+    [ProviderType.Opencode]: {
+      description: "原生连接到 OpenCode 服务器",
+      help:
+        "打开终端并启动服务器：\n\n" +
+        "  opencode serve [--port <number>] [--hostname <string>] [--cors <origin>]\n\n" +
+        "默认值：port=4096、hostname=127.0.0.1。\n" +
+        "--cors 可重复以允许多个来源。\n\n" +
+        "要启用身份验证，请设置环境变量：\n" +
+        "  OPENCODE_SERVER_PASSWORD=你的密码\n\n" +
+        "然后在下面输入密码。",
+      modelPlaceholder: "模型（留空使用服务器默认）",
+      apiKeyLabel: "密码（可选）",
+      apiKeyPlaceholder: "OPENCODE_SERVER_PASSWORD",
+      baseUrlLabel: "服务器 URL",
+      baseUrlPlaceholder: "http://localhost:4096",
+      docLinks: [
+        { label: "OpenCode 文档", url: "https://opencode.ai/docs" },
+        { label: "GitHub 仓库", url: "https://github.com/anomalyco/opencode" },
+      ],
+    },
+    [ProviderType.Shadcn]: {
+      description: "使用 @shadcn/helpers SDK 与 AI 提供商（OpenAI、Anthropic...）",
+      help:
+        "从你的提供商（OpenAI、Anthropic 等）配置 API 密钥并在下面输入。SDK 使用所选模型生成响应。",
+      modelPlaceholder: "模型（例如 gpt-4o）",
+      apiKeyLabel: "API 密钥",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "基础 URL",
+      baseUrlPlaceholder: "https://api.openai.com/v1",
+      docLinks: [
+        { label: "@shadcn/helpers", url: "https://shadcn.com/docs/helpers/ai-sdk" },
+        { label: "OpenAI API 密钥", url: "https://platform.openai.com/api-keys" },
+      ],
+    },
+    [ProviderType.Fallback]: {
+      description: "直接向外部 API 发送 HTTP 请求",
+      help:
+        "面板向配置的 URL 发送一个 JSON 正文 { prompt } 的 POST 请求。响应必须是 ReadableStream 或纯文本。将此模式用于兼容 OpenAI 的 API 或自定义代理。",
+      modelPlaceholder: "模型（回退模式下不使用）",
+      apiKeyLabel: "API 密钥",
+      apiKeyPlaceholder: "可选（在 Authorization 标头中发送）",
+      baseUrlLabel: "API URL",
+      baseUrlPlaceholder: "/api/ai/generate",
+      docLinks: [
+        { label: "MDN fetch", url: "https://developer.mozilla.org/en-US/docs/Web/API/fetch" },
+      ],
+    },
+  },
+  [AiPanelLanguage.Es]: {
+    [ProviderType.Opencode]: {
+      description: "Conexión nativa al servidor OpenCode",
+      help:
+        "Abre una terminal y lanza el servidor:\n\n" +
+        "  opencode serve [--port <number>] [--hostname <string>] [--cors <origin>]\n\n" +
+        "Valores por defecto: port=4096, hostname=127.0.0.1.\n" +
+        "--cors se puede repetir para permitir varios orígenes.\n\n" +
+        "Para activar la autenticación, define la variable de entorno:\n" +
+        "  OPENCODE_SERVER_PASSWORD=tu-contraseña\n\n" +
+        "Luego introduce la contraseña abajo.",
+      modelPlaceholder: "Modelo (déjalo vacío para el predeterminado del servidor)",
+      apiKeyLabel: "Contraseña (opcional)",
+      apiKeyPlaceholder: "OPENCODE_SERVER_PASSWORD",
+      baseUrlLabel: "URL del servidor",
+      baseUrlPlaceholder: "http://localhost:4096",
+      docLinks: [
+        { label: "Documentación de OpenCode", url: "https://opencode.ai/docs" },
+        { label: "Repositorio de GitHub", url: "https://github.com/anomalyco/opencode" },
+      ],
+    },
+    [ProviderType.Shadcn]: {
+      description: "Usa el SDK @shadcn/helpers con un proveedor de IA (OpenAI, Anthropic...)",
+      help:
+        "Configura una clave API en tu proveedor (OpenAI, Anthropic, etc.) e introdúcela abajo. El SDK usa el modelo seleccionado para generar las respuestas.",
+      modelPlaceholder: "Modelo (p. ej. gpt-4o)",
+      apiKeyLabel: "Clave API",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "URL base",
+      baseUrlPlaceholder: "https://api.openai.com/v1",
+      docLinks: [
+        { label: "@shadcn/helpers", url: "https://shadcn.com/docs/helpers/ai-sdk" },
+        { label: "Claves API de OpenAI", url: "https://platform.openai.com/api-keys" },
+      ],
+    },
+    [ProviderType.Fallback]: {
+      description: "Petición HTTP directa a una API externa",
+      help:
+        "El panel envía una petición POST a la URL configurada con un body JSON { prompt }. La respuesta debe ser un ReadableStream o texto plano. Usa este modo para una API compatible con OpenAI o un proxy personalizado.",
+      modelPlaceholder: "Modelo (no se usa en fallback)",
+      apiKeyLabel: "Clave API",
+      apiKeyPlaceholder: "Opcional (se envía en la cabecera Authorization)",
+      baseUrlLabel: "URL de la API",
+      baseUrlPlaceholder: "/api/ai/generate",
+      docLinks: [
+        { label: "MDN fetch", url: "https://developer.mozilla.org/en-US/docs/Web/API/fetch" },
+      ],
+    },
+  },
+  [AiPanelLanguage.Ar]: {
+    [ProviderType.Opencode]: {
+      description: "اتصال أصلي بخادم OpenCode",
+      help:
+        "افتح محطة وأطلق الخادم:\n\n" +
+        "  opencode serve [--port <number>] [--hostname <string>] [--cors <origin>]\n\n" +
+        "الافتراضي: port=4096، hostname=127.0.0.1.\n" +
+        "يمكن تكرار --cors للسماح بعدة مصادر.\n\n" +
+        "لتفعيل المصادقة، عرّف متغير البيئة:\n" +
+        "  OPENCODE_SERVER_PASSWORD=كلمة-مرورك\n\n" +
+        "ثم أدخل كلمة المرور أدناه.",
+      modelPlaceholder: "النموذج (اتركه فارغًا للافتراضي للخادم)",
+      apiKeyLabel: "كلمة المرور (اختياري)",
+      apiKeyPlaceholder: "OPENCODE_SERVER_PASSWORD",
+      baseUrlLabel: "عنوان URL للخادم",
+      baseUrlPlaceholder: "http://localhost:4096",
+      docLinks: [
+        { label: "وثائق OpenCode", url: "https://opencode.ai/docs" },
+        { label: "مستودع GitHub", url: "https://github.com/anomalyco/opencode" },
+      ],
+    },
+    [ProviderType.Shadcn]: {
+      description: "يستخدم SDK @shadcn/helpers مع مزود ذكاء اصطناعي (OpenAI، Anthropic...)",
+      help:
+        "عيّن مفتاح API لدى مزودك (OpenAI، Anthropic، إلخ) وأدخله أدناه. يستخدم SDK النموذج المحدد لتوليد الاستجابات.",
+      modelPlaceholder: "النموذج (مثال: gpt-4o)",
+      apiKeyLabel: "مفتاح API",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "عنوان URL الأساسي",
+      baseUrlPlaceholder: "https://api.openai.com/v1",
+      docLinks: [
+        { label: "@shadcn/helpers", url: "https://shadcn.com/docs/helpers/ai-sdk" },
+        { label: "مفاتيح API من OpenAI", url: "https://platform.openai.com/api-keys" },
+      ],
+    },
+    [ProviderType.Fallback]: {
+      description: "طلب HTTP مباشر إلى API خارجية",
+      help:
+        "ترسل اللوحة طلب POST إلى عنوان URL المحدد بجسم JSON { prompt }. يجب أن تكون الاستجابة ReadableStream أو نصًا خامًا. استخدم هذا الوضع لواجهة متوافقة مع OpenAI أو وكيل مخصص.",
+      modelPlaceholder: "النموذج (غير مستخدم في وضع الرجوع)",
+      apiKeyLabel: "مفتاح API",
+      apiKeyPlaceholder: "اختياري (يُرسل في ترويسة Authorization)",
+      baseUrlLabel: "عنوان API",
+      baseUrlPlaceholder: "/api/ai/generate",
+      docLinks: [
+        { label: "MDN fetch", url: "https://developer.mozilla.org/en-US/docs/Web/API/fetch" },
+      ],
+    },
+  },
 }

@@ -19,7 +19,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { AiPanelLanguage, PROVIDER_INFO } from "../i18n"
+import { AiPanelLanguage, PROVIDER_INFO, AiPanelLanguageNames, AI_PANEL_LANGUAGES } from "../i18n"
 import type { ProviderInfo } from "../i18n"
 import { PROVIDER_META, ProviderType, OpenCodeModels, ShadcnModels, modelDisplayName } from "../adapters"
 import type {
@@ -30,11 +30,6 @@ import type {
 } from "../adapters"
 import type { AiPanelLabels } from "../types"
 import { AiPanelInvalidMode } from "../types"
-
-const LANGUAGE_NAMES: Record<AiPanelLanguage, string> = {
-  [AiPanelLanguage.Fr]: "Français",
-  [AiPanelLanguage.En]: "English",
-}
 
 const INVALID_MODE_NAMES: Record<AiPanelInvalidMode, (labels: AiPanelLabels) => string> = {
   [AiPanelInvalidMode.Warn]: (labels) => labels.invalidModeWarn,
@@ -89,12 +84,12 @@ export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAda
               <p className="text-xs text-muted-foreground">{labels.languageDescription}</p>
               <Select value={language} onValueChange={(v) => onLanguageChange(v as AiPanelLanguage)}>
                 <SelectTrigger className="h-8 text-xs w-full cursor-pointer">
-                  {LANGUAGE_NAMES[language]}
+                  {AiPanelLanguageNames[language]}
                 </SelectTrigger>
                 <SelectContent>
-                  {([AiPanelLanguage.Fr, AiPanelLanguage.En] as const).map((lang) => (
+                  {AI_PANEL_LANGUAGES.map((lang) => (
                     <SelectItem key={lang} value={lang} className="text-xs cursor-pointer">
-                      {LANGUAGE_NAMES[lang]}
+                      {AiPanelLanguageNames[lang]}
                     </SelectItem>
                   ))}
                 </SelectContent>
