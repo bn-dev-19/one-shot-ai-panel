@@ -1,7 +1,9 @@
 import { useState, useRef, useCallback } from "react"
 import type {
+  AiPanelContextInfo,
   AiPanelPendingPermission,
   AiPanelPendingQuestion,
+  AiPanelStreamStatus,
   AiPanelToolActivity,
 } from "../types"
 
@@ -11,11 +13,15 @@ export interface StreamHandlers {
   onQuestion?: (q: AiPanelPendingQuestion) => void
   onPermission?: (p: AiPanelPendingPermission) => void
   onTool?: (t: AiPanelToolActivity) => void
+  onContext?: (c: AiPanelContextInfo) => void
+  onStatus?: (s: AiPanelStreamStatus) => void
 }
 
 export interface UseStreamingReturn {
   text: string
   reasoning: string
+  contextInfo: AiPanelContextInfo | null
+  streamStatus: AiPanelStreamStatus | null
   isStreaming: boolean
   start: (stream: ReadableStream<Uint8Array>, handlers?: StreamHandlers) => void
   cancel: () => void
@@ -23,8 +29,8 @@ export interface UseStreamingReturn {
 }
 
 interface StreamFrame {
-  t: "text" | "reasoning" | "question" | "permission" | "tool"
-  d: string | AiPanelPendingQuestion | AiPanelPendingPermission | AiPanelToolActivity
+  t: "text" | "reasoning" | "question" | "permission" | "tool" | "context" | "status"
+  d: string | AiPanelPendingQuestion | AiPanelPendingPermission | AiPanelToolActivity | AiPanelContextInfo | AiPanelStreamStatus
   snapshot?: boolean
 }
 
@@ -38,6 +44,12 @@ function parseFrame(line: string): StreamFrame | null {
       if (typeof obj.d === "string") return obj as StreamFrame
     } else if (obj.t === "question" || obj.t === "permission" || obj.t === "tool") {
       if (obj.d && typeof obj.d === "object") return obj as StreamFrame
+    } else if (obj.t === "context") {
+      const c = obj.d as AiPanelContextInfo
+      if (c && typeof c === "object" && typeof c.sessionID === "string") return obj as StreamFrame
+    } else if (obj.t === "status") {
+      const s = obj.d as AiPanelStreamStatus
+      if (s && typeof s === "object" && typeof s.kind === "string") return obj as StreamFrame
     }
   } catch {
     // not a frame
@@ -48,6 +60,8 @@ function parseFrame(line: string): StreamFrame | null {
 export function useStreaming(): UseStreamingReturn {
   const [text, setText] = useState("")
   const [reasoning, setReasoning] = useState("")
+  const [contextInfo, setContextInfo] = useState<AiPanelContextInfo | null>(null)
+  const [streamStatus, setStreamStatus] = useState<AiPanelStreamStatus | null>(null)
   const [isStreaming, setIsStreaming] = useState(false)
   const abortRef = useRef<AbortController | null>(null)
 
@@ -60,6 +74,8 @@ export function useStreaming(): UseStreamingReturn {
     setIsStreaming(true)
     setText("")
     setReasoning("")
+    setContextInfo(null)
+    setStreamStatus(null)
 
     const decoder = new TextDecoder()
     let buffer = ""
@@ -88,6 +104,12 @@ export function useStreaming(): UseStreamingReturn {
         handlers?.onPermission?.(frame.d as AiPanelPendingPermission)
       } else if (frame.t === "tool") {
         handlers?.onTool?.(frame.d as AiPanelToolActivity)
+      } else if (frame.t === "context") {
+        setContextInfo(frame.d as AiPanelContextInfo)
+        handlers?.onContext?.(frame.d as AiPanelContextInfo)
+      } else if (frame.t === "status") {
+        setStreamStatus(frame.d as AiPanelStreamStatus)
+        handlers?.onStatus?.(frame.d as AiPanelStreamStatus)
       }
     }
 
@@ -153,8 +175,10 @@ export function useStreaming(): UseStreamingReturn {
     abortRef.current = null
     setText("")
     setReasoning("")
+    setContextInfo(null)
+    setStreamStatus(null)
     setIsStreaming(false)
   }, [])
 
-  return { text, reasoning, isStreaming, start, cancel, reset }
+  return { text, reasoning, contextInfo, streamStatus, isStreaming, start, cancel, reset }
 }

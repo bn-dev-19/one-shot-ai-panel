@@ -11,6 +11,8 @@ import type {
   AiPanelPendingPermission,
   AiPanelPermissionResponse,
   AiPanelToolActivity,
+  AiPanelContextInfo,
+  AiPanelStreamStatus,
 } from "../types"
 import { AiPanelStatus } from "../types"
 import type { AiPanelSendHandler } from "../adapters/types"
@@ -31,6 +33,8 @@ export interface UseAiPanelReturn {
   response: AiPanelResponse | null
   streamingText: string
   streamingReasoning: string
+  contextInfo: AiPanelContextInfo | null
+  streamStatus: AiPanelStreamStatus | null
   pendingQuestions: AiPanelPendingQuestion[]
   pendingPermissions: AiPanelPendingPermission[]
   toolActivity: AiPanelToolActivity | null
@@ -40,6 +44,7 @@ export interface UseAiPanelReturn {
   send: (fullPrompt: string, activeTickets?: AiPanelTicket[]) => Promise<void>
   cancel: () => void
   reset: () => void
+  renewSession: () => Promise<void>
 }
 
 export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
@@ -49,6 +54,8 @@ export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
   const [pendingQuestions, setPendingQuestions] = useState<AiPanelPendingQuestion[]>([])
   const [pendingPermissions, setPendingPermissions] = useState<AiPanelPendingPermission[]>([])
   const [toolActivity, setToolActivity] = useState<AiPanelToolActivity | null>(null)
+  const [contextInfo, setContextInfo] = useState<AiPanelContextInfo | null>(null)
+  const [streamStatus, setStreamStatus] = useState<AiPanelStreamStatus | null>(null)
   const streaming = useStreaming()
   const sendInFlight = useRef(false)
   const activeTicketsRef = useRef<AiPanelTicket[] | undefined>(undefined)
@@ -98,6 +105,14 @@ export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
     setToolActivity(t)
   }, [])
 
+  const handleContext = useCallback((c: AiPanelContextInfo) => {
+    setContextInfo(c)
+  }, [])
+
+  const handleStatus = useCallback((s: AiPanelStreamStatus) => {
+    setStreamStatus(s)
+  }, [])
+
   const replyQuestion = useCallback(async (requestID: string, answers: string[][]) => {
     if (adapter?.replyQuestion) {
       try {
@@ -124,12 +139,18 @@ export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
     if (adapter?.replyPermission) {
       try {
         await adapter.replyPermission(permissionID, response)
-      } catch {
-        // ignore
+        setPendingPermissions((prev) => prev.filter((p) => p.permissionID !== permissionID))
+      } catch (err) {
+        const message = err instanceof Error && err.message
+          ? err.message
+          : (labels?.errorStreaming ?? defaultLabels.errorStreaming)
+        setStatus(AiPanelStatus.Error)
+        setResponse({ raw: "", error: message })
       }
+      return
     }
     setPendingPermissions((prev) => prev.filter((p) => p.permissionID !== permissionID))
-  }, [adapter])
+  }, [adapter, labels])
 
   const send = useCallback(async (
     fullPrompt: string,
@@ -144,11 +165,23 @@ export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
     setPendingQuestions([])
     setPendingPermissions([])
     setToolActivity(null)
+    setContextInfo(null)
+    setStreamStatus(null)
     streaming.reset()
 
     try {
       const enabledFiles = (files ?? []).filter((f) => f.enabled !== false && f.present)
       const stream = await sendHandler(fullPrompt, { files: enabledFiles })
+
+      if (!sendInFlight.current) {
+        // cancelled while the stream was being established
+        try {
+          await adapter?.cancel?.()
+        } catch {
+          // ignore
+        }
+        return
+      }
 
       if (!stream) {
         throw new Error(labels?.errorNoStream ?? defaultLabels.errorNoStream)
@@ -161,6 +194,8 @@ export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
         onQuestion: handleQuestion,
         onPermission: handlePermission,
         onTool: handleTool,
+        onContext: handleContext,
+        onStatus: handleStatus,
       })
     } catch (err) {
       const msg = err instanceof Error ? err.message : (labels?.errorUnknown ?? defaultLabels.errorUnknown)
@@ -168,13 +203,24 @@ export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
       setResponse({ raw: "", error: msg })
       sendInFlight.current = false
     }
-  }, [sendHandler, streaming, handleComplete, handleStreamError, handleQuestion, handlePermission, handleTool, labels, files])
+  }, [sendHandler, streaming, handleComplete, handleStreamError, handleQuestion, handlePermission, handleTool, handleContext, handleStatus, labels, files, adapter])
 
   const cancel = useCallback(() => {
+    if (adapter?.cancel) {
+      void adapter.cancel()
+    }
     streaming.cancel()
     setStatus(AiPanelStatus.Idle)
     sendInFlight.current = false
-  }, [streaming])
+  }, [streaming, adapter])
+
+  const renewSession = useCallback(async () => {
+    if (adapter?.renewSession) {
+      await adapter.renewSession()
+    }
+    const info = adapter?.getContextInfo?.()
+    setContextInfo(info ?? null)
+  }, [adapter])
 
   const reset = useCallback(() => {
     streaming.reset()
@@ -191,6 +237,8 @@ export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
     response: streaming.text && status === AiPanelStatus.Streaming ? { raw: streaming.text } : response,
     streamingText: streaming.text,
     streamingReasoning: streaming.reasoning,
+    contextInfo,
+    streamStatus,
     pendingQuestions,
     pendingPermissions,
     toolActivity,
@@ -200,5 +248,6 @@ export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
     send,
     cancel,
     reset,
+    renewSession,
   }
 }

@@ -49,6 +49,28 @@ export interface AiPanelToolActivity {
   state?: string
 }
 
+export interface AiPanelTokenUsage {
+  input: number
+  output: number
+  reasoning: number
+  cacheRead: number
+  cacheWrite: number
+}
+
+export interface AiPanelContextInfo {
+  sessionID: string
+  directory?: string
+  modelID?: string
+  providerID?: string
+  cost?: number
+  tokens?: AiPanelTokenUsage
+}
+
+export interface AiPanelStreamStatus {
+  kind: "connecting" | "waiting" | "stalled" | "tool"
+  seconds?: number
+}
+
 export const AiPanelJsonType = {
   Object: "object",
   Array: "array",
@@ -278,4 +300,16 @@ export interface AiPanelLabels {
   permissionAlways: string
   permissionDeny: string
   toolActivity: string
+  context?: string
+  contextDescription?: string
+  statusSession?: string
+  statusModel?: string
+  statusTokens?: string
+  statusCost?: string
+  sessionRenew?: string
+  sessionRenewDescription?: string
+  statusConnecting?: string
+  statusWaiting?: string
+  statusStalled?: string
+  statusTool?: string
 }

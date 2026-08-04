@@ -1,5 +1,5 @@
 import type { OpencodeClient } from "@opencode-ai/sdk"
-import type { AiPanelContextFile, AiPanelPermissionResponse } from "../types"
+import type { AiPanelContextFile, AiPanelContextInfo, AiPanelPermissionResponse } from "../types"
 import { OpenCodeModels, ShadcnModels } from "./models"
 
 export const ProviderType = {
@@ -57,6 +57,11 @@ export interface AiPanelAdapter {
   replyQuestion?(requestID: string, answers: string[][]): Promise<void>
   rejectQuestion?(requestID: string): Promise<void>
   replyPermission?(permissionID: string, response: AiPanelPermissionResponse): Promise<void>
+  abort?(): Promise<void>
+  cancel?(): Promise<void>
+  deleteSession?(): Promise<void>
+  renewSession?(): Promise<void>
+  getContextInfo?(): AiPanelContextInfo | undefined
 }
 
 export interface OpenCodeAdapterConfig {

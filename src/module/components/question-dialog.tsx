@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useCallback } from "react"
 import { HelpCircle, Sparkles } from "lucide-react"
 import { cn } from "../lib/utils"
 import { Button } from "@/components/ui/button"
@@ -28,13 +28,6 @@ export function QuestionDialog({ labels, open, questions, onSubmit, onSkip }: Qu
   const [selected, setSelected] = useState<Record<number, string[]>>({})
   const [custom, setCustom] = useState<Record<number, string>>({})
 
-  useEffect(() => {
-    if (open) {
-      setSelected({})
-      setCustom({})
-    }
-  }, [open])
-
   const toggleOption = useCallback((qi: number, label: string, multiple: boolean) => {
     setSelected((prev) => {
       const current = prev[qi] ?? []
@@ -57,14 +50,22 @@ export function QuestionDialog({ labels, open, questions, onSubmit, onSkip }: Qu
       const customValue = custom[qi]?.trim()
       return customValue ? [...picked, customValue] : picked
     })
+    setSelected({})
+    setCustom({})
     onSubmit(answers)
   }
+
+  const handleSkip = useCallback(() => {
+    setSelected({})
+    setCustom({})
+    onSkip()
+  }, [onSkip])
 
   return (
     <Dialog
       open={open}
       onOpenChange={(o) => {
-        if (!o) onSkip()
+        if (!o) handleSkip()
       }}
     >
       <DialogContent className="sm:max-w-md">
@@ -118,7 +119,7 @@ export function QuestionDialog({ labels, open, questions, onSubmit, onSkip }: Qu
           ))}
         </div>
         <DialogFooter>
-          <Button variant="ghost" size="sm" onClick={onSkip}>
+          <Button variant="ghost" size="sm" onClick={handleSkip}>
             {labels.questionSkip}
           </Button>
           <Button size="sm" onClick={handleSubmit} disabled={!canSubmit} className="gap-1">

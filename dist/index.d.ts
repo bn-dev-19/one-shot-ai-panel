@@ -53,6 +53,25 @@ interface AiPanelToolActivity {
     tool?: string;
     state?: string;
 }
+interface AiPanelTokenUsage {
+    input: number;
+    output: number;
+    reasoning: number;
+    cacheRead: number;
+    cacheWrite: number;
+}
+interface AiPanelContextInfo {
+    sessionID: string;
+    directory?: string;
+    modelID?: string;
+    providerID?: string;
+    cost?: number;
+    tokens?: AiPanelTokenUsage;
+}
+interface AiPanelStreamStatus {
+    kind: "connecting" | "waiting" | "stalled" | "tool";
+    seconds?: number;
+}
 declare const AiPanelJsonType: {
     readonly Object: "object";
     readonly Array: "array";
@@ -270,6 +289,18 @@ interface AiPanelLabels {
     permissionAlways: string;
     permissionDeny: string;
     toolActivity: string;
+    context?: string;
+    contextDescription?: string;
+    statusSession?: string;
+    statusModel?: string;
+    statusTokens?: string;
+    statusCost?: string;
+    sessionRenew?: string;
+    sessionRenewDescription?: string;
+    statusConnecting?: string;
+    statusWaiting?: string;
+    statusStalled?: string;
+    statusTool?: string;
 }
 
 declare const translations: Record<AiPanelLanguage, AiPanelLabels>;
@@ -299,6 +330,11 @@ interface AiPanelAdapter {
     replyQuestion?(requestID: string, answers: string[][]): Promise<void>;
     rejectQuestion?(requestID: string): Promise<void>;
     replyPermission?(permissionID: string, response: AiPanelPermissionResponse): Promise<void>;
+    abort?(): Promise<void>;
+    cancel?(): Promise<void>;
+    deleteSession?(): Promise<void>;
+    renewSession?(): Promise<void>;
+    getContextInfo?(): AiPanelContextInfo | undefined;
 }
 interface OpenCodeAdapterConfig {
     type: typeof ProviderType$1.Opencode;
@@ -395,15 +431,27 @@ declare class OpenCodeAdapter implements AiPanelAdapter {
     private modelId?;
     private password?;
     private sessionId?;
+    private directory?;
+    private lastCost?;
+    private lastTokens?;
     private pendingQuestions;
     private pendingPermissions;
+    private runningTools;
+    private seenPermissions;
+    private seenQuestions;
     constructor(config: OpenCodeAdapterConfig);
     private createSession;
+    private getSession;
     replyQuestion(requestID: string, answers: string[][]): Promise<void>;
     rejectQuestion(requestID: string): Promise<void>;
     replyPermission(permissionID: string, response: AiPanelPermissionResponse): Promise<void>;
+    abort(): Promise<void>;
+    cancel(): Promise<void>;
+    deleteSession(): Promise<void>;
+    renewSession(): Promise<void>;
+    getContextInfo(): AiPanelContextInfo | undefined;
     private postRaw;
-    send(prompt: string, context?: AiPanelSendContext): Promise<ReadableStream<Uint8Array>>;
+    send(prompt: string, _context?: AiPanelSendContext): Promise<ReadableStream<Uint8Array>>;
 }
 
 /**
@@ -593,6 +641,8 @@ interface UseAiPanelReturn {
     response: AiPanelResponse | null;
     streamingText: string;
     streamingReasoning: string;
+    contextInfo: AiPanelContextInfo | null;
+    streamStatus: AiPanelStreamStatus | null;
     pendingQuestions: AiPanelPendingQuestion[];
     pendingPermissions: AiPanelPendingPermission[];
     toolActivity: AiPanelToolActivity | null;
@@ -602,6 +652,7 @@ interface UseAiPanelReturn {
     send: (fullPrompt: string, activeTickets?: AiPanelTicket[]) => Promise<void>;
     cancel: () => void;
     reset: () => void;
+    renewSession: () => Promise<void>;
 }
 declare function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn;
 
@@ -611,10 +662,14 @@ interface StreamHandlers {
     onQuestion?: (q: AiPanelPendingQuestion) => void;
     onPermission?: (p: AiPanelPendingPermission) => void;
     onTool?: (t: AiPanelToolActivity) => void;
+    onContext?: (c: AiPanelContextInfo) => void;
+    onStatus?: (s: AiPanelStreamStatus) => void;
 }
 interface UseStreamingReturn {
     text: string;
     reasoning: string;
+    contextInfo: AiPanelContextInfo | null;
+    streamStatus: AiPanelStreamStatus | null;
     isStreaming: boolean;
     start: (stream: ReadableStream<Uint8Array>, handlers?: StreamHandlers) => void;
     cancel: () => void;

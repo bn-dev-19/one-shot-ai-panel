@@ -33,17 +33,17 @@ export function PermissionDialog({ labels, open, permission, onDecide }: Permiss
           </DialogTitle>
           <DialogDescription>{labels.permissionDescription}</DialogDescription>
         </DialogHeader>
-        <div className="space-y-2">
+        <div className="space-y-2 min-w-0">
           <p className="text-xs font-semibold text-foreground">{permission?.title ?? "—"}</p>
           {permission?.type && <p className="text-xs text-muted-foreground">{permission.type}</p>}
           {permission?.pattern && (
-            <pre className="overflow-x-auto whitespace-pre-wrap rounded-md bg-muted/50 p-2 font-mono text-[10px]">
+            <pre className="whitespace-pre-wrap break-all max-w-full rounded-md bg-muted/50 p-2 font-mono text-xs">
               {Array.isArray(permission.pattern) ? permission.pattern.join("\n") : permission.pattern}
             </pre>
           )}
         </div>
-        <DialogFooter>
-          <Button variant="ghost" size="sm" onClick={() => onDecide("reject")}>
+        <DialogFooter className="flex-wrap">
+          <Button variant="outline" size="sm" onClick={() => onDecide("reject")}>
             {labels.permissionDeny}
           </Button>
           <Button variant="secondary" size="sm" onClick={() => onDecide("once")}>

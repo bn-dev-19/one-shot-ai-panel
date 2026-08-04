@@ -1,6 +1,6 @@
 // src/module/components/OneShotAiPanel.tsx
 import { useState as useState13, useMemo as useMemo3, useCallback as useCallback5, useRef as useRef4 } from "react";
-import { Bot as Bot2, Sparkles as Sparkles5, Eye, Copy, Check as Check4 } from "lucide-react";
+import { Bot as Bot2, Sparkles as Sparkles5, Eye, Copy, Check as Check4, Loader2 as Loader23, RotateCcw } from "lucide-react";
 
 // src/module/lib/utils.ts
 import { clsx } from "clsx";
@@ -188,7 +188,19 @@ var fr = {
   permissionAllowOnce: "Autoriser une fois",
   permissionAlways: "Toujours autoriser",
   permissionDeny: "Refuser",
-  toolActivity: "Outil"
+  toolActivity: "Outil",
+  context: "Contexte",
+  contextDescription: "Session OpenCode partag\xE9e entre les panneaux. Elle est conserv\xE9e dans un cookie et r\xE9utilis\xE9e, sauf si elle n'existe plus (recr\xE9\xE9e automatiquement).",
+  statusSession: "Session",
+  statusModel: "Mod\xE8le",
+  statusTokens: "Tokens",
+  statusCost: "Co\xFBt",
+  sessionRenew: "Nouvelle session",
+  sessionRenewDescription: "Supprime la session courante et d\xE9marre une nouvelle session.",
+  statusConnecting: "Connexion au serveur OpenCode\u2026",
+  statusWaiting: "En attente du mod\xE8le\u2026",
+  statusStalled: "La g\xE9n\xE9ration semble bloqu\xE9e. V\xE9rifie que le serveur OpenCode est toujours actif.",
+  statusTool: "En attente du serveur (outil en cours / autorisation\u2026)"
 };
 
 // src/module/i18n/en.ts
@@ -346,7 +358,19 @@ var en = {
   permissionAllowOnce: "Allow once",
   permissionAlways: "Always allow",
   permissionDeny: "Deny",
-  toolActivity: "Tool"
+  toolActivity: "Tool",
+  context: "Context",
+  contextDescription: "OpenCode session shared across panels. It is kept in a cookie and reused, unless it no longer exists (recreated automatically).",
+  statusSession: "Session",
+  statusModel: "Model",
+  statusTokens: "Tokens",
+  statusCost: "Cost",
+  sessionRenew: "New session",
+  sessionRenewDescription: "Deletes the current session and starts a new one.",
+  statusConnecting: "Connecting to the OpenCode server\u2026",
+  statusWaiting: "Waiting for the model\u2026",
+  statusStalled: "Generation seems stuck. Check that the OpenCode server is still running.",
+  statusTool: "Waiting for the server (tool running / permission\u2026)"
 };
 
 // src/module/i18n/ja.ts
@@ -1196,43 +1220,48 @@ var ShadcnAdapter = class {
 // src/module/adapters/opencode.ts
 import { createOpencodeClient } from "@opencode-ai/sdk/client";
 var DEFAULT_OPENCODE_URL = "http://localhost:4096";
-function isHttpUrl(p) {
-  return /^https?:\/\//i.test(p);
+var SESSION_COOKIE_PREFIX = "ai-panel:session:";
+var SESSION_COOKIE_DAYS = 30;
+var SSE_MAX_RETRIES = 3;
+var HEARTBEAT_INTERVAL_MS = 1e4;
+var STALL_SECONDS = 45;
+var PROMPT_TIMEOUT_MS = 15 * 60 * 1e3;
+var sessionStore = /* @__PURE__ */ new Map();
+function cookieKey(baseUrl) {
+  return `${SESSION_COOKIE_PREFIX}${encodeURIComponent(baseUrl)}`;
 }
-function toLocalPath(p) {
-  if (/^file:\/\//i.test(p)) {
-    try {
-      return decodeURIComponent(new URL(p).pathname);
-    } catch {
-      return p.replace(/^file:\/\//i, "");
+function readCookie(key) {
+  if (typeof document === "undefined") return void 0;
+  const prefix = `${key}=`;
+  for (const part of document.cookie.split(";")) {
+    const trimmed = part.trim();
+    if (trimmed.startsWith(prefix)) {
+      try {
+        const value = JSON.parse(decodeURIComponent(trimmed.slice(prefix.length)));
+        if (value && typeof value.id === "string") return value;
+      } catch {
+      }
     }
   }
-  return p;
+  return void 0;
 }
-function commonAncestorDir(paths) {
-  if (paths.length === 0) return null;
-  let prefix = paths[0].replace(/\/+$/, "");
-  for (const raw of paths.slice(1)) {
-    let p = raw.replace(/\/+$/, "");
-    while (!p.startsWith(prefix)) {
-      const idx = prefix.lastIndexOf("/");
-      if (idx <= 0) return null;
-      prefix = prefix.slice(0, idx);
-    }
-  }
-  if (prefix === "/" || prefix.split("/").filter(Boolean).length <= 1) return null;
-  return prefix;
+function writeCookie(key, value) {
+  if (typeof document === "undefined") return;
+  const expires = new Date(Date.now() + SESSION_COOKIE_DAYS * 24 * 60 * 60 * 1e3).toUTCString();
+  document.cookie = `${key}=${encodeURIComponent(JSON.stringify(value))}; expires=${expires}; path=/; SameSite=Lax`;
 }
-function patternInPaths(pattern, paths) {
-  if (!pattern || paths.length === 0) return false;
-  const patterns = Array.isArray(pattern) ? pattern : [pattern];
-  return patterns.some((p) => paths.some((f) => f.startsWith(p) || p.startsWith(f)));
+function clearCookie(key) {
+  if (typeof document === "undefined") return;
+  document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
 }
 var OpenCodeAdapter = class {
   constructor(config) {
     this.type = ProviderType.Opencode;
     this.pendingQuestions = /* @__PURE__ */ new Map();
     this.pendingPermissions = /* @__PURE__ */ new Map();
+    this.runningTools = /* @__PURE__ */ new Map();
+    this.seenPermissions = /* @__PURE__ */ new Set();
+    this.seenQuestions = /* @__PURE__ */ new Set();
     this.baseUrl = config.apiUrl ?? DEFAULT_OPENCODE_URL;
     this.modelId = config.model;
     this.password = config.password;
@@ -1259,7 +1288,29 @@ ${err?.message ?? ""}`
     if (!sid) {
       throw new Error("\xC9chec de cr\xE9ation de session OpenCode");
     }
-    return sid;
+    return { id: sid, directory };
+  }
+  async getSession(directory) {
+    const key = cookieKey(this.baseUrl);
+    const cached = sessionStore.get(this.baseUrl);
+    const stored = cached ?? readCookie(key);
+    if (stored) {
+      try {
+        await this.client.session.get({
+          path: { id: stored.id },
+          query: stored.directory ? { directory: stored.directory } : void 0
+        });
+        sessionStore.set(this.baseUrl, stored);
+        return stored;
+      } catch {
+        sessionStore.delete(this.baseUrl);
+        clearCookie(key);
+      }
+    }
+    const created = await this.createSession(directory);
+    sessionStore.set(this.baseUrl, created);
+    writeCookie(key, created);
+    return created;
   }
   async replyQuestion(requestID, answers) {
     this.pendingQuestions.delete(requestID);
@@ -1271,14 +1322,71 @@ ${err?.message ?? ""}`
   }
   async replyPermission(permissionID, response) {
     this.pendingPermissions.delete(permissionID);
-    if (!this.sessionId) return;
     try {
-      await this.client.postSessionIdPermissionsPermissionId({
-        path: { id: this.sessionId, permissionID },
-        body: { response }
-      });
+      await this.postRaw(`/permission/${permissionID}/reply`, { reply: response });
+      return;
     } catch {
     }
+    if (!this.sessionId) return;
+    await this.client.postSessionIdPermissionsPermissionId({
+      path: { id: this.sessionId, permissionID },
+      body: { response }
+    });
+  }
+  async abort() {
+    const sid = this.sessionId;
+    if (!sid) return;
+    try {
+      await this.client.session.abort({ path: { id: sid } });
+    } catch {
+    }
+  }
+  async cancel() {
+    const sid = this.sessionId;
+    await this.abort();
+    if (sid) {
+      try {
+        await this.client.session.delete({ path: { id: sid } });
+      } catch {
+      }
+      this.sessionId = void 0;
+      this.directory = void 0;
+      this.lastCost = void 0;
+      this.lastTokens = void 0;
+      sessionStore.delete(this.baseUrl);
+      clearCookie(cookieKey(this.baseUrl));
+    }
+  }
+  async deleteSession() {
+    const sid = this.sessionId;
+    if (!sid) return;
+    try {
+      await this.client.session.delete({ path: { id: sid } });
+    } catch {
+    }
+    this.sessionId = void 0;
+    this.directory = void 0;
+    this.lastCost = void 0;
+    this.lastTokens = void 0;
+    sessionStore.delete(this.baseUrl);
+    clearCookie(cookieKey(this.baseUrl));
+  }
+  async renewSession() {
+    await this.deleteSession();
+    const created = await this.getSession(void 0);
+    this.sessionId = created.id;
+    this.directory = created.directory;
+  }
+  getContextInfo() {
+    if (!this.sessionId) return void 0;
+    return {
+      sessionID: this.sessionId,
+      directory: this.directory,
+      modelID: this.modelId,
+      providerID: "opencode",
+      cost: this.lastCost,
+      tokens: this.lastTokens
+    };
   }
   async postRaw(path, body) {
     const headers = { "Content-Type": "application/json" };
@@ -1292,24 +1400,51 @@ ${err?.message ?? ""}`
       throw new Error(`OpenCode API error ${res.status} on ${path}`);
     }
   }
-  async send(prompt, context) {
-    const files = (context?.files ?? []).filter((f) => f.enabled !== false && f.present && f.path);
-    const localFiles = files.map((f) => toLocalPath(f.path)).filter((p) => !isHttpUrl(p));
-    const scopedDir = commonAncestorDir(localFiles);
-    const panelPaths = [...localFiles];
-    if (scopedDir) panelPaths.push(scopedDir);
-    const sessionId = await this.createSession(scopedDir ?? void 0);
+  async send(prompt, _context) {
+    void _context;
+    this.seenPermissions.clear();
+    this.seenQuestions.clear();
+    this.runningTools.clear();
+    const stored = await this.getSession();
+    const sessionId = stored.id;
     this.sessionId = sessionId;
+    this.directory = stored.directory;
+    this.lastCost = void 0;
+    this.lastTokens = void 0;
     const body = {
       model: this.modelId ? { providerID: "opencode", modelID: this.modelId } : void 0,
       parts: [{ type: "text", text: prompt }]
     };
     let events;
+    let sseError = null;
+    let eventReceived = false;
+    const sseAbort = new AbortController();
     try {
-      const sse = await this.client.event.subscribe({});
+      const subscribeOptions = {
+        signal: sseAbort.signal,
+        sseMaxRetryAttempts: SSE_MAX_RETRIES,
+        onSseError: (err) => {
+          sseError = err instanceof Error ? err : new Error(String(err));
+        }
+      };
+      const sse = await this.client.event.subscribe(subscribeOptions);
       events = sse.stream;
-    } catch {
+    } catch (err) {
       events = void 0;
+      sseError = err instanceof Error ? err : new Error(String(err));
+    }
+    let globalEvents;
+    try {
+      const globalOptions = {
+        signal: sseAbort.signal,
+        sseMaxRetryAttempts: SSE_MAX_RETRIES,
+        onSseError: () => {
+        }
+      };
+      const g = await this.client.global.event(globalOptions);
+      globalEvents = g.stream;
+    } catch {
+      globalEvents = void 0;
     }
     const promptPromise = this.client.session.prompt({
       path: { id: sessionId },
@@ -1317,6 +1452,19 @@ ${err?.message ?? ""}`
     });
     const encoder = new TextEncoder();
     let closed = false;
+    const startedAt = Date.now();
+    let lastActivity = Date.now();
+    let lastStatusKind;
+    let lastStatusSeconds = -1;
+    let watchdog;
+    let poller;
+    const buildSseError = () => {
+      const detail = sseError?.message ? `
+${sseError.message}` : "";
+      return new Error(
+        `Impossible de recevoir le flux du serveur OpenCode (${this.baseUrl}). V\xE9rifie qu'il est lanc\xE9.${detail}`
+      );
+    };
     return new ReadableStream({
       start: async (controller) => {
         const emit = (frame) => {
@@ -1331,7 +1479,11 @@ ${err?.message ?? ""}`
         const close = () => {
           if (closed) return;
           closed = true;
+          if (watchdog) clearInterval(watchdog);
+          if (poller) clearInterval(poller);
+          sseAbort.abort();
           void events?.return(void 0);
+          void globalEvents?.return(void 0);
           try {
             controller.close();
           } catch {
@@ -1340,9 +1492,71 @@ ${err?.message ?? ""}`
         const fail = (err) => {
           if (closed) return;
           closed = true;
+          if (watchdog) clearInterval(watchdog);
+          if (poller) clearInterval(poller);
+          sseAbort.abort();
           void events?.return(void 0);
+          void globalEvents?.return(void 0);
           try {
             controller.error(err);
+          } catch {
+          }
+        };
+        const emitStatus = (kind, seconds) => {
+          if (lastStatusKind === kind && Math.abs(seconds - lastStatusSeconds) < 10) return;
+          lastStatusKind = kind;
+          lastStatusSeconds = seconds;
+          emit({ t: "status", d: { kind, seconds } });
+        };
+        const handleQuestionEvent = (props) => {
+          if (props.sessionID !== sessionId || !props.id || !props.questions) return;
+          if (this.seenQuestions.has(props.id)) return;
+          this.seenQuestions.add(props.id);
+          lastActivity = Date.now();
+          this.pendingQuestions.set(props.id, { sessionID: sessionId, questions: props.questions });
+          emit({ t: "question", d: { requestID: props.id, questions: props.questions } });
+        };
+        const handlePermissionEvent = (props) => {
+          if (props.sessionID !== sessionId || !props.id) return;
+          if (this.seenPermissions.has(props.id)) return;
+          this.seenPermissions.add(props.id);
+          lastActivity = Date.now();
+          const entry = {
+            permissionID: props.id,
+            title: props.title ?? props.type ?? "permission",
+            type: props.type,
+            pattern: props.pattern
+          };
+          this.pendingPermissions.set(props.id, { sessionID: sessionId, permission: entry });
+          emit({ t: "permission", d: entry });
+        };
+        const pollRequests = async () => {
+          if (closed) return;
+          try {
+            const headers = { Accept: "application/json" };
+            if (this.password) headers.Authorization = `Bearer ${this.password}`;
+            const res = await fetch(`${this.baseUrl}/permission`, { headers });
+            if (res.ok) {
+              const list = await res.json();
+              for (const item of list) {
+                handlePermissionEvent({
+                  sessionID: item.sessionID,
+                  id: item.id,
+                  type: item.permission,
+                  pattern: item.patterns,
+                  title: item.metadata?.filepath
+                });
+              }
+            }
+            const qres = await fetch(`${this.baseUrl}/question`, { headers });
+            if (qres.ok) {
+              const qlist = await qres.json();
+              for (const item of qlist) {
+                if (item.id && item.sessionID === sessionId && item.questions) {
+                  handleQuestionEvent({ sessionID: item.sessionID, id: item.id, questions: item.questions });
+                }
+              }
+            }
           } catch {
           }
         };
@@ -1352,33 +1566,53 @@ ${err?.message ?? ""}`
           try {
             for await (const evt of events) {
               if (closed) return;
+              eventReceived = true;
               if (evt.type === "question.asked") {
-                const props2 = evt.properties;
-                if (props2.sessionID !== sessionId || !props2.id || !props2.questions) continue;
-                this.pendingQuestions.set(props2.id, { sessionID: sessionId, questions: props2.questions });
-                emit({ t: "question", d: { requestID: props2.id, questions: props2.questions } });
+                handleQuestionEvent(evt.properties);
                 continue;
               }
               if (evt.type === "permission.updated") {
+                handlePermissionEvent(evt.properties);
+                continue;
+              }
+              if (evt.type === "message.part.removed") {
                 const props2 = evt.properties;
-                if (props2.sessionID !== sessionId || !props2.id) continue;
-                if (props2.type === "external_directory" && patternInPaths(props2.pattern, panelPaths)) {
-                  void this.replyPermission(props2.id, "always");
-                  continue;
+                if (props2.sessionID === sessionId && props2.partID) {
+                  this.runningTools.delete(props2.partID);
                 }
-                const entry = {
-                  permissionID: props2.id,
-                  title: props2.title ?? props2.type ?? "permission",
-                  type: props2.type,
-                  pattern: props2.pattern
+                continue;
+              }
+              if (evt.type === "message.updated") {
+                const info = evt.properties?.info;
+                if (!info || info.sessionID !== sessionId || typeof info.cost !== "number") continue;
+                lastActivity = Date.now();
+                this.lastCost = info.cost;
+                const rawTokens = info.tokens;
+                const cache = rawTokens?.cache ?? {};
+                this.lastTokens = {
+                  input: Number(rawTokens?.input ?? 0),
+                  output: Number(rawTokens?.output ?? 0),
+                  reasoning: Number(rawTokens?.reasoning ?? 0),
+                  cacheRead: Number(cache.read ?? 0),
+                  cacheWrite: Number(cache.write ?? 0)
                 };
-                this.pendingPermissions.set(props2.id, { sessionID: sessionId, permission: entry });
-                emit({ t: "permission", d: entry });
+                emit({
+                  t: "context",
+                  d: {
+                    sessionID: sessionId,
+                    directory: this.directory,
+                    modelID: typeof info.modelID === "string" ? info.modelID : void 0,
+                    providerID: typeof info.providerID === "string" ? info.providerID : void 0,
+                    cost: info.cost,
+                    tokens: this.lastTokens
+                  }
+                });
                 continue;
               }
               if (evt.type === "message.part.delta") {
                 const props2 = evt.properties;
                 if (props2.sessionID !== sessionId) continue;
+                lastActivity = Date.now();
                 if (props2.field === "reasoning") {
                   if (props2.partID) reasoningSeen.add(props2.partID);
                   if (props2.delta) emit({ t: "reasoning", d: props2.delta });
@@ -1391,14 +1625,48 @@ ${err?.message ?? ""}`
               const props = evt.properties;
               const part = props.part;
               if (!part || part.sessionID !== sessionId) continue;
+              lastActivity = Date.now();
               if (part.type === "reasoning") {
                 if (!part.id || reasoningSeen.has(part.id)) continue;
                 if (part.text) emit({ t: "reasoning", d: part.text, snapshot: true });
                 continue;
               }
               if (part.type === "tool") {
+                if (part.id) {
+                  if (part.state?.status === "running") {
+                    this.runningTools.set(part.id, {
+                      activity: { title: part.title, tool: part.tool, state: "running" },
+                      startedAt: Date.now()
+                    });
+                  } else {
+                    this.runningTools.delete(part.id);
+                  }
+                }
                 emit({ t: "tool", d: { title: part.title, tool: part.tool, state: part.state?.status } });
                 continue;
+              }
+            }
+            if (!closed && !eventReceived) {
+              fail(buildSseError());
+            }
+          } catch {
+            if (!closed && !eventReceived) {
+              fail(buildSseError());
+            }
+          }
+        };
+        const consumeGlobalEvents = async () => {
+          if (!globalEvents) return;
+          try {
+            for await (const evt of globalEvents) {
+              if (closed) return;
+              const envelope = evt;
+              const payload = envelope?.payload;
+              if (!payload?.type) continue;
+              if (payload.type === "permission.updated") {
+                handlePermissionEvent(payload.properties);
+              } else if (payload.type === "question.asked") {
+                handleQuestionEvent(payload.properties);
               }
             }
           } catch {
@@ -1406,7 +1674,12 @@ ${err?.message ?? ""}`
         };
         const consumePrompt = async () => {
           try {
-            const result = await promptPromise;
+            const result = await Promise.race([
+              promptPromise,
+              new Promise(
+                (_, reject) => setTimeout(() => reject(new Error("D\xE9lai d'attente d\xE9pass\xE9 pour la r\xE9ponse du serveur OpenCode")), PROMPT_TIMEOUT_MS)
+              )
+            ]);
             if (closed) return;
             const responseData = result?.data;
             if (!responseData) {
@@ -1434,11 +1707,39 @@ ${err?.message ?? ""}`
             fail(err);
           }
         };
+        emitStatus("connecting", 0);
+        poller = setInterval(() => {
+          void pollRequests();
+        }, 2e3);
+        watchdog = setInterval(() => {
+          if (closed) {
+            if (watchdog) clearInterval(watchdog);
+            return;
+          }
+          const elapsed = Math.floor((Date.now() - lastActivity) / 1e3);
+          const total = Math.floor((Date.now() - startedAt) / 1e3);
+          if (!eventReceived) {
+            emitStatus("waiting", total);
+          } else if (this.pendingPermissions.size > 0 || this.pendingQuestions.size > 0) {
+            emitStatus("waiting", total);
+          } else if (elapsed >= STALL_SECONDS) {
+            if (this.runningTools.size > 0) {
+              emitStatus("tool", elapsed);
+            } else {
+              emitStatus("stalled", elapsed);
+            }
+          }
+        }, HEARTBEAT_INTERVAL_MS);
         void consumeEvents();
+        void consumeGlobalEvents();
         await consumePrompt();
+        close();
       },
       cancel: async () => {
         closed = true;
+        if (watchdog) clearInterval(watchdog);
+        if (poller) clearInterval(poller);
+        sseAbort.abort();
         try {
           await this.client.session.abort({ path: { id: sessionId } });
         } catch {
@@ -1766,6 +2067,12 @@ function parseFrame(line) {
       if (typeof obj.d === "string") return obj;
     } else if (obj.t === "question" || obj.t === "permission" || obj.t === "tool") {
       if (obj.d && typeof obj.d === "object") return obj;
+    } else if (obj.t === "context") {
+      const c = obj.d;
+      if (c && typeof c === "object" && typeof c.sessionID === "string") return obj;
+    } else if (obj.t === "status") {
+      const s = obj.d;
+      if (s && typeof s === "object" && typeof s.kind === "string") return obj;
     }
   } catch {
   }
@@ -1774,6 +2081,8 @@ function parseFrame(line) {
 function useStreaming() {
   const [text, setText] = useState("");
   const [reasoning, setReasoning] = useState("");
+  const [contextInfo, setContextInfo] = useState(null);
+  const [streamStatus, setStreamStatus] = useState(null);
   const [isStreaming, setIsStreaming] = useState(false);
   const abortRef = useRef(null);
   const start = useCallback(async (stream, handlers) => {
@@ -1782,6 +2091,8 @@ function useStreaming() {
     setIsStreaming(true);
     setText("");
     setReasoning("");
+    setContextInfo(null);
+    setStreamStatus(null);
     const decoder = new TextDecoder();
     let buffer = "";
     let fullText = "";
@@ -1806,6 +2117,12 @@ function useStreaming() {
         handlers?.onPermission?.(frame.d);
       } else if (frame.t === "tool") {
         handlers?.onTool?.(frame.d);
+      } else if (frame.t === "context") {
+        setContextInfo(frame.d);
+        handlers?.onContext?.(frame.d);
+      } else if (frame.t === "status") {
+        setStreamStatus(frame.d);
+        handlers?.onStatus?.(frame.d);
       }
     };
     try {
@@ -1861,9 +2178,11 @@ function useStreaming() {
     abortRef.current = null;
     setText("");
     setReasoning("");
+    setContextInfo(null);
+    setStreamStatus(null);
     setIsStreaming(false);
   }, []);
-  return { text, reasoning, isStreaming, start, cancel, reset };
+  return { text, reasoning, contextInfo, streamStatus, isStreaming, start, cancel, reset };
 }
 
 // src/module/lib/validate.ts
@@ -2086,7 +2405,19 @@ var defaultLabels = {
   permissionAllowOnce: "Autoriser une fois",
   permissionAlways: "Toujours autoriser",
   permissionDeny: "Refuser",
-  toolActivity: "Outil"
+  toolActivity: "Outil",
+  context: "Contexte",
+  contextDescription: "Session OpenCode partag\xE9e entre les panneaux. Elle est conserv\xE9e dans un cookie et r\xE9utilis\xE9e, sauf si elle n'existe plus (recr\xE9\xE9e automatiquement).",
+  statusSession: "Session",
+  statusModel: "Mod\xE8le",
+  statusTokens: "Tokens",
+  statusCost: "Co\xFBt",
+  sessionRenew: "Nouvelle session",
+  sessionRenewDescription: "Supprime la session courante et d\xE9marre une nouvelle session.",
+  statusConnecting: "Connexion au serveur OpenCode\u2026",
+  statusWaiting: "En attente du mod\xE8le\u2026",
+  statusStalled: "La g\xE9n\xE9ration semble bloqu\xE9e. V\xE9rifie que le serveur OpenCode est toujours actif.",
+  statusTool: "En attente du serveur (outil en cours / autorisation\u2026)"
 };
 
 // src/module/hooks/useAiPanel.ts
@@ -2097,6 +2428,8 @@ function useAiPanel(options) {
   const [pendingQuestions, setPendingQuestions] = useState2([]);
   const [pendingPermissions, setPendingPermissions] = useState2([]);
   const [toolActivity, setToolActivity] = useState2(null);
+  const [contextInfo, setContextInfo] = useState2(null);
+  const [streamStatus, setStreamStatus] = useState2(null);
   const streaming = useStreaming();
   const sendInFlight = useRef2(false);
   const activeTicketsRef = useRef2(void 0);
@@ -2136,6 +2469,12 @@ function useAiPanel(options) {
   const handleTool = useCallback2((t) => {
     setToolActivity(t);
   }, []);
+  const handleContext = useCallback2((c) => {
+    setContextInfo(c);
+  }, []);
+  const handleStatus = useCallback2((s) => {
+    setStreamStatus(s);
+  }, []);
   const replyQuestion = useCallback2(async (requestID, answers) => {
     if (adapter?.replyQuestion) {
       try {
@@ -2158,11 +2497,16 @@ function useAiPanel(options) {
     if (adapter?.replyPermission) {
       try {
         await adapter.replyPermission(permissionID, response2);
-      } catch {
+        setPendingPermissions((prev) => prev.filter((p) => p.permissionID !== permissionID));
+      } catch (err) {
+        const message = err instanceof Error && err.message ? err.message : labels?.errorStreaming ?? defaultLabels.errorStreaming;
+        setStatus(AiPanelStatus.Error);
+        setResponse({ raw: "", error: message });
       }
+      return;
     }
     setPendingPermissions((prev) => prev.filter((p) => p.permissionID !== permissionID));
-  }, [adapter]);
+  }, [adapter, labels]);
   const send = useCallback2(async (fullPrompt, activeTickets) => {
     if (!sendHandler || sendInFlight.current) return;
     sendInFlight.current = true;
@@ -2172,10 +2516,19 @@ function useAiPanel(options) {
     setPendingQuestions([]);
     setPendingPermissions([]);
     setToolActivity(null);
+    setContextInfo(null);
+    setStreamStatus(null);
     streaming.reset();
     try {
       const enabledFiles = (files ?? []).filter((f) => f.enabled !== false && f.present);
       const stream = await sendHandler(fullPrompt, { files: enabledFiles });
+      if (!sendInFlight.current) {
+        try {
+          await adapter?.cancel?.();
+        } catch {
+        }
+        return;
+      }
       if (!stream) {
         throw new Error(labels?.errorNoStream ?? defaultLabels.errorNoStream);
       }
@@ -2185,7 +2538,9 @@ function useAiPanel(options) {
         onError: handleStreamError,
         onQuestion: handleQuestion,
         onPermission: handlePermission,
-        onTool: handleTool
+        onTool: handleTool,
+        onContext: handleContext,
+        onStatus: handleStatus
       });
     } catch (err) {
       const msg = err instanceof Error ? err.message : labels?.errorUnknown ?? defaultLabels.errorUnknown;
@@ -2193,12 +2548,22 @@ function useAiPanel(options) {
       setResponse({ raw: "", error: msg });
       sendInFlight.current = false;
     }
-  }, [sendHandler, streaming, handleComplete, handleStreamError, handleQuestion, handlePermission, handleTool, labels, files]);
+  }, [sendHandler, streaming, handleComplete, handleStreamError, handleQuestion, handlePermission, handleTool, handleContext, handleStatus, labels, files, adapter]);
   const cancel = useCallback2(() => {
+    if (adapter?.cancel) {
+      void adapter.cancel();
+    }
     streaming.cancel();
     setStatus(AiPanelStatus.Idle);
     sendInFlight.current = false;
-  }, [streaming]);
+  }, [streaming, adapter]);
+  const renewSession = useCallback2(async () => {
+    if (adapter?.renewSession) {
+      await adapter.renewSession();
+    }
+    const info = adapter?.getContextInfo?.();
+    setContextInfo(info ?? null);
+  }, [adapter]);
   const reset = useCallback2(() => {
     streaming.reset();
     setStatus(AiPanelStatus.Idle);
@@ -2213,6 +2578,8 @@ function useAiPanel(options) {
     response: streaming.text && status === AiPanelStatus.Streaming ? { raw: streaming.text } : response,
     streamingText: streaming.text,
     streamingReasoning: streaming.reasoning,
+    contextInfo,
+    streamStatus,
     pendingQuestions,
     pendingPermissions,
     toolActivity,
@@ -2221,7 +2588,8 @@ function useAiPanel(options) {
     decidePermission,
     send,
     cancel,
-    reset
+    reset,
+    renewSession
   };
 }
 
@@ -4470,18 +4838,12 @@ function InfoSheet({ labels, showIntegration = true, showCredits = true }) {
 }
 
 // src/module/components/question-dialog.tsx
-import { useState as useState12, useEffect as useEffect2, useCallback as useCallback4 } from "react";
+import { useState as useState12, useCallback as useCallback4 } from "react";
 import { HelpCircle, Sparkles as Sparkles4 } from "lucide-react";
 import { jsx as jsx24, jsxs as jsxs17 } from "react/jsx-runtime";
 function QuestionDialog({ labels, open, questions, onSubmit, onSkip }) {
   const [selected, setSelected] = useState12({});
   const [custom, setCustom] = useState12({});
-  useEffect2(() => {
-    if (open) {
-      setSelected({});
-      setCustom({});
-    }
-  }, [open]);
   const toggleOption = useCallback4((qi, label, multiple) => {
     setSelected((prev) => {
       const current = prev[qi] ?? [];
@@ -4502,14 +4864,21 @@ function QuestionDialog({ labels, open, questions, onSubmit, onSkip }) {
       const customValue = custom[qi]?.trim();
       return customValue ? [...picked, customValue] : picked;
     });
+    setSelected({});
+    setCustom({});
     onSubmit(answers);
   };
+  const handleSkip = useCallback4(() => {
+    setSelected({});
+    setCustom({});
+    onSkip();
+  }, [onSkip]);
   return /* @__PURE__ */ jsx24(
     Dialog,
     {
       open,
       onOpenChange: (o) => {
-        if (!o) onSkip();
+        if (!o) handleSkip();
       },
       children: /* @__PURE__ */ jsxs17(DialogContent, { className: "sm:max-w-md", children: [
         /* @__PURE__ */ jsxs17(DialogHeader, { children: [
@@ -4560,7 +4929,7 @@ function QuestionDialog({ labels, open, questions, onSubmit, onSkip }) {
           )
         ] }, qi)) }),
         /* @__PURE__ */ jsxs17(DialogFooter, { children: [
-          /* @__PURE__ */ jsx24(Button, { variant: "ghost", size: "sm", onClick: onSkip, children: labels.questionSkip }),
+          /* @__PURE__ */ jsx24(Button, { variant: "ghost", size: "sm", onClick: handleSkip, children: labels.questionSkip }),
           /* @__PURE__ */ jsxs17(Button, { size: "sm", onClick: handleSubmit, disabled: !canSubmit, className: "gap-1", children: [
             /* @__PURE__ */ jsx24(Sparkles4, { className: "size-3" }),
             labels.questionAnswer
@@ -4588,13 +4957,13 @@ function PermissionDialog({ labels, open, permission, onDecide }) {
           ] }),
           /* @__PURE__ */ jsx25(DialogDescription, { children: labels.permissionDescription })
         ] }),
-        /* @__PURE__ */ jsxs18("div", { className: "space-y-2", children: [
+        /* @__PURE__ */ jsxs18("div", { className: "space-y-2 min-w-0", children: [
           /* @__PURE__ */ jsx25("p", { className: "text-xs font-semibold text-foreground", children: permission?.title ?? "\u2014" }),
           permission?.type && /* @__PURE__ */ jsx25("p", { className: "text-xs text-muted-foreground", children: permission.type }),
-          permission?.pattern && /* @__PURE__ */ jsx25("pre", { className: "overflow-x-auto whitespace-pre-wrap rounded-md bg-muted/50 p-2 font-mono text-[10px]", children: Array.isArray(permission.pattern) ? permission.pattern.join("\n") : permission.pattern })
+          permission?.pattern && /* @__PURE__ */ jsx25("pre", { className: "whitespace-pre-wrap break-all max-w-full rounded-md bg-muted/50 p-2 font-mono text-xs", children: Array.isArray(permission.pattern) ? permission.pattern.join("\n") : permission.pattern })
         ] }),
-        /* @__PURE__ */ jsxs18(DialogFooter, { children: [
-          /* @__PURE__ */ jsx25(Button, { variant: "ghost", size: "sm", onClick: () => onDecide("reject"), children: labels.permissionDeny }),
+        /* @__PURE__ */ jsxs18(DialogFooter, { className: "flex-wrap", children: [
+          /* @__PURE__ */ jsx25(Button, { variant: "outline", size: "sm", onClick: () => onDecide("reject"), children: labels.permissionDeny }),
           /* @__PURE__ */ jsx25(Button, { variant: "secondary", size: "sm", onClick: () => onDecide("once"), children: labels.permissionAllowOnce }),
           /* @__PURE__ */ jsx25(Button, { size: "sm", onClick: () => onDecide("always"), children: labels.permissionAlways })
         ] })
@@ -4606,6 +4975,13 @@ function PermissionDialog({ labels, open, permission, onDecide }) {
 // src/module/components/OneShotAiPanel.tsx
 import { jsx as jsx26, jsxs as jsxs19 } from "react/jsx-runtime";
 registerDefaultAdapters();
+function streamStatusText(labels, s) {
+  if (s.kind === "connecting") return labels.statusConnecting ?? defaultLabels.statusConnecting ?? "Connecting\u2026";
+  if (s.kind === "stalled") return labels.statusStalled ?? defaultLabels.statusStalled ?? "Stalled";
+  if (s.kind === "tool") return labels.statusTool ?? defaultLabels.statusTool ?? "Waiting for the server (tool running\u2026)";
+  const base = labels.statusWaiting ?? defaultLabels.statusWaiting ?? "Waiting\u2026";
+  return s.seconds != null ? `${base} (${s.seconds}s)` : base;
+}
 function assembleFullPrompt(labels, systemPrompt, userPrompt, additionalContext, resolvedFiles, resolvedTickets, feedback, includeFeedback) {
   const parts = [];
   if (systemPrompt) parts.push(systemPrompt);
@@ -4714,7 +5090,7 @@ function OneShotAiPanel({
       return void 0;
     }
   }, [onSend, activeConfig]);
-  const { status, response, streamingText, streamingReasoning, pendingQuestions, pendingPermissions, toolActivity, replyQuestion, rejectQuestion, decidePermission, send, cancel, reset } = useAiPanel({
+  const { status, response, streamingText, streamingReasoning, contextInfo, streamStatus, pendingQuestions, pendingPermissions, toolActivity, replyQuestion, rejectQuestion, decidePermission, send, cancel, reset, renewSession } = useAiPanel({
     sendHandler,
     files,
     tickets,
@@ -4805,7 +5181,11 @@ function OneShotAiPanel({
         hasFeedback: feedback !== null
       }
     ),
-    /* @__PURE__ */ jsxs19("div", { className: "flex-1 overflow-y-auto no-scrollbar px-4 py-3 space-y-4 text-xs text-muted-foreground", children: [
+    streamStatus && (status === AiPanelStatus.Streaming || status === AiPanelStatus.Loading) && /* @__PURE__ */ jsxs19("div", { className: "flex items-center gap-1.5 px-4 py-1.5 border-b bg-muted/30 text-xs text-muted-foreground", children: [
+      /* @__PURE__ */ jsx26(Loader23, { className: "size-3 shrink-0 animate-spin" }),
+      /* @__PURE__ */ jsx26("span", { children: streamStatusText(labels, streamStatus) })
+    ] }),
+    /* @__PURE__ */ jsxs19("div", { className: "flex-1 overflow-y-auto no-scrollbar px-4 pt-3 pb-24 space-y-4 text-xs text-muted-foreground", children: [
       /* @__PURE__ */ jsx26(
         PromptSection,
         {
@@ -4864,32 +5244,73 @@ function OneShotAiPanel({
       ),
       children
     ] }),
-    /* @__PURE__ */ jsx26("div", { className: "px-4 py-3 shrink-0", children: /* @__PURE__ */ jsxs19("div", { className: "grid grid-cols-2 gap-2", children: [
-      /* @__PURE__ */ jsxs19(
-        Button,
-        {
-          variant: "secondary",
-          size: "default",
-          onClick: () => setPreviewOpen(true),
-          className: "gap-1",
-          children: [
-            /* @__PURE__ */ jsx26(Eye, { className: "size-3" }),
-            labels.viewPrompt
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsx26(
-        LoadingButton,
-        {
-          label: isBusy ? labels.cancel : actionLabel ?? labels.actionLabel,
-          loading: isBusy,
-          disableOnLoading: false,
-          onClick: handleAction,
-          size: "default",
-          children: /* @__PURE__ */ jsx26(Sparkles5, { className: "size-3.5" })
-        }
-      )
-    ] }) }),
+    /* @__PURE__ */ jsxs19("div", { className: "relative", children: [
+      contextInfo && /* @__PURE__ */ jsxs19("div", { className: "absolute bottom-full left-3 right-3 bottom-5 rounded-md flex items-center gap-x-3 gap-y-1 flex-wrap px-4 py-1.5 bg-card border z-4 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] text-xs text-muted-foreground [&>span]:min-w-0 [&>span]:break-all", children: [
+        /* @__PURE__ */ jsxs19("span", { className: "font-mono", children: [
+          labels.context ?? defaultLabels.context,
+          " : ",
+          contextInfo.sessionID.slice(0, 8)
+        ] }),
+        contextInfo.modelID && /* @__PURE__ */ jsxs19("span", { children: [
+          labels.statusModel ?? defaultLabels.statusModel,
+          " : ",
+          contextInfo.modelID
+        ] }),
+        contextInfo.tokens && /* @__PURE__ */ jsxs19("span", { children: [
+          labels.statusTokens ?? defaultLabels.statusTokens,
+          " : ",
+          contextInfo.tokens.input,
+          "\u2192",
+          contextInfo.tokens.output
+        ] }),
+        typeof contextInfo.cost === "number" && /* @__PURE__ */ jsxs19("span", { children: [
+          labels.statusCost ?? defaultLabels.statusCost,
+          " : $",
+          contextInfo.cost.toFixed(4)
+        ] }),
+        /* @__PURE__ */ jsxs19(
+          Button,
+          {
+            variant: "outline",
+            size: "sm",
+            className: "h-6 ml-auto gap-1 px-2 text-xs",
+            disabled: isBusy,
+            title: labels.sessionRenewDescription ?? defaultLabels.sessionRenewDescription,
+            onClick: () => void renewSession(),
+            children: [
+              /* @__PURE__ */ jsx26(RotateCcw, { className: "size-3" }),
+              labels.sessionRenew ?? defaultLabels.sessionRenew
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsx26("div", { className: "px-4 py-3 shrink-0", children: /* @__PURE__ */ jsxs19("div", { className: "grid grid-cols-2 gap-2", children: [
+        /* @__PURE__ */ jsxs19(
+          Button,
+          {
+            variant: "secondary",
+            size: "default",
+            onClick: () => setPreviewOpen(true),
+            className: "gap-1",
+            children: [
+              /* @__PURE__ */ jsx26(Eye, { className: "size-3" }),
+              labels.viewPrompt
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsx26(
+          LoadingButton,
+          {
+            label: isBusy ? labels.cancel : actionLabel ?? labels.actionLabel,
+            loading: isBusy,
+            disableOnLoading: false,
+            onClick: handleAction,
+            size: "default",
+            children: /* @__PURE__ */ jsx26(Sparkles5, { className: "size-3.5" })
+          }
+        )
+      ] }) })
+    ] }),
     /* @__PURE__ */ jsx26(Sheet, { open: previewOpen, onOpenChange: setPreviewOpen, children: /* @__PURE__ */ jsx26(SheetContent, { side: "right", className: "w-[480px] sm:w-[540px] p-0", children: /* @__PURE__ */ jsxs19("div", { className: "flex flex-col h-full", children: [
       /* @__PURE__ */ jsxs19(SheetHeader, { className: "px-4 py-3 shrink-0 border-b space-y-1", children: [
         /* @__PURE__ */ jsx26(SheetTitle, { className: "text-sm", children: labels.promptPreview }),

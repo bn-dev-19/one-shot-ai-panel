@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo, useCallback, useRef } from "react"
-import { Bot, Sparkles, Eye, Copy, Check } from "lucide-react"
+import { Bot, Sparkles, Eye, Copy, Check, Loader2, RotateCcw } from "lucide-react"
 import { cn } from "../lib/utils"
 import { AiPanelLanguage, translations } from "../i18n"
 import { useAiPanel } from "../hooks/useAiPanel"
@@ -12,9 +12,11 @@ import type {
   AiPanelLabels, AiPanelResponse,
   AiPanelContextFile, AiPanelTicket,
   AiPanelResponseParser, AiPanelResponseValidation,
+  AiPanelStreamStatus,
 } from "../types"
 import { AiPanelStatus, AiPanelInvalidMode } from "../types"
 import type { AiAdapterConfig } from "../adapters"
+import { defaultLabels } from "../lib/defaults"
 import { LoadingButton } from "@/components/loading-button"
 import { Button } from "@/components/ui/button"
 import {
@@ -57,6 +59,14 @@ export interface OneShotAiPanelProps {
   showInfoCredits?: boolean
   showInfoButton?: boolean
   showSettingsButton?: boolean
+}
+
+function streamStatusText(labels: AiPanelLabels, s: AiPanelStreamStatus): string {
+  if (s.kind === "connecting") return labels.statusConnecting ?? defaultLabels.statusConnecting ?? "Connecting…"
+  if (s.kind === "stalled") return labels.statusStalled ?? defaultLabels.statusStalled ?? "Stalled"
+  if (s.kind === "tool") return labels.statusTool ?? defaultLabels.statusTool ?? "Waiting for the server (tool running…)"
+  const base = labels.statusWaiting ?? defaultLabels.statusWaiting ?? "Waiting…"
+  return s.seconds != null ? `${base} (${s.seconds}s)` : base
 }
 
 function assembleFullPrompt(
@@ -172,7 +182,7 @@ export function OneShotAiPanel({
     }
   }, [onSend, activeConfig])
 
-  const { status, response, streamingText, streamingReasoning, pendingQuestions, pendingPermissions, toolActivity, replyQuestion, rejectQuestion, decidePermission, send, cancel, reset } = useAiPanel({
+  const { status, response, streamingText, streamingReasoning, contextInfo, streamStatus, pendingQuestions, pendingPermissions, toolActivity, replyQuestion, rejectQuestion, decidePermission, send, cancel, reset, renewSession } = useAiPanel({
     sendHandler,
     files,
     tickets,
@@ -271,7 +281,14 @@ export function OneShotAiPanel({
           hasFeedback={feedback !== null}
         />
 
-      <div className="flex-1 overflow-y-auto no-scrollbar px-4 py-3 space-y-4 text-xs text-muted-foreground">
+      {streamStatus && (status === AiPanelStatus.Streaming || status === AiPanelStatus.Loading) && (
+        <div className="flex items-center gap-1.5 px-4 py-1.5 border-b bg-muted/30 text-xs text-muted-foreground">
+          <Loader2 className="size-3 shrink-0 animate-spin" />
+          <span>{streamStatusText(labels, streamStatus)}</span>
+        </div>
+      )}
+
+      <div className="flex-1 overflow-y-auto no-scrollbar px-4 pt-3 pb-24 space-y-4 text-xs text-muted-foreground">
         <PromptSection
           labels={labels}
           systemPrompt={systemPrompt}
@@ -321,26 +338,58 @@ export function OneShotAiPanel({
         {children}
       </div>
 
-      <div className="px-4 py-3 shrink-0">
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            variant="secondary"
-            size="default"
-            onClick={() => setPreviewOpen(true)}
-            className="gap-1"
-          >
-            <Eye className="size-3" />
-            {labels.viewPrompt}
-          </Button>
-          <LoadingButton
-            label={isBusy ? labels.cancel : (actionLabel ?? labels.actionLabel)}
-            loading={isBusy}
-            disableOnLoading={false}
-            onClick={handleAction}
-            size="default"
-          >
-            <Sparkles className="size-3.5" />
-          </LoadingButton>
+      <div className="relative">
+        {contextInfo && (
+          <div className="absolute bottom-full left-3 right-3 bottom-5 rounded-md flex items-center gap-x-3 gap-y-1 flex-wrap px-4 py-1.5 bg-card border z-4 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] text-xs text-muted-foreground [&>span]:min-w-0 [&>span]:break-all">
+            <span className="font-mono">
+              {labels.context ?? defaultLabels.context} : {contextInfo.sessionID.slice(0, 8)}
+            </span>
+            {contextInfo.modelID && (
+              <span>{labels.statusModel ?? defaultLabels.statusModel} : {contextInfo.modelID}</span>
+            )}
+            {contextInfo.tokens && (
+              <span>
+                {labels.statusTokens ?? defaultLabels.statusTokens} : {contextInfo.tokens.input}→{contextInfo.tokens.output}
+              </span>
+            )}
+            {typeof contextInfo.cost === "number" && (
+              <span>{labels.statusCost ?? defaultLabels.statusCost} : ${contextInfo.cost.toFixed(4)}</span>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-6 ml-auto gap-1 px-2 text-xs"
+              disabled={isBusy}
+              title={labels.sessionRenewDescription ?? defaultLabels.sessionRenewDescription}
+              onClick={() => void renewSession()}
+            >
+              <RotateCcw className="size-3" />
+              {labels.sessionRenew ?? defaultLabels.sessionRenew}
+            </Button>
+          </div>
+        )}
+
+        <div className="px-4 py-3 shrink-0">
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              variant="secondary"
+              size="default"
+              onClick={() => setPreviewOpen(true)}
+              className="gap-1"
+            >
+              <Eye className="size-3" />
+              {labels.viewPrompt}
+            </Button>
+            <LoadingButton
+              label={isBusy ? labels.cancel : (actionLabel ?? labels.actionLabel)}
+              loading={isBusy}
+              disableOnLoading={false}
+              onClick={handleAction}
+              size="default"
+            >
+              <Sparkles className="size-3.5" />
+            </LoadingButton>
+          </div>
         </div>
       </div>
 
