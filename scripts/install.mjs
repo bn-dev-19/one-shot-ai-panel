@@ -56,6 +56,7 @@ Options:
   --no-registry    Always copy primitives directly, even when components.json is detected
   --pm <pm>        Package manager: pnpm | npm | yarn | bun (default: auto-detected)
   --module-dir <d> Destination subdirectory for the module (default: src/external-modules/ai-panel)
+  --module-only    Only copy/update the module source (keep ui/*, css and deps untouched)
   --help           Show this help
 
 When the target project has a components.json (shadcn), the panel primitives
@@ -66,7 +67,7 @@ so you get the native skip/overwrite prompts. Otherwise they are copied directly
 }
 
 function parseArgs(argv) {
-  const args = { dir: process.cwd(), force: false, noInstall: false, noCss: false, noRegistry: false, pm: null, moduleDir: "src/external-modules/ai-panel" }
+  const args = { dir: process.cwd(), force: false, noInstall: false, noCss: false, noRegistry: false, pm: null, moduleDir: "src/external-modules/ai-panel", moduleOnly: false }
   const rest = [...argv]
   if (rest[0] === "install") rest.shift()
   while (rest.length) {
@@ -85,6 +86,8 @@ function parseArgs(argv) {
       args.pm = rest.shift()
     } else if (a === "--module-dir") {
       args.moduleDir = rest.shift()
+    } else if (a === "--module-only") {
+      args.moduleOnly = true
     } else if (a.startsWith("-")) {
       process.stderr.write(`Unknown option: ${a}\n`)
       help()
@@ -400,6 +403,14 @@ if (!existsSync(MODULE_SRC) || !existsSync(PRIMITIVES_SRC)) {
 }
 
 log("", `Integrating OneShotAiPanel → ${target}`)
+const moduleExists = existsSync(join(target, args.moduleDir))
+if (args.moduleOnly || moduleExists) {
+  installModule(target, args.force)
+  log("", moduleExists
+    ? `Existing source-mode install detected in ${args.moduleDir} → module-only ${args.force ? "update" : "check"}. Use --force to overwrite.`
+    : "module-only mode: ui/*, css and deps are left untouched.")
+  process.exit(0)
+}
 const framework = detectFramework(target)
 const viaRegistry = !args.noRegistry && detectShadcn(target)
 installModule(target, args.force)

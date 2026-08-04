@@ -70,7 +70,7 @@ export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAda
         <Settings className="size-3.5" />
         {labels.settings}
       </SheetTrigger>
-      <SheetContent side="right" className="w-[400px] sm:w-[440px] p-0">
+      <SheetContent side="right" className="w-full max-w-[400px] sm:w-[440px] p-0">
         <div className="flex flex-col h-full">
           <SheetHeader className="px-4 py-3 shrink-0 border-b space-y-1">
             <SheetTitle className="text-sm">{labels.settings}</SheetTitle>

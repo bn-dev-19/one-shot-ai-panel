@@ -92,7 +92,10 @@ one-shot-ai-panel install --no-install   # skip dependency install
 one-shot-ai-panel install --no-css       # do not modify globals.css
 one-shot-ai-panel install --no-registry  # always copy primitives, even with components.json
 one-shot-ai-panel install --pm npm       # force the package manager
+one-shot-ai-panel install --force --module-only  # update ONLY the module source (keeps ui/*, css, deps untouched)
 ```
+
+> **Source-mode updates:** if `src/external-modules/ai-panel` already exists, the installer **automatically switches to module-only mode** (it never re-runs `shadcn add` over an existing install, so your customized `src/components/ui/*` are never overwritten). To pull the latest module, run `pnpm exec one-shot-ai-panel install --force` — or pass `--module-only` explicitly. This mirrors the source-mode philosophy: the panel code lives in your repository, and updates only refresh the module.
 
 ### 3. Source copy (git clone)
 

@@ -4071,7 +4071,7 @@ function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterCha
       /* @__PURE__ */ jsx22(Settings, { className: "size-3.5" }),
       labels.settings
     ] }),
-    /* @__PURE__ */ jsx22(SheetContent, { side: "right", className: "w-[400px] sm:w-[440px] p-0", children: /* @__PURE__ */ jsxs15("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsx22(SheetContent, { side: "right", className: "w-full max-w-[400px] sm:w-[440px] p-0", children: /* @__PURE__ */ jsxs15("div", { className: "flex flex-col h-full", children: [
       /* @__PURE__ */ jsx22(SheetHeader, { className: "px-4 py-3 shrink-0 border-b space-y-1", children: /* @__PURE__ */ jsx22(SheetTitle, { className: "text-sm", children: labels.settings }) }),
       /* @__PURE__ */ jsxs15("div", { className: "flex-1 overflow-y-auto no-scrollbar p-4 space-y-5", children: [
         /* @__PURE__ */ jsxs15("div", { className: "space-y-1.5", children: [
