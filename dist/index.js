@@ -4519,7 +4519,7 @@ function QuestionDialog({ labels, open, questions, onSubmit, onSkip }) {
           ] }),
           /* @__PURE__ */ jsx24(DialogDescription, { children: labels.questionDescription })
         ] }),
-        /* @__PURE__ */ jsx24("div", { className: "max-h-[50vh] space-y-4 overflow-y-auto pr-1", children: questions.map((q, qi) => /* @__PURE__ */ jsxs17("div", { className: "space-y-2", children: [
+        /* @__PURE__ */ jsx24("div", { className: "max-h-[50vh] space-y-4 overflow-y-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden", children: questions.map((q, qi) => /* @__PURE__ */ jsxs17("div", { className: "space-y-2", children: [
           q.header && /* @__PURE__ */ jsx24("p", { className: "text-xs font-semibold text-foreground", children: q.header }),
           /* @__PURE__ */ jsx24("p", { className: "text-xs text-foreground", children: q.question }),
           /* @__PURE__ */ jsx24("div", { className: "space-y-1", children: q.options.map((opt) => {

@@ -75,7 +75,7 @@ export function QuestionDialog({ labels, open, questions, onSubmit, onSkip }: Qu
           </DialogTitle>
           <DialogDescription>{labels.questionDescription}</DialogDescription>
         </DialogHeader>
-        <div className="max-h-[50vh] space-y-4 overflow-y-auto pr-1">
+        <div className="max-h-[50vh] space-y-4 overflow-y-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {questions.map((q, qi) => (
             <div key={qi} className="space-y-2">
               {q.header && <p className="text-xs font-semibold text-foreground">{q.header}</p>}
