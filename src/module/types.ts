@@ -16,6 +16,39 @@ export interface AiPanelContextFile {
   path: string
 }
 
+export interface AiPanelQuestionOption {
+  label: string
+  description?: string
+}
+
+export interface AiPanelQuestion {
+  question: string
+  header?: string
+  options: AiPanelQuestionOption[]
+  multiple?: boolean
+  custom?: boolean
+}
+
+export interface AiPanelPendingQuestion {
+  requestID: string
+  questions: AiPanelQuestion[]
+}
+
+export interface AiPanelPendingPermission {
+  permissionID: string
+  title: string
+  type?: string
+  pattern?: string | string[]
+}
+
+export type AiPanelPermissionResponse = "once" | "always" | "reject"
+
+export interface AiPanelToolActivity {
+  title?: string
+  tool?: string
+  state?: string
+}
+
 export const AiPanelJsonType = {
   Object: "object",
   Array: "array",
@@ -234,4 +267,15 @@ export interface AiPanelLabels {
   diffExisting: string
   diffProposed: string
   diffClose: string
+  questionTitle: string
+  questionDescription: string
+  questionAnswer: string
+  questionSkip: string
+  questionCustomPlaceholder: string
+  permissionTitle: string
+  permissionDescription: string
+  permissionAllowOnce: string
+  permissionAlways: string
+  permissionDeny: string
+  toolActivity: string
 }

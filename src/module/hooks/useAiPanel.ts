@@ -7,6 +7,10 @@ import type {
   AiPanelTicket,
   AiPanelLabels,
   AiPanelResponseParser,
+  AiPanelPendingQuestion,
+  AiPanelPendingPermission,
+  AiPanelPermissionResponse,
+  AiPanelToolActivity,
 } from "../types"
 import { AiPanelStatus } from "../types"
 import type { AiPanelSendHandler } from "../adapters/types"
@@ -27,18 +31,28 @@ export interface UseAiPanelReturn {
   response: AiPanelResponse | null
   streamingText: string
   streamingReasoning: string
+  pendingQuestions: AiPanelPendingQuestion[]
+  pendingPermissions: AiPanelPendingPermission[]
+  toolActivity: AiPanelToolActivity | null
+  replyQuestion: (requestID: string, answers: string[][]) => Promise<void>
+  rejectQuestion: (requestID: string) => Promise<void>
+  decidePermission: (permissionID: string, response: AiPanelPermissionResponse) => Promise<void>
   send: (fullPrompt: string, activeTickets?: AiPanelTicket[]) => Promise<void>
   cancel: () => void
   reset: () => void
 }
 
 export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
-  const { sendHandler, labels, parser } = options
+  const { sendHandler, labels, parser, files } = options
   const [status, setStatus] = useState<AiPanelStatus>(AiPanelStatus.Idle)
   const [response, setResponse] = useState<AiPanelResponse | null>(null)
+  const [pendingQuestions, setPendingQuestions] = useState<AiPanelPendingQuestion[]>([])
+  const [pendingPermissions, setPendingPermissions] = useState<AiPanelPendingPermission[]>([])
+  const [toolActivity, setToolActivity] = useState<AiPanelToolActivity | null>(null)
   const streaming = useStreaming()
   const sendInFlight = useRef(false)
   const activeTicketsRef = useRef<AiPanelTicket[] | undefined>(undefined)
+  const adapter = (sendHandler as AiPanelSendHandler | undefined)?.adapter
 
   const handleComplete = useCallback((raw: string) => {
     const activeTickets = activeTicketsRef.current
@@ -72,6 +86,51 @@ export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
     sendInFlight.current = false
   }, [labels])
 
+  const handleQuestion = useCallback((q: AiPanelPendingQuestion) => {
+    setPendingQuestions((prev) => (prev.some((p) => p.requestID === q.requestID) ? prev : [...prev, q]))
+  }, [])
+
+  const handlePermission = useCallback((p: AiPanelPendingPermission) => {
+    setPendingPermissions((prev) => (prev.some((x) => x.permissionID === p.permissionID) ? prev : [...prev, p]))
+  }, [])
+
+  const handleTool = useCallback((t: AiPanelToolActivity) => {
+    setToolActivity(t)
+  }, [])
+
+  const replyQuestion = useCallback(async (requestID: string, answers: string[][]) => {
+    if (adapter?.replyQuestion) {
+      try {
+        await adapter.replyQuestion(requestID, answers)
+      } catch {
+        // ignore
+      }
+    }
+    setPendingQuestions((prev) => prev.filter((q) => q.requestID !== requestID))
+  }, [adapter])
+
+  const rejectQuestion = useCallback(async (requestID: string) => {
+    if (adapter?.rejectQuestion) {
+      try {
+        await adapter.rejectQuestion(requestID)
+      } catch {
+        // ignore
+      }
+    }
+    setPendingQuestions((prev) => prev.filter((q) => q.requestID !== requestID))
+  }, [adapter])
+
+  const decidePermission = useCallback(async (permissionID: string, response: AiPanelPermissionResponse) => {
+    if (adapter?.replyPermission) {
+      try {
+        await adapter.replyPermission(permissionID, response)
+      } catch {
+        // ignore
+      }
+    }
+    setPendingPermissions((prev) => prev.filter((p) => p.permissionID !== permissionID))
+  }, [adapter])
+
   const send = useCallback(async (
     fullPrompt: string,
     activeTickets?: AiPanelTicket[],
@@ -82,24 +141,34 @@ export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
     activeTicketsRef.current = activeTickets
     setStatus(AiPanelStatus.Loading)
     setResponse(null)
+    setPendingQuestions([])
+    setPendingPermissions([])
+    setToolActivity(null)
     streaming.reset()
 
     try {
-      const stream = await sendHandler(fullPrompt)
+      const enabledFiles = (files ?? []).filter((f) => f.enabled !== false && f.present)
+      const stream = await sendHandler(fullPrompt, { files: enabledFiles })
 
       if (!stream) {
         throw new Error(labels?.errorNoStream ?? defaultLabels.errorNoStream)
       }
 
       setStatus(AiPanelStatus.Streaming)
-      streaming.start(stream, handleComplete, handleStreamError)
+      streaming.start(stream, {
+        onComplete: handleComplete,
+        onError: handleStreamError,
+        onQuestion: handleQuestion,
+        onPermission: handlePermission,
+        onTool: handleTool,
+      })
     } catch (err) {
       const msg = err instanceof Error ? err.message : (labels?.errorUnknown ?? defaultLabels.errorUnknown)
       setStatus(AiPanelStatus.Error)
       setResponse({ raw: "", error: msg })
       sendInFlight.current = false
     }
-  }, [sendHandler, streaming, handleComplete, handleStreamError, labels])
+  }, [sendHandler, streaming, handleComplete, handleStreamError, handleQuestion, handlePermission, handleTool, labels, files])
 
   const cancel = useCallback(() => {
     streaming.cancel()
@@ -111,6 +180,9 @@ export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
     streaming.reset()
     setStatus(AiPanelStatus.Idle)
     setResponse(null)
+    setPendingQuestions([])
+    setPendingPermissions([])
+    setToolActivity(null)
     sendInFlight.current = false
   }, [streaming])
 
@@ -119,6 +191,12 @@ export function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn {
     response: streaming.text && status === AiPanelStatus.Streaming ? { raw: streaming.text } : response,
     streamingText: streaming.text,
     streamingReasoning: streaming.reasoning,
+    pendingQuestions,
+    pendingPermissions,
+    toolActivity,
+    replyQuestion,
+    rejectQuestion,
+    decidePermission,
     send,
     cancel,
     reset,

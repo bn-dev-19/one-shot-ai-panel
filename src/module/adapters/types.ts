@@ -1,4 +1,5 @@
 import type { OpencodeClient } from "@opencode-ai/sdk"
+import type { AiPanelContextFile, AiPanelPermissionResponse } from "../types"
 import { OpenCodeModels, ShadcnModels } from "./models"
 
 export const ProviderType = {
@@ -47,8 +48,15 @@ export const PROVIDER_META: Record<ProviderType, ProviderMeta> = {
   },
 }
 
+export interface AiPanelSendContext {
+  files?: AiPanelContextFile[]
+}
+
 export interface AiPanelAdapter {
-  send(prompt: string): Promise<ReadableStream<Uint8Array>>
+  send(prompt: string, context?: AiPanelSendContext): Promise<ReadableStream<Uint8Array>>
+  replyQuestion?(requestID: string, answers: string[][]): Promise<void>
+  rejectQuestion?(requestID: string): Promise<void>
+  replyPermission?(permissionID: string, response: AiPanelPermissionResponse): Promise<void>
 }
 
 export interface OpenCodeAdapterConfig {
@@ -76,4 +84,7 @@ export interface FallbackAdapterConfig {
 
 export type AiAdapterConfig = OpenCodeAdapterConfig | ShadcnAdapterConfig | FallbackAdapterConfig
 
-export type AiPanelSendHandler = (prompt: string) => Promise<ReadableStream<Uint8Array>>
+export type AiPanelSendHandler = ((
+  prompt: string,
+  context?: AiPanelSendContext,
+) => Promise<ReadableStream<Uint8Array>>) & { adapter?: AiPanelAdapter }

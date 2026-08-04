@@ -5,6 +5,7 @@ export type {
   AiPanelAdapter,
   AiAdapterConfig,
   AiPanelSendHandler,
+  AiPanelSendContext,
   OpenCodeAdapterConfig,
   ShadcnAdapterConfig,
   FallbackAdapterConfig,

@@ -31,6 +31,8 @@ import { ResponseSection } from "./response-section"
 import { FeedbackSection } from "./feedback-section"
 import { ConfigSheet } from "./config-sheet"
 import { InfoSheet } from "./info-sheet"
+import { QuestionDialog } from "./question-dialog"
+import { PermissionDialog } from "./permission-dialog"
 
 registerDefaultAdapters()
 
@@ -170,7 +172,7 @@ export function OneShotAiPanel({
     }
   }, [onSend, activeConfig])
 
-  const { status, response, streamingText, streamingReasoning, send, cancel, reset } = useAiPanel({
+  const { status, response, streamingText, streamingReasoning, pendingQuestions, pendingPermissions, toolActivity, replyQuestion, rejectQuestion, decidePermission, send, cancel, reset } = useAiPanel({
     sendHandler,
     files,
     tickets,
@@ -303,6 +305,7 @@ export function OneShotAiPanel({
           response={response}
           streamingText={streamingText}
           streamingReasoning={streamingReasoning}
+          toolActivity={toolActivity}
           tickets={resolvedTickets}
           onPlug={onPlug}
           invalidMode={invalidMode}
@@ -360,6 +363,21 @@ export function OneShotAiPanel({
           </div>
         </SheetContent>
       </Sheet>
+
+      <QuestionDialog
+        labels={labels}
+        open={pendingQuestions.length > 0}
+        questions={pendingQuestions[0]?.questions ?? []}
+        onSubmit={(answers) => pendingQuestions[0] && replyQuestion(pendingQuestions[0].requestID, answers)}
+        onSkip={() => pendingQuestions[0] && rejectQuestion(pendingQuestions[0].requestID)}
+      />
+
+      <PermissionDialog
+        labels={labels}
+        open={pendingPermissions.length > 0}
+        permission={pendingPermissions[0] ?? null}
+        onDecide={(r) => pendingPermissions[0] && decidePermission(pendingPermissions[0].permissionID, r)}
+      />
     </div>
   )
 }

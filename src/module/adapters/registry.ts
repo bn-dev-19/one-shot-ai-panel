@@ -1,4 +1,4 @@
-import type { AiAdapterConfig, AiPanelSendHandler, AiPanelAdapter } from "./types"
+import type { AiAdapterConfig, AiPanelSendContext, AiPanelSendHandler, AiPanelAdapter } from "./types"
 import { ProviderType } from "./types"
 
 const registry = new Map<ProviderType, new (config: AiAdapterConfig) => AiPanelAdapter>()
@@ -15,5 +15,7 @@ export function buildSend(config: AiAdapterConfig): AiPanelSendHandler {
   }
 
   const adapter = new AdapterClass(config)
-  return (prompt: string) => adapter.send(prompt)
+  const handler: AiPanelSendHandler = (prompt: string, context?: AiPanelSendContext) => adapter.send(prompt, context)
+  handler.adapter = adapter
+  return handler
 }

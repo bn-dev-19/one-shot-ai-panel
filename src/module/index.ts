@@ -11,6 +11,8 @@ export { ResponseSection } from "./components/response-section"
 export { FeedbackSection } from "./components/feedback-section"
 export { InfoSheet } from "./components/info-sheet"
 export { DiffDialog } from "./components/diff-dialog"
+export { QuestionDialog } from "./components/question-dialog"
+export { PermissionDialog } from "./components/permission-dialog"
 export { AI_PANEL_PROJECT_LINKS } from "./project-links"
 
 // Hooks
@@ -39,6 +41,7 @@ export type {
   AiPanelAdapter,
   AiAdapterConfig,
   AiPanelSendHandler,
+  AiPanelSendContext,
   OpenCodeAdapterConfig,
   ShadcnAdapterConfig,
   FallbackAdapterConfig,
@@ -57,6 +60,12 @@ export type {
   AiPanelTicket,
   AiPanelSubTicket,
   AiPanelJsonSchema,
+  AiPanelQuestion,
+  AiPanelQuestionOption,
+  AiPanelPendingQuestion,
+  AiPanelPendingPermission,
+  AiPanelPermissionResponse,
+  AiPanelToolActivity,
 } from "./types"
 
 // Labels

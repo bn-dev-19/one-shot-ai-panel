@@ -26,6 +26,33 @@ interface AiPanelContextFile {
     enabled?: boolean;
     path: string;
 }
+interface AiPanelQuestionOption {
+    label: string;
+    description?: string;
+}
+interface AiPanelQuestion {
+    question: string;
+    header?: string;
+    options: AiPanelQuestionOption[];
+    multiple?: boolean;
+    custom?: boolean;
+}
+interface AiPanelPendingQuestion {
+    requestID: string;
+    questions: AiPanelQuestion[];
+}
+interface AiPanelPendingPermission {
+    permissionID: string;
+    title: string;
+    type?: string;
+    pattern?: string | string[];
+}
+type AiPanelPermissionResponse = "once" | "always" | "reject";
+interface AiPanelToolActivity {
+    title?: string;
+    tool?: string;
+    state?: string;
+}
 declare const AiPanelJsonType: {
     readonly Object: "object";
     readonly Array: "array";
@@ -232,6 +259,17 @@ interface AiPanelLabels {
     diffExisting: string;
     diffProposed: string;
     diffClose: string;
+    questionTitle: string;
+    questionDescription: string;
+    questionAnswer: string;
+    questionSkip: string;
+    questionCustomPlaceholder: string;
+    permissionTitle: string;
+    permissionDescription: string;
+    permissionAllowOnce: string;
+    permissionAlways: string;
+    permissionDeny: string;
+    toolActivity: string;
 }
 
 declare const translations: Record<AiPanelLanguage, AiPanelLabels>;
@@ -253,8 +291,14 @@ interface ProviderMeta {
     }[];
 }
 declare const PROVIDER_META: Record<ProviderType$1, ProviderMeta>;
+interface AiPanelSendContext {
+    files?: AiPanelContextFile[];
+}
 interface AiPanelAdapter {
-    send(prompt: string): Promise<ReadableStream<Uint8Array>>;
+    send(prompt: string, context?: AiPanelSendContext): Promise<ReadableStream<Uint8Array>>;
+    replyQuestion?(requestID: string, answers: string[][]): Promise<void>;
+    rejectQuestion?(requestID: string): Promise<void>;
+    replyPermission?(permissionID: string, response: AiPanelPermissionResponse): Promise<void>;
 }
 interface OpenCodeAdapterConfig {
     type: typeof ProviderType$1.Opencode;
@@ -277,7 +321,9 @@ interface FallbackAdapterConfig {
     apiUrl?: string;
 }
 type AiAdapterConfig = OpenCodeAdapterConfig | ShadcnAdapterConfig | FallbackAdapterConfig;
-type AiPanelSendHandler = (prompt: string) => Promise<ReadableStream<Uint8Array>>;
+type AiPanelSendHandler = ((prompt: string, context?: AiPanelSendContext) => Promise<ReadableStream<Uint8Array>>) & {
+    adapter?: AiPanelAdapter;
+};
 
 declare const OpenCodeModels: {
     readonly None: "";
@@ -347,9 +393,17 @@ declare class OpenCodeAdapter implements AiPanelAdapter {
     private client;
     private baseUrl;
     private modelId?;
+    private password?;
+    private sessionId?;
+    private pendingQuestions;
+    private pendingPermissions;
     constructor(config: OpenCodeAdapterConfig);
     private createSession;
-    send(prompt: string): Promise<ReadableStream<Uint8Array>>;
+    replyQuestion(requestID: string, answers: string[][]): Promise<void>;
+    rejectQuestion(requestID: string): Promise<void>;
+    replyPermission(permissionID: string, response: AiPanelPermissionResponse): Promise<void>;
+    private postRaw;
+    send(prompt: string, context?: AiPanelSendContext): Promise<ReadableStream<Uint8Array>>;
 }
 
 /**
@@ -470,11 +524,12 @@ interface ResponseSectionProps {
     response: AiPanelResponse | null;
     streamingText: string;
     streamingReasoning?: string;
+    toolActivity?: AiPanelToolActivity | null;
     invalidMode?: AiPanelInvalidMode;
     tickets?: AiPanelTicket[];
     onPlug?: (response: AiPanelResponse, selectedKeys?: string[]) => void;
 }
-declare function ResponseSection({ labels, status, response, streamingText, streamingReasoning, invalidMode, tickets, onPlug, }: ResponseSectionProps): react.JSX.Element;
+declare function ResponseSection({ labels, status, response, streamingText, streamingReasoning, toolActivity, invalidMode, tickets, onPlug, }: ResponseSectionProps): react.JSX.Element;
 
 interface FeedbackSectionProps {
     labels: AiPanelLabels;
@@ -504,6 +559,23 @@ interface DiffDialogProps {
 }
 declare function DiffDialog({ labels, title, subtitle, statusLabel, statusClass, oldValue, newValue, open, onOpenChange, }: DiffDialogProps): react.JSX.Element;
 
+interface QuestionDialogProps {
+    labels: AiPanelLabels;
+    open: boolean;
+    questions: AiPanelQuestion[];
+    onSubmit: (answers: string[][]) => void;
+    onSkip: () => void;
+}
+declare function QuestionDialog({ labels, open, questions, onSubmit, onSkip }: QuestionDialogProps): react.JSX.Element;
+
+interface PermissionDialogProps {
+    labels: AiPanelLabels;
+    open: boolean;
+    permission: AiPanelPendingPermission | null;
+    onDecide: (response: AiPanelPermissionResponse) => void;
+}
+declare function PermissionDialog({ labels, open, permission, onDecide }: PermissionDialogProps): react.JSX.Element;
+
 declare const AI_PANEL_PROJECT_LINKS: {
     landingPage: string;
     github: string;
@@ -521,17 +593,30 @@ interface UseAiPanelReturn {
     response: AiPanelResponse | null;
     streamingText: string;
     streamingReasoning: string;
+    pendingQuestions: AiPanelPendingQuestion[];
+    pendingPermissions: AiPanelPendingPermission[];
+    toolActivity: AiPanelToolActivity | null;
+    replyQuestion: (requestID: string, answers: string[][]) => Promise<void>;
+    rejectQuestion: (requestID: string) => Promise<void>;
+    decidePermission: (permissionID: string, response: AiPanelPermissionResponse) => Promise<void>;
     send: (fullPrompt: string, activeTickets?: AiPanelTicket[]) => Promise<void>;
     cancel: () => void;
     reset: () => void;
 }
 declare function useAiPanel(options: UseAiPanelOptions): UseAiPanelReturn;
 
+interface StreamHandlers {
+    onComplete?: (text: string) => void;
+    onError?: (error: unknown) => void;
+    onQuestion?: (q: AiPanelPendingQuestion) => void;
+    onPermission?: (p: AiPanelPendingPermission) => void;
+    onTool?: (t: AiPanelToolActivity) => void;
+}
 interface UseStreamingReturn {
     text: string;
     reasoning: string;
     isStreaming: boolean;
-    start: (stream: ReadableStream<Uint8Array>, onComplete?: (text: string) => void, onError?: (error: unknown) => void) => void;
+    start: (stream: ReadableStream<Uint8Array>, handlers?: StreamHandlers) => void;
     cancel: () => void;
     reset: () => void;
 }
@@ -545,4 +630,4 @@ declare const ProviderType: {
     readonly Fallback: "fallback";
 };
 
-export { AI_PANEL_LANGUAGES, AI_PANEL_PROJECT_LINKS, type AiAdapterConfig, type AiPanelAdapter, type AiPanelContextFile, AiPanelInvalidMode, type AiPanelJsonSchema, AiPanelJsonType, type AiPanelLabels, AiPanelLanguage, AiPanelLanguageNames, type AiPanelResponse, type AiPanelResponseParser, type AiPanelResponseValidation, type AiPanelSendHandler, AiPanelStatus, type AiPanelSubTicket, type AiPanelTicket, type AiPanelTicketValidationError, DiffDialog, FallbackAdapter, type FallbackAdapterConfig, FeedbackSection, FilesSection, InfoSheet, OneShotAiPanel, type OneShotAiPanelProps, OpenCodeAdapter, type OpenCodeAdapterConfig, OpenCodeModels, PROVIDER_INFO, PROVIDER_META, PromptSection, type ProviderMeta, ProviderType, ResponseSection, ShadcnAdapter, type ShadcnAdapterConfig, ShadcnModels, StatusBar, TicketItem, TicketsSection, type UseAiPanelOptions, type UseAiPanelReturn, type UseStreamingReturn, aiPanelLanguageFromLocale, buildSend, defaultLabels, modelDisplayName, register, registerDefaultAdapters, translations, useAiPanel, useStreaming };
+export { AI_PANEL_LANGUAGES, AI_PANEL_PROJECT_LINKS, type AiAdapterConfig, type AiPanelAdapter, type AiPanelContextFile, AiPanelInvalidMode, type AiPanelJsonSchema, AiPanelJsonType, type AiPanelLabels, AiPanelLanguage, AiPanelLanguageNames, type AiPanelPendingPermission, type AiPanelPendingQuestion, type AiPanelPermissionResponse, type AiPanelQuestion, type AiPanelQuestionOption, type AiPanelResponse, type AiPanelResponseParser, type AiPanelResponseValidation, type AiPanelSendContext, type AiPanelSendHandler, AiPanelStatus, type AiPanelSubTicket, type AiPanelTicket, type AiPanelTicketValidationError, type AiPanelToolActivity, DiffDialog, FallbackAdapter, type FallbackAdapterConfig, FeedbackSection, FilesSection, InfoSheet, OneShotAiPanel, type OneShotAiPanelProps, OpenCodeAdapter, type OpenCodeAdapterConfig, OpenCodeModels, PROVIDER_INFO, PROVIDER_META, PermissionDialog, PromptSection, type ProviderMeta, ProviderType, QuestionDialog, ResponseSection, ShadcnAdapter, type ShadcnAdapterConfig, ShadcnModels, StatusBar, TicketItem, TicketsSection, type UseAiPanelOptions, type UseAiPanelReturn, type UseStreamingReturn, aiPanelLanguageFromLocale, buildSend, defaultLabels, modelDisplayName, register, registerDefaultAdapters, translations, useAiPanel, useStreaming };

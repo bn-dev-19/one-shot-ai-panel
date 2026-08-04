@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { EmptyState } from "./empty-state"
 import { DiffSection } from "./diff-section"
 import { formatJson } from "../lib/utils"
-import type { AiPanelLabels, AiPanelResponse, AiPanelInvalidMode, AiPanelTicket } from "../types"
+import type { AiPanelLabels, AiPanelResponse, AiPanelInvalidMode, AiPanelTicket, AiPanelToolActivity } from "../types"
 import { AiPanelStatus } from "../types"
 
 interface ResponseSectionProps {
@@ -15,6 +15,7 @@ interface ResponseSectionProps {
   response: AiPanelResponse | null
   streamingText: string
   streamingReasoning?: string
+  toolActivity?: AiPanelToolActivity | null
   invalidMode?: AiPanelInvalidMode
   tickets?: AiPanelTicket[]
   onPlug?: (response: AiPanelResponse, selectedKeys?: string[]) => void
@@ -48,7 +49,7 @@ function defaultSelectedKeys(response: AiPanelResponse | null, tickets: AiPanelT
 }
 
 export function ResponseSection({
-  labels, status, response, streamingText, streamingReasoning = "", invalidMode = "warn", tickets = [], onPlug,
+  labels, status, response, streamingText, streamingReasoning = "", toolActivity = null, invalidMode = "warn", tickets = [], onPlug,
 }: ResponseSectionProps) {
   const isLoading = status === AiPanelStatus.Loading
   const isStreaming = status === AiPanelStatus.Streaming
@@ -133,6 +134,15 @@ export function ResponseSection({
         </div>
       ) : (
         <>
+          {toolActivity && (
+            <div className="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Loader2 className="size-3 animate-spin shrink-0" />
+              <span className="truncate">
+                {labels.toolActivity}: {toolActivity.title ?? toolActivity.tool ?? "…"}
+              </span>
+            </div>
+          )}
+
           {streamingReasoning && (
             <div className="mb-2 border border-muted rounded-md">
               <div className="flex items-center gap-1.5 px-2 py-1.5">

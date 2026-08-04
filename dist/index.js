@@ -1,6 +1,6 @@
 // src/module/components/OneShotAiPanel.tsx
-import { useState as useState12, useMemo as useMemo3, useCallback as useCallback4, useRef as useRef4 } from "react";
-import { Bot as Bot2, Sparkles as Sparkles4, Eye, Copy, Check as Check4 } from "lucide-react";
+import { useState as useState13, useMemo as useMemo3, useCallback as useCallback5, useRef as useRef4 } from "react";
+import { Bot as Bot2, Sparkles as Sparkles5, Eye, Copy, Check as Check4 } from "lucide-react";
 
 // src/module/lib/utils.ts
 import { clsx } from "clsx";
@@ -177,7 +177,18 @@ var fr = {
   diffViewFull: "Diffs",
   diffExisting: "Existant",
   diffProposed: "Propos\xE9",
-  diffClose: "Fermer"
+  diffClose: "Fermer",
+  questionTitle: "Question de l'IA",
+  questionDescription: "L'IA a besoin d'une pr\xE9cision pour continuer.",
+  questionAnswer: "R\xE9pondre",
+  questionSkip: "Ignorer",
+  questionCustomPlaceholder: "Autre r\xE9ponse (texte libre)...",
+  permissionTitle: "Autorisation requise",
+  permissionDescription: "Le mod\xE8le demande une autorisation pour continuer.",
+  permissionAllowOnce: "Autoriser une fois",
+  permissionAlways: "Toujours autoriser",
+  permissionDeny: "Refuser",
+  toolActivity: "Outil"
 };
 
 // src/module/i18n/en.ts
@@ -324,7 +335,18 @@ var en = {
   diffViewFull: "Diffs",
   diffExisting: "Existing",
   diffProposed: "Proposed",
-  diffClose: "Close"
+  diffClose: "Close",
+  questionTitle: "AI question",
+  questionDescription: "The AI needs a clarification to continue.",
+  questionAnswer: "Answer",
+  questionSkip: "Skip",
+  questionCustomPlaceholder: "Type your own answer...",
+  permissionTitle: "Permission required",
+  permissionDescription: "The model requests permission to continue.",
+  permissionAllowOnce: "Allow once",
+  permissionAlways: "Always allow",
+  permissionDeny: "Deny",
+  toolActivity: "Tool"
 };
 
 // src/module/i18n/ja.ts
@@ -471,7 +493,18 @@ var ja = {
   diffViewFull: "\u5DEE\u5206",
   diffExisting: "\u65E2\u5B58",
   diffProposed: "\u63D0\u6848",
-  diffClose: "\u9589\u3058\u308B"
+  diffClose: "\u9589\u3058\u308B",
+  questionTitle: "AI\u304B\u3089\u306E\u8CEA\u554F",
+  questionDescription: "\u7D9A\u884C\u3059\u308B\u306B\u306FAI\u306E\u78BA\u8A8D\u304C\u5FC5\u8981\u3067\u3059\u3002",
+  questionAnswer: "\u56DE\u7B54",
+  questionSkip: "\u30B9\u30AD\u30C3\u30D7",
+  questionCustomPlaceholder: "\u81EA\u7531\u5165\u529B\u3067\u56DE\u7B54...",
+  permissionTitle: "\u6A29\u9650\u304C\u5FC5\u8981\u3067\u3059",
+  permissionDescription: "\u30E2\u30C7\u30EB\u304C\u7D9A\u884C\u3059\u308B\u305F\u3081\u306E\u8A31\u53EF\u3092\u6C42\u3081\u3066\u3044\u307E\u3059\u3002",
+  permissionAllowOnce: "\u4E00\u5EA6\u3060\u3051\u8A31\u53EF",
+  permissionAlways: "\u5E38\u306B\u8A31\u53EF",
+  permissionDeny: "\u62D2\u5426",
+  toolActivity: "\u30C4\u30FC\u30EB"
 };
 
 // src/module/i18n/zh.ts
@@ -618,7 +651,18 @@ var zh = {
   diffViewFull: "\u5DEE\u5F02",
   diffExisting: "\u73B0\u6709",
   diffProposed: "\u63D0\u6848",
-  diffClose: "\u5173\u95ED"
+  diffClose: "\u5173\u95ED",
+  questionTitle: "AI \u63D0\u95EE",
+  questionDescription: "AI \u9700\u8981\u60A8\u7684\u786E\u8BA4\u624D\u80FD\u7EE7\u7EED\u3002",
+  questionAnswer: "\u56DE\u7B54",
+  questionSkip: "\u8DF3\u8FC7",
+  questionCustomPlaceholder: "\u8F93\u5165\u81EA\u5B9A\u4E49\u7B54\u6848...",
+  permissionTitle: "\u9700\u8981\u6388\u6743",
+  permissionDescription: "\u6A21\u578B\u8BF7\u6C42\u6388\u6743\u4EE5\u7EE7\u7EED\u3002",
+  permissionAllowOnce: "\u5141\u8BB8\u4E00\u6B21",
+  permissionAlways: "\u59CB\u7EC8\u5141\u8BB8",
+  permissionDeny: "\u62D2\u7EDD",
+  toolActivity: "\u5DE5\u5177"
 };
 
 // src/module/i18n/es.ts
@@ -765,7 +809,18 @@ var es = {
   diffViewFull: "Diffs",
   diffExisting: "Existente",
   diffProposed: "Propuesto",
-  diffClose: "Cerrar"
+  diffClose: "Cerrar",
+  questionTitle: "Pregunta de la IA",
+  questionDescription: "La IA necesita una aclaraci\xF3n para continuar.",
+  questionAnswer: "Responder",
+  questionSkip: "Omitir",
+  questionCustomPlaceholder: "Escribe tu propia respuesta...",
+  permissionTitle: "Permiso requerido",
+  permissionDescription: "El modelo solicita permiso para continuar.",
+  permissionAllowOnce: "Permitir una vez",
+  permissionAlways: "Permitir siempre",
+  permissionDeny: "Denegar",
+  toolActivity: "Herramienta"
 };
 
 // src/module/i18n/ar.ts
@@ -912,7 +967,18 @@ var ar = {
   diffViewFull: "\u0627\u0644\u0627\u062E\u062A\u0644\u0627\u0641\u0627\u062A",
   diffExisting: "\u0645\u0648\u062C\u0648\u062F",
   diffProposed: "\u0645\u0642\u062A\u0631\u062D",
-  diffClose: "\u0625\u063A\u0644\u0627\u0642"
+  diffClose: "\u0625\u063A\u0644\u0627\u0642",
+  questionTitle: "\u0633\u0624\u0627\u0644 \u0645\u0646 \u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064A",
+  questionDescription: "\u064A\u062D\u062A\u0627\u062C \u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064A \u0625\u0644\u0649 \u062A\u0648\u0636\u064A\u062D \u0644\u0644\u0645\u062A\u0627\u0628\u0639\u0629.",
+  questionAnswer: "\u0625\u062C\u0627\u0628\u0629",
+  questionSkip: "\u062A\u062E\u0637\u064A",
+  questionCustomPlaceholder: "\u0627\u0643\u062A\u0628 \u0625\u062C\u0627\u0628\u0629 \u0645\u062E\u0635\u0635\u0629...",
+  permissionTitle: "\u0645\u0637\u0644\u0648\u0628 \u0625\u0630\u0646",
+  permissionDescription: "\u064A\u0637\u0644\u0628 \u0627\u0644\u0646\u0645\u0648\u0630\u062C \u0627\u0644\u0625\u0630\u0646 \u0644\u0644\u0645\u062A\u0627\u0628\u0639\u0629.",
+  permissionAllowOnce: "\u0627\u0644\u0633\u0645\u0627\u062D \u0645\u0631\u0629 \u0648\u0627\u062D\u062F\u0629",
+  permissionAlways: "\u0627\u0644\u0633\u0645\u0627\u062D \u062F\u0627\u0626\u0645\u064B\u0627",
+  permissionDeny: "\u0631\u0641\u0636",
+  toolActivity: "\u0623\u062F\u0627\u0629"
 };
 
 // src/module/i18n/registry.ts
@@ -1083,7 +1149,9 @@ function buildSend(config) {
     throw new Error(`Unknown adapter type: ${config.type}`);
   }
   const adapter = new AdapterClass(config);
-  return (prompt) => adapter.send(prompt);
+  const handler = (prompt, context) => adapter.send(prompt, context);
+  handler.adapter = adapter;
+  return handler;
 }
 
 // src/module/adapters/fallback.ts
@@ -1128,21 +1196,59 @@ var ShadcnAdapter = class {
 // src/module/adapters/opencode.ts
 import { createOpencodeClient } from "@opencode-ai/sdk/client";
 var DEFAULT_OPENCODE_URL = "http://localhost:4096";
+function isHttpUrl(p) {
+  return /^https?:\/\//i.test(p);
+}
+function toLocalPath(p) {
+  if (/^file:\/\//i.test(p)) {
+    try {
+      return decodeURIComponent(new URL(p).pathname);
+    } catch {
+      return p.replace(/^file:\/\//i, "");
+    }
+  }
+  return p;
+}
+function commonAncestorDir(paths) {
+  if (paths.length === 0) return null;
+  let prefix = paths[0].replace(/\/+$/, "");
+  for (const raw of paths.slice(1)) {
+    let p = raw.replace(/\/+$/, "");
+    while (!p.startsWith(prefix)) {
+      const idx = prefix.lastIndexOf("/");
+      if (idx <= 0) return null;
+      prefix = prefix.slice(0, idx);
+    }
+  }
+  if (prefix === "/" || prefix.split("/").filter(Boolean).length <= 1) return null;
+  return prefix;
+}
+function patternInPaths(pattern, paths) {
+  if (!pattern || paths.length === 0) return false;
+  const patterns = Array.isArray(pattern) ? pattern : [pattern];
+  return patterns.some((p) => paths.some((f) => f.startsWith(p) || p.startsWith(f)));
+}
 var OpenCodeAdapter = class {
   constructor(config) {
     this.type = ProviderType.Opencode;
+    this.pendingQuestions = /* @__PURE__ */ new Map();
+    this.pendingPermissions = /* @__PURE__ */ new Map();
     this.baseUrl = config.apiUrl ?? DEFAULT_OPENCODE_URL;
     this.modelId = config.model;
+    this.password = config.password;
     this.client = createOpencodeClient({
       baseUrl: this.baseUrl,
       throwOnError: true,
       headers: config.password ? { Authorization: `Bearer ${config.password}` } : void 0
     });
   }
-  async createSession() {
+  async createSession(directory) {
     let session;
     try {
-      session = await this.client.session.create({ body: { title: "ai-panel" } });
+      session = await this.client.session.create({
+        body: { title: "ai-panel" },
+        query: directory ? { directory } : void 0
+      });
     } catch (err) {
       throw new Error(
         `Impossible de contacter le serveur OpenCode (${this.baseUrl}). V\xE9rifie qu'il est lanc\xE9.
@@ -1155,8 +1261,45 @@ ${err?.message ?? ""}`
     }
     return sid;
   }
-  async send(prompt) {
-    const sessionId = await this.createSession();
+  async replyQuestion(requestID, answers) {
+    this.pendingQuestions.delete(requestID);
+    await this.postRaw(`/question/${requestID}/reply`, { answers });
+  }
+  async rejectQuestion(requestID) {
+    this.pendingQuestions.delete(requestID);
+    await this.postRaw(`/question/${requestID}/reject`);
+  }
+  async replyPermission(permissionID, response) {
+    this.pendingPermissions.delete(permissionID);
+    if (!this.sessionId) return;
+    try {
+      await this.client.postSessionIdPermissionsPermissionId({
+        path: { id: this.sessionId, permissionID },
+        body: { response }
+      });
+    } catch {
+    }
+  }
+  async postRaw(path, body) {
+    const headers = { "Content-Type": "application/json" };
+    if (this.password) headers["Authorization"] = `Bearer ${this.password}`;
+    const res = await fetch(`${this.baseUrl}${path}`, {
+      method: "POST",
+      headers,
+      body: body === void 0 ? void 0 : JSON.stringify(body)
+    });
+    if (!res.ok) {
+      throw new Error(`OpenCode API error ${res.status} on ${path}`);
+    }
+  }
+  async send(prompt, context) {
+    const files = (context?.files ?? []).filter((f) => f.enabled !== false && f.present && f.path);
+    const localFiles = files.map((f) => toLocalPath(f.path)).filter((p) => !isHttpUrl(p));
+    const scopedDir = commonAncestorDir(localFiles);
+    const panelPaths = [...localFiles];
+    if (scopedDir) panelPaths.push(scopedDir);
+    const sessionId = await this.createSession(scopedDir ?? void 0);
+    this.sessionId = sessionId;
     const body = {
       model: this.modelId ? { providerID: "opencode", modelID: this.modelId } : void 0,
       parts: [{ type: "text", text: prompt }]
@@ -1209,6 +1352,30 @@ ${err?.message ?? ""}`
           try {
             for await (const evt of events) {
               if (closed) return;
+              if (evt.type === "question.asked") {
+                const props2 = evt.properties;
+                if (props2.sessionID !== sessionId || !props2.id || !props2.questions) continue;
+                this.pendingQuestions.set(props2.id, { sessionID: sessionId, questions: props2.questions });
+                emit({ t: "question", d: { requestID: props2.id, questions: props2.questions } });
+                continue;
+              }
+              if (evt.type === "permission.updated") {
+                const props2 = evt.properties;
+                if (props2.sessionID !== sessionId || !props2.id) continue;
+                if (props2.type === "external_directory" && patternInPaths(props2.pattern, panelPaths)) {
+                  void this.replyPermission(props2.id, "always");
+                  continue;
+                }
+                const entry = {
+                  permissionID: props2.id,
+                  title: props2.title ?? props2.type ?? "permission",
+                  type: props2.type,
+                  pattern: props2.pattern
+                };
+                this.pendingPermissions.set(props2.id, { sessionID: sessionId, permission: entry });
+                emit({ t: "permission", d: entry });
+                continue;
+              }
               if (evt.type === "message.part.delta") {
                 const props2 = evt.properties;
                 if (props2.sessionID !== sessionId) continue;
@@ -1223,9 +1390,16 @@ ${err?.message ?? ""}`
               if (evt.type !== "message.part.updated") continue;
               const props = evt.properties;
               const part = props.part;
-              if (!part || part.sessionID !== sessionId || part.type !== "reasoning") continue;
-              if (!part.id || reasoningSeen.has(part.id)) continue;
-              if (part.text) emit({ t: "reasoning", d: part.text, snapshot: true });
+              if (!part || part.sessionID !== sessionId) continue;
+              if (part.type === "reasoning") {
+                if (!part.id || reasoningSeen.has(part.id)) continue;
+                if (part.text) emit({ t: "reasoning", d: part.text, snapshot: true });
+                continue;
+              }
+              if (part.type === "tool") {
+                emit({ t: "tool", d: { title: part.title, tool: part.tool, state: part.state?.status } });
+                continue;
+              }
             }
           } catch {
           }
@@ -1587,8 +1761,11 @@ function parseFrame(line) {
   if (!trimmed.startsWith("{")) return null;
   try {
     const obj = JSON.parse(trimmed);
-    if (obj && typeof obj === "object" && (obj.t === "text" || obj.t === "reasoning") && typeof obj.d === "string") {
-      return obj;
+    if (!obj || typeof obj !== "object" || typeof obj.t !== "string" || !("d" in obj)) return null;
+    if (obj.t === "text" || obj.t === "reasoning") {
+      if (typeof obj.d === "string") return obj;
+    } else if (obj.t === "question" || obj.t === "permission" || obj.t === "tool") {
+      if (obj.d && typeof obj.d === "object") return obj;
     }
   } catch {
   }
@@ -1599,7 +1776,7 @@ function useStreaming() {
   const [reasoning, setReasoning] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const abortRef = useRef(null);
-  const start = useCallback(async (stream, onComplete, onError) => {
+  const start = useCallback(async (stream, handlers) => {
     const abort = new AbortController();
     abortRef.current = abort;
     setIsStreaming(true);
@@ -1620,10 +1797,15 @@ function useStreaming() {
       if (frame.t === "reasoning") {
         if (frame.snapshot) setReasoning(frame.d);
         else setReasoning((prev) => prev + frame.d);
-      } else if (frame.snapshot) {
-        setTextSnapshot(frame.d);
-      } else {
-        appendText(frame.d);
+      } else if (frame.t === "text") {
+        if (frame.snapshot) setTextSnapshot(frame.d);
+        else appendText(frame.d);
+      } else if (frame.t === "question") {
+        handlers?.onQuestion?.(frame.d);
+      } else if (frame.t === "permission") {
+        handlers?.onPermission?.(frame.d);
+      } else if (frame.t === "tool") {
+        handlers?.onTool?.(frame.d);
       }
     };
     try {
@@ -1661,12 +1843,12 @@ function useStreaming() {
       }
       setIsStreaming(false);
       if (!abort.signal.aborted) {
-        onComplete?.(fullText);
+        handlers?.onComplete?.(fullText);
       }
     } catch (err) {
       setIsStreaming(false);
       if (abort.signal.aborted) return;
-      onError?.(err);
+      handlers?.onError?.(err);
     }
   }, []);
   const cancel = useCallback(() => {
@@ -1893,17 +2075,32 @@ var defaultLabels = {
   diffViewFull: "Diffs",
   diffExisting: "Existant",
   diffProposed: "Propos\xE9",
-  diffClose: "Fermer"
+  diffClose: "Fermer",
+  questionTitle: "Question de l'IA",
+  questionDescription: "L'IA a besoin d'une pr\xE9cision pour continuer.",
+  questionAnswer: "R\xE9pondre",
+  questionSkip: "Ignorer",
+  questionCustomPlaceholder: "Autre r\xE9ponse (texte libre)...",
+  permissionTitle: "Autorisation requise",
+  permissionDescription: "Le mod\xE8le demande une autorisation pour continuer.",
+  permissionAllowOnce: "Autoriser une fois",
+  permissionAlways: "Toujours autoriser",
+  permissionDeny: "Refuser",
+  toolActivity: "Outil"
 };
 
 // src/module/hooks/useAiPanel.ts
 function useAiPanel(options) {
-  const { sendHandler, labels, parser } = options;
+  const { sendHandler, labels, parser, files } = options;
   const [status, setStatus] = useState2(AiPanelStatus.Idle);
   const [response, setResponse] = useState2(null);
+  const [pendingQuestions, setPendingQuestions] = useState2([]);
+  const [pendingPermissions, setPendingPermissions] = useState2([]);
+  const [toolActivity, setToolActivity] = useState2(null);
   const streaming = useStreaming();
   const sendInFlight = useRef2(false);
   const activeTicketsRef = useRef2(void 0);
+  const adapter = sendHandler?.adapter;
   const handleComplete = useCallback2((raw) => {
     const activeTickets = activeTicketsRef.current;
     let parsed;
@@ -1930,27 +2127,73 @@ function useAiPanel(options) {
     setResponse({ raw: "", error: message });
     sendInFlight.current = false;
   }, [labels]);
+  const handleQuestion = useCallback2((q) => {
+    setPendingQuestions((prev) => prev.some((p) => p.requestID === q.requestID) ? prev : [...prev, q]);
+  }, []);
+  const handlePermission = useCallback2((p) => {
+    setPendingPermissions((prev) => prev.some((x) => x.permissionID === p.permissionID) ? prev : [...prev, p]);
+  }, []);
+  const handleTool = useCallback2((t) => {
+    setToolActivity(t);
+  }, []);
+  const replyQuestion = useCallback2(async (requestID, answers) => {
+    if (adapter?.replyQuestion) {
+      try {
+        await adapter.replyQuestion(requestID, answers);
+      } catch {
+      }
+    }
+    setPendingQuestions((prev) => prev.filter((q) => q.requestID !== requestID));
+  }, [adapter]);
+  const rejectQuestion = useCallback2(async (requestID) => {
+    if (adapter?.rejectQuestion) {
+      try {
+        await adapter.rejectQuestion(requestID);
+      } catch {
+      }
+    }
+    setPendingQuestions((prev) => prev.filter((q) => q.requestID !== requestID));
+  }, [adapter]);
+  const decidePermission = useCallback2(async (permissionID, response2) => {
+    if (adapter?.replyPermission) {
+      try {
+        await adapter.replyPermission(permissionID, response2);
+      } catch {
+      }
+    }
+    setPendingPermissions((prev) => prev.filter((p) => p.permissionID !== permissionID));
+  }, [adapter]);
   const send = useCallback2(async (fullPrompt, activeTickets) => {
     if (!sendHandler || sendInFlight.current) return;
     sendInFlight.current = true;
     activeTicketsRef.current = activeTickets;
     setStatus(AiPanelStatus.Loading);
     setResponse(null);
+    setPendingQuestions([]);
+    setPendingPermissions([]);
+    setToolActivity(null);
     streaming.reset();
     try {
-      const stream = await sendHandler(fullPrompt);
+      const enabledFiles = (files ?? []).filter((f) => f.enabled !== false && f.present);
+      const stream = await sendHandler(fullPrompt, { files: enabledFiles });
       if (!stream) {
         throw new Error(labels?.errorNoStream ?? defaultLabels.errorNoStream);
       }
       setStatus(AiPanelStatus.Streaming);
-      streaming.start(stream, handleComplete, handleStreamError);
+      streaming.start(stream, {
+        onComplete: handleComplete,
+        onError: handleStreamError,
+        onQuestion: handleQuestion,
+        onPermission: handlePermission,
+        onTool: handleTool
+      });
     } catch (err) {
       const msg = err instanceof Error ? err.message : labels?.errorUnknown ?? defaultLabels.errorUnknown;
       setStatus(AiPanelStatus.Error);
       setResponse({ raw: "", error: msg });
       sendInFlight.current = false;
     }
-  }, [sendHandler, streaming, handleComplete, handleStreamError, labels]);
+  }, [sendHandler, streaming, handleComplete, handleStreamError, handleQuestion, handlePermission, handleTool, labels, files]);
   const cancel = useCallback2(() => {
     streaming.cancel();
     setStatus(AiPanelStatus.Idle);
@@ -1960,6 +2203,9 @@ function useAiPanel(options) {
     streaming.reset();
     setStatus(AiPanelStatus.Idle);
     setResponse(null);
+    setPendingQuestions([]);
+    setPendingPermissions([]);
+    setToolActivity(null);
     sendInFlight.current = false;
   }, [streaming]);
   return {
@@ -1967,6 +2213,12 @@ function useAiPanel(options) {
     response: streaming.text && status === AiPanelStatus.Streaming ? { raw: streaming.text } : response,
     streamingText: streaming.text,
     streamingReasoning: streaming.reasoning,
+    pendingQuestions,
+    pendingPermissions,
+    toolActivity,
+    replyQuestion,
+    rejectQuestion,
+    decidePermission,
     send,
     cancel,
     reset
@@ -2753,6 +3005,51 @@ function DialogOverlay({
     }
   );
 }
+function DialogContent({
+  className,
+  children,
+  showCloseButton = true,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxs9(DialogPortal, { children: [
+    /* @__PURE__ */ jsx14(DialogOverlay, {}),
+    /* @__PURE__ */ jsxs9(
+      DialogPrimitive.Popup,
+      {
+        "data-slot": "dialog-content",
+        className: cn2(
+          "fixed top-1/2 start-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 rtl:translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-xs/relaxed text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          className
+        ),
+        ...props,
+        children: [
+          children,
+          showCloseButton && /* @__PURE__ */ jsxs9(
+            DialogPrimitive.Close,
+            {
+              "data-slot": "dialog-close",
+              render: /* @__PURE__ */ jsx14(
+                Button,
+                {
+                  variant: "ghost",
+                  className: "absolute top-2 end-2",
+                  size: "icon-sm"
+                }
+              ),
+              children: [
+                /* @__PURE__ */ jsx14(
+                  XIcon2,
+                  {}
+                ),
+                /* @__PURE__ */ jsx14("span", { className: "sr-only", children: "Close" })
+              ]
+            }
+          )
+        ]
+      }
+    )
+  ] });
+}
 function DialogHeader({ className, ...props }) {
   return /* @__PURE__ */ jsx14(
     "div",
@@ -3371,6 +3668,7 @@ function ResponseSection({
   response,
   streamingText,
   streamingReasoning = "",
+  toolActivity = null,
   invalidMode = "warn",
   tickets = [],
   onPlug
@@ -3437,6 +3735,14 @@ function ResponseSection({
       ] }),
       /* @__PURE__ */ jsx17("p", { className: "text-xs text-red-500/80", children: response?.error })
     ] }) : /* @__PURE__ */ jsxs12(Fragment, { children: [
+      toolActivity && /* @__PURE__ */ jsxs12("div", { className: "mb-2 flex items-center gap-1.5 text-xs text-muted-foreground", children: [
+        /* @__PURE__ */ jsx17(Loader22, { className: "size-3 animate-spin shrink-0" }),
+        /* @__PURE__ */ jsxs12("span", { className: "truncate", children: [
+          labels.toolActivity,
+          ": ",
+          toolActivity.title ?? toolActivity.tool ?? "\u2026"
+        ] })
+      ] }),
       streamingReasoning && /* @__PURE__ */ jsxs12("div", { className: "mb-2 border border-muted rounded-md", children: [
         /* @__PURE__ */ jsxs12("div", { className: "flex items-center gap-1.5 px-2 py-1.5", children: [
           /* @__PURE__ */ jsx17(Brain, { className: "size-3 text-muted-foreground" }),
@@ -4163,8 +4469,142 @@ function InfoSheet({ labels, showIntegration = true, showCredits = true }) {
   ] });
 }
 
-// src/module/components/OneShotAiPanel.tsx
+// src/module/components/question-dialog.tsx
+import { useState as useState12, useEffect as useEffect2, useCallback as useCallback4 } from "react";
+import { HelpCircle, Sparkles as Sparkles4 } from "lucide-react";
 import { jsx as jsx24, jsxs as jsxs17 } from "react/jsx-runtime";
+function QuestionDialog({ labels, open, questions, onSubmit, onSkip }) {
+  const [selected, setSelected] = useState12({});
+  const [custom, setCustom] = useState12({});
+  useEffect2(() => {
+    if (open) {
+      setSelected({});
+      setCustom({});
+    }
+  }, [open]);
+  const toggleOption = useCallback4((qi, label, multiple) => {
+    setSelected((prev) => {
+      const current = prev[qi] ?? [];
+      if (multiple) {
+        return { ...prev, [qi]: current.includes(label) ? current.filter((l) => l !== label) : [...current, label] };
+      }
+      return { ...prev, [qi]: current.includes(label) ? [] : [label] };
+    });
+  }, []);
+  const canSubmit = questions.every((_q, qi) => {
+    const hasSelection = (selected[qi] ?? []).length > 0;
+    const hasCustom = !!custom[qi]?.trim();
+    return hasSelection || hasCustom;
+  });
+  const handleSubmit = () => {
+    const answers = questions.map((_q, qi) => {
+      const picked = selected[qi] ?? [];
+      const customValue = custom[qi]?.trim();
+      return customValue ? [...picked, customValue] : picked;
+    });
+    onSubmit(answers);
+  };
+  return /* @__PURE__ */ jsx24(
+    Dialog,
+    {
+      open,
+      onOpenChange: (o) => {
+        if (!o) onSkip();
+      },
+      children: /* @__PURE__ */ jsxs17(DialogContent, { className: "sm:max-w-md", children: [
+        /* @__PURE__ */ jsxs17(DialogHeader, { children: [
+          /* @__PURE__ */ jsxs17(DialogTitle, { className: "flex items-center gap-1.5", children: [
+            /* @__PURE__ */ jsx24(HelpCircle, { className: "size-3.5" }),
+            labels.questionTitle
+          ] }),
+          /* @__PURE__ */ jsx24(DialogDescription, { children: labels.questionDescription })
+        ] }),
+        /* @__PURE__ */ jsx24("div", { className: "max-h-[50vh] space-y-4 overflow-y-auto pr-1", children: questions.map((q, qi) => /* @__PURE__ */ jsxs17("div", { className: "space-y-2", children: [
+          q.header && /* @__PURE__ */ jsx24("p", { className: "text-xs font-semibold text-foreground", children: q.header }),
+          /* @__PURE__ */ jsx24("p", { className: "text-xs text-foreground", children: q.question }),
+          /* @__PURE__ */ jsx24("div", { className: "space-y-1", children: q.options.map((opt) => {
+            const active = (selected[qi] ?? []).includes(opt.label);
+            return /* @__PURE__ */ jsxs17(
+              "label",
+              {
+                className: cn(
+                  "flex w-full cursor-pointer items-start gap-2.5 rounded-md border px-2.5 py-2 text-left transition-colors",
+                  active ? "border-primary bg-primary/10 text-foreground" : "border-border text-muted-foreground hover:bg-muted"
+                ),
+                children: [
+                  /* @__PURE__ */ jsx24(
+                    Checkbox,
+                    {
+                      checked: active,
+                      onCheckedChange: () => toggleOption(qi, opt.label, !!q.multiple),
+                      className: "mt-0.5"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxs17("span", { className: "min-w-0 flex-1", children: [
+                    /* @__PURE__ */ jsx24("span", { className: "block text-xs font-medium text-foreground", children: opt.label }),
+                    opt.description && /* @__PURE__ */ jsx24("span", { className: "block text-xs text-muted-foreground", children: opt.description })
+                  ] })
+                ]
+              },
+              opt.label
+            );
+          }) }),
+          q.custom !== false && /* @__PURE__ */ jsx24(
+            Textarea,
+            {
+              value: custom[qi] ?? "",
+              onChange: (e) => setCustom((prev) => ({ ...prev, [qi]: e.target.value })),
+              placeholder: labels.questionCustomPlaceholder,
+              className: "min-h-16 text-xs"
+            }
+          )
+        ] }, qi)) }),
+        /* @__PURE__ */ jsxs17(DialogFooter, { children: [
+          /* @__PURE__ */ jsx24(Button, { variant: "ghost", size: "sm", onClick: onSkip, children: labels.questionSkip }),
+          /* @__PURE__ */ jsxs17(Button, { size: "sm", onClick: handleSubmit, disabled: !canSubmit, className: "gap-1", children: [
+            /* @__PURE__ */ jsx24(Sparkles4, { className: "size-3" }),
+            labels.questionAnswer
+          ] })
+        ] })
+      ] })
+    }
+  );
+}
+
+// src/module/components/permission-dialog.tsx
+import { ShieldAlert } from "lucide-react";
+import { jsx as jsx25, jsxs as jsxs18 } from "react/jsx-runtime";
+function PermissionDialog({ labels, open, permission, onDecide }) {
+  return /* @__PURE__ */ jsx25(
+    Dialog,
+    {
+      open,
+      onOpenChange: () => onDecide("reject"),
+      children: /* @__PURE__ */ jsxs18(DialogContent, { className: "sm:max-w-sm", children: [
+        /* @__PURE__ */ jsxs18(DialogHeader, { children: [
+          /* @__PURE__ */ jsxs18(DialogTitle, { className: "flex items-center gap-1.5", children: [
+            /* @__PURE__ */ jsx25(ShieldAlert, { className: "size-3.5" }),
+            labels.permissionTitle
+          ] }),
+          /* @__PURE__ */ jsx25(DialogDescription, { children: labels.permissionDescription })
+        ] }),
+        /* @__PURE__ */ jsxs18("div", { className: "space-y-2", children: [
+          /* @__PURE__ */ jsx25("p", { className: "text-xs font-semibold text-foreground", children: permission?.title ?? "\u2014" }),
+          permission?.type && /* @__PURE__ */ jsx25("p", { className: "text-xs text-muted-foreground", children: permission.type }),
+          permission?.pattern && /* @__PURE__ */ jsx25("pre", { className: "overflow-x-auto whitespace-pre-wrap rounded-md bg-muted/50 p-2 font-mono text-[10px]", children: Array.isArray(permission.pattern) ? permission.pattern.join("\n") : permission.pattern })
+        ] }),
+        /* @__PURE__ */ jsxs18(DialogFooter, { children: [
+          /* @__PURE__ */ jsx25(Button, { variant: "ghost", size: "sm", onClick: () => onDecide("reject"), children: labels.permissionDeny }),
+          /* @__PURE__ */ jsx25(Button, { variant: "secondary", size: "sm", onClick: () => onDecide("once"), children: labels.permissionAllowOnce }),
+          /* @__PURE__ */ jsx25(Button, { size: "sm", onClick: () => onDecide("always"), children: labels.permissionAlways })
+        ] })
+      ] })
+    }
+  );
+}
+
+// src/module/components/OneShotAiPanel.tsx
+import { jsx as jsx26, jsxs as jsxs19 } from "react/jsx-runtime";
 registerDefaultAdapters();
 function assembleFullPrompt(labels, systemPrompt, userPrompt, additionalContext, resolvedFiles, resolvedTickets, feedback, includeFeedback) {
   const parts = [];
@@ -4253,14 +4693,14 @@ function OneShotAiPanel({
   const [invalidMode, setInvalidMode] = useSyncedState(invalidModeProp);
   const [systemPrompt, setSystemPrompt] = useSyncedState(systemPromptProp ?? "");
   const [userPrompt, setUserPrompt] = useSyncedState(initialUserPrompt ?? "");
-  const [additionalContext, setAdditionalContext] = useState12("");
-  const [fileEnabled, setFileEnabled] = useState12({});
-  const [ticketEnabled, setTicketEnabled] = useState12({});
-  const [customFiles, setCustomFiles] = useState12([]);
+  const [additionalContext, setAdditionalContext] = useState13("");
+  const [fileEnabled, setFileEnabled] = useState13({});
+  const [ticketEnabled, setTicketEnabled] = useState13({});
+  const [customFiles, setCustomFiles] = useState13([]);
   const customIdRef = useRef4(0);
-  const [previewOpen, setPreviewOpen] = useState12(false);
-  const [copied, setCopied] = useState12(false);
-  const [feedbackEnabled, setFeedbackEnabled] = useState12(true);
+  const [previewOpen, setPreviewOpen] = useState13(false);
+  const [copied, setCopied] = useState13(false);
+  const [feedbackEnabled, setFeedbackEnabled] = useState13(true);
   const activeConfig = useMemo3(() => {
     if (currentAdapter && "enabled" in currentAdapter && !currentAdapter.enabled) return void 0;
     return currentAdapter;
@@ -4274,7 +4714,7 @@ function OneShotAiPanel({
       return void 0;
     }
   }, [onSend, activeConfig]);
-  const { status, response, streamingText, streamingReasoning, send, cancel, reset } = useAiPanel({
+  const { status, response, streamingText, streamingReasoning, pendingQuestions, pendingPermissions, toolActivity, replyQuestion, rejectQuestion, decidePermission, send, cancel, reset } = useAiPanel({
     sendHandler,
     files,
     tickets,
@@ -4312,13 +4752,13 @@ function OneShotAiPanel({
     const activeTickets = resolvedTickets.filter((t) => t.enabled && !t.done);
     send(fullPrompt, activeTickets);
   };
-  const handleAddCustomFile = useCallback4((path) => {
+  const handleAddCustomFile = useCallback5((path) => {
     customIdRef.current += 1;
     const key = `_custom-${customIdRef.current}`;
     const label = path.split("/").filter(Boolean).pop() ?? path;
     setCustomFiles((prev) => [...prev, { key, label, present: true, enabled: true, path }]);
   }, []);
-  const handleRemoveCustomFile = useCallback4((key) => {
+  const handleRemoveCustomFile = useCallback5((key) => {
     setCustomFiles((prev) => prev.filter((f) => f.key !== key));
     setFileEnabled((prev) => {
       const next = { ...prev };
@@ -4326,20 +4766,20 @@ function OneShotAiPanel({
       return next;
     });
   }, []);
-  const handleCopy = useCallback4(async () => {
+  const handleCopy = useCallback5(async () => {
     await navigator.clipboard.writeText(fullPrompt);
     setCopied(true);
     setTimeout(() => setCopied(false), 2e3);
   }, [fullPrompt]);
-  return /* @__PURE__ */ jsxs17("div", { className: cn("flex flex-col h-full divide-y", className), children: [
-    /* @__PURE__ */ jsxs17("div", { className: "flex items-center justify-between gap-2 px-4  py-3 border-b shrink-0", children: [
-      /* @__PURE__ */ jsxs17("div", { className: "w-full flex items-center gap-2", children: [
-        /* @__PURE__ */ jsx24(Bot2, { className: "size-4 text-muted-foreground" }),
-        /* @__PURE__ */ jsx24("span", { className: "text-xs font-semibold text-foreground uppercase tracking-wider flex-1", children: title ?? labels.title })
+  return /* @__PURE__ */ jsxs19("div", { className: cn("flex flex-col h-full divide-y", className), children: [
+    /* @__PURE__ */ jsxs19("div", { className: "flex items-center justify-between gap-2 px-4  py-3 border-b shrink-0", children: [
+      /* @__PURE__ */ jsxs19("div", { className: "w-full flex items-center gap-2", children: [
+        /* @__PURE__ */ jsx26(Bot2, { className: "size-4 text-muted-foreground" }),
+        /* @__PURE__ */ jsx26("span", { className: "text-xs font-semibold text-foreground uppercase tracking-wider flex-1", children: title ?? labels.title })
       ] }),
-      /* @__PURE__ */ jsxs17("div", { className: "flex items-end gap-1", children: [
-        showInfoButton && /* @__PURE__ */ jsx24(InfoSheet, { labels, showIntegration: showInfoIntegration, showCredits: showInfoCredits }),
-        showSettingsButton && /* @__PURE__ */ jsx24(
+      /* @__PURE__ */ jsxs19("div", { className: "flex items-end gap-1", children: [
+        showInfoButton && /* @__PURE__ */ jsx26(InfoSheet, { labels, showIntegration: showInfoIntegration, showCredits: showInfoCredits }),
+        showSettingsButton && /* @__PURE__ */ jsx26(
           ConfigSheet,
           {
             labels,
@@ -4353,7 +4793,7 @@ function OneShotAiPanel({
         )
       ] })
     ] }),
-    /* @__PURE__ */ jsx24(
+    /* @__PURE__ */ jsx26(
       StatusBar,
       {
         labels,
@@ -4365,8 +4805,8 @@ function OneShotAiPanel({
         hasFeedback: feedback !== null
       }
     ),
-    /* @__PURE__ */ jsxs17("div", { className: "flex-1 overflow-y-auto no-scrollbar px-4 py-3 space-y-4 text-xs text-muted-foreground", children: [
-      /* @__PURE__ */ jsx24(
+    /* @__PURE__ */ jsxs19("div", { className: "flex-1 overflow-y-auto no-scrollbar px-4 py-3 space-y-4 text-xs text-muted-foreground", children: [
+      /* @__PURE__ */ jsx26(
         PromptSection,
         {
           labels,
@@ -4378,7 +4818,7 @@ function OneShotAiPanel({
           onAdditionalContextChange: setAdditionalContext
         }
       ),
-      /* @__PURE__ */ jsx24(
+      /* @__PURE__ */ jsx26(
         FilesSection,
         {
           labels,
@@ -4390,7 +4830,7 @@ function OneShotAiPanel({
           onRemoveCustomFile: handleRemoveCustomFile
         }
       ),
-      /* @__PURE__ */ jsx24(
+      /* @__PURE__ */ jsx26(
         TicketsSection,
         {
           labels,
@@ -4399,7 +4839,7 @@ function OneShotAiPanel({
           onToggleTicket: (key) => setTicketEnabled((prev) => ({ ...prev, [key]: !(prev[key] ?? tickets?.find((t) => t.key === key)?.enabled ?? true) }))
         }
       ),
-      /* @__PURE__ */ jsx24(
+      /* @__PURE__ */ jsx26(
         ResponseSection,
         {
           labels,
@@ -4407,12 +4847,13 @@ function OneShotAiPanel({
           response,
           streamingText,
           streamingReasoning,
+          toolActivity,
           tickets: resolvedTickets,
           onPlug,
           invalidMode
         }
       ),
-      /* @__PURE__ */ jsx24(
+      /* @__PURE__ */ jsx26(
         FeedbackSection,
         {
           labels,
@@ -4423,8 +4864,8 @@ function OneShotAiPanel({
       ),
       children
     ] }),
-    /* @__PURE__ */ jsx24("div", { className: "px-4 py-3 shrink-0", children: /* @__PURE__ */ jsxs17("div", { className: "grid grid-cols-2 gap-2", children: [
-      /* @__PURE__ */ jsxs17(
+    /* @__PURE__ */ jsx26("div", { className: "px-4 py-3 shrink-0", children: /* @__PURE__ */ jsxs19("div", { className: "grid grid-cols-2 gap-2", children: [
+      /* @__PURE__ */ jsxs19(
         Button,
         {
           variant: "secondary",
@@ -4432,12 +4873,12 @@ function OneShotAiPanel({
           onClick: () => setPreviewOpen(true),
           className: "gap-1",
           children: [
-            /* @__PURE__ */ jsx24(Eye, { className: "size-3" }),
+            /* @__PURE__ */ jsx26(Eye, { className: "size-3" }),
             labels.viewPrompt
           ]
         }
       ),
-      /* @__PURE__ */ jsx24(
+      /* @__PURE__ */ jsx26(
         LoadingButton,
         {
           label: isBusy ? labels.cancel : actionLabel ?? labels.actionLabel,
@@ -4445,25 +4886,44 @@ function OneShotAiPanel({
           disableOnLoading: false,
           onClick: handleAction,
           size: "default",
-          children: /* @__PURE__ */ jsx24(Sparkles4, { className: "size-3.5" })
+          children: /* @__PURE__ */ jsx26(Sparkles5, { className: "size-3.5" })
         }
       )
     ] }) }),
-    /* @__PURE__ */ jsx24(Sheet, { open: previewOpen, onOpenChange: setPreviewOpen, children: /* @__PURE__ */ jsx24(SheetContent, { side: "right", className: "w-[480px] sm:w-[540px] p-0", children: /* @__PURE__ */ jsxs17("div", { className: "flex flex-col h-full", children: [
-      /* @__PURE__ */ jsxs17(SheetHeader, { className: "px-4 py-3 shrink-0 border-b space-y-1", children: [
-        /* @__PURE__ */ jsx24(SheetTitle, { className: "text-sm", children: labels.promptPreview }),
-        /* @__PURE__ */ jsxs17("p", { className: "text-xs text-muted-foreground", children: [
+    /* @__PURE__ */ jsx26(Sheet, { open: previewOpen, onOpenChange: setPreviewOpen, children: /* @__PURE__ */ jsx26(SheetContent, { side: "right", className: "w-[480px] sm:w-[540px] p-0", children: /* @__PURE__ */ jsxs19("div", { className: "flex flex-col h-full", children: [
+      /* @__PURE__ */ jsxs19(SheetHeader, { className: "px-4 py-3 shrink-0 border-b space-y-1", children: [
+        /* @__PURE__ */ jsx26(SheetTitle, { className: "text-sm", children: labels.promptPreview }),
+        /* @__PURE__ */ jsxs19("p", { className: "text-xs text-muted-foreground", children: [
           fullPrompt.length,
           " ",
           labels.promptCharCount
         ] }),
-        /* @__PURE__ */ jsxs17(Button, { variant: "secondary", size: "sm", onClick: handleCopy, className: "gap-1 h-7", children: [
-          copied ? /* @__PURE__ */ jsx24(Check4, { className: "size-3 text-green-500" }) : /* @__PURE__ */ jsx24(Copy, { className: "size-3" }),
-          /* @__PURE__ */ jsx24("span", { className: "text-xs", children: copied ? labels.promptCopied : labels.copyPrompt })
+        /* @__PURE__ */ jsxs19(Button, { variant: "secondary", size: "sm", onClick: handleCopy, className: "gap-1 h-7", children: [
+          copied ? /* @__PURE__ */ jsx26(Check4, { className: "size-3 text-green-500" }) : /* @__PURE__ */ jsx26(Copy, { className: "size-3" }),
+          /* @__PURE__ */ jsx26("span", { className: "text-xs", children: copied ? labels.promptCopied : labels.copyPrompt })
         ] })
       ] }),
-      /* @__PURE__ */ jsx24("div", { className: "flex-1 overflow-y-auto no-scrollbar p-4", children: /* @__PURE__ */ jsx24("p", { className: "text-xs whitespace-pre-wrap break-words leading-relaxed", children: fullPrompt || "\u2014" }) })
-    ] }) }) })
+      /* @__PURE__ */ jsx26("div", { className: "flex-1 overflow-y-auto no-scrollbar p-4", children: /* @__PURE__ */ jsx26("p", { className: "text-xs whitespace-pre-wrap break-words leading-relaxed", children: fullPrompt || "\u2014" }) })
+    ] }) }) }),
+    /* @__PURE__ */ jsx26(
+      QuestionDialog,
+      {
+        labels,
+        open: pendingQuestions.length > 0,
+        questions: pendingQuestions[0]?.questions ?? [],
+        onSubmit: (answers) => pendingQuestions[0] && replyQuestion(pendingQuestions[0].requestID, answers),
+        onSkip: () => pendingQuestions[0] && rejectQuestion(pendingQuestions[0].requestID)
+      }
+    ),
+    /* @__PURE__ */ jsx26(
+      PermissionDialog,
+      {
+        labels,
+        open: pendingPermissions.length > 0,
+        permission: pendingPermissions[0] ?? null,
+        onDecide: (r) => pendingPermissions[0] && decidePermission(pendingPermissions[0].permissionID, r)
+      }
+    )
   ] });
 }
 
@@ -4486,8 +4946,10 @@ export {
   OpenCodeModels,
   PROVIDER_INFO,
   PROVIDER_META,
+  PermissionDialog,
   PromptSection,
   ProviderType2 as ProviderType,
+  QuestionDialog,
   ResponseSection,
   ShadcnAdapter,
   ShadcnModels,
