@@ -52,6 +52,7 @@ export interface OneShotAiPanelProps {
   className?: string
 
   adapter?: AiAdapterConfig
+  onAdapterChange?: (config: AiAdapterConfig) => void
   onSend?: AiPanelSendHandler
   parser?: AiPanelResponseParser
   invalidMode?: AiPanelInvalidMode
@@ -144,6 +145,7 @@ export function OneShotAiPanel({
   children,
   className,
   adapter,
+  onAdapterChange,
   onSend,
   parser,
   invalidMode: invalidModeProp = AiPanelInvalidMode.Warn,
@@ -155,6 +157,10 @@ export function OneShotAiPanel({
   const [currentLanguage, setCurrentLanguage] = useSyncedState<AiPanelLanguage>(language)
   const labels = useMemo(() => ({ ...translations[currentLanguage], ...labelsProp }), [currentLanguage, labelsProp])
   const [currentAdapter, setCurrentAdapter] = useSyncedState<AiAdapterConfig>(adapter ?? DEFAULT_CONFIGS[ProviderType.Opencode])
+  const handleAdapterChange = useCallback((next: AiAdapterConfig) => {
+    setCurrentAdapter(next)
+    onAdapterChange?.(next)
+  }, [setCurrentAdapter, onAdapterChange])
   const [invalidMode, setInvalidMode] = useSyncedState<AiPanelInvalidMode>(invalidModeProp)
   const [systemPrompt, setSystemPrompt] = useSyncedState<string>(systemPromptProp ?? "")
   const [userPrompt, setUserPrompt] = useSyncedState<string>(initialUserPrompt ?? "")
@@ -263,7 +269,7 @@ export function OneShotAiPanel({
               language={currentLanguage}
               onLanguageChange={setCurrentLanguage}
               adapter={currentAdapter}
-              onAdapterChange={setCurrentAdapter}
+              onAdapterChange={handleAdapterChange}
               invalidMode={invalidMode}
               onInvalidModeChange={setInvalidMode}
             />

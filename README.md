@@ -188,6 +188,36 @@ The panel module is built against **base-ui** primitives (`@base-ui/react`): `re
 
 > **Rule of thumb: a project with existing radix/shadcn components → use the compiled package.** Never run `one-shot-ai-panel install --force` over an existing radix `src/components/ui/*`: it overwrites shared files (`button.tsx`, `dialog.tsx`, …) with base-ui versions and breaks every radix consumer of those files (`asChild` ≠ `render`).
 
+#### Nested dialogs & portals
+
+The panel's internal overlays — Info sheet, Settings sheet, full-prompt preview, diff dialog, question/permission dialogs, selects/popovers — are **base-ui dialogs portaled to `document.body`**. They are designed to nest inside another base-ui dialog (base-ui detects nesting via `DialogRootContext` and handles inert/backdrop/stacking itself).
+
+**Do NOT render the panel inside a radix `modal` dialog.** A radix modal sets `pointer-events: none` on everything outside its own content (+ `aria-hidden`, focus trap, and a document-level Escape handler). The base-ui portals land in `document.body` but outside the radix content, so they inherit `pointer-events: none`: the sheets/dialogs stay **visible but inert** — scroll/selection/clicks pass through to the panel behind, and Escape closes both layers.
+
+Use one of these instead:
+
+- **Preferred: a base-ui outer container** (e.g. a `Sheet`/`Dialog` built on `@base-ui/react/dialog`). base-ui nests cleanly in base-ui.
+- **With a radix Sheet/Dialog:** render it **non-modal** (`modal={false}`) and tell it to ignore the base-ui portals:
+
+```tsx
+<Sheet modal={false}>
+  <SheetContent
+    onInteractOutside={(event) => {
+      if (event.target instanceof Element && event.target.closest("[data-base-ui-portal]")) {
+        event.preventDefault()
+      }
+    }}
+    onEscapeKeyDown={(event) => {
+      if (document.querySelector("[data-base-ui-portal]")) event.preventDefault()
+    }}
+  >
+    <OneShotAiPanel ... />
+  </SheetContent>
+</Sheet>
+```
+
+> Note: with `modal={false}` the radix overlay (dim) is not rendered and the page behind stays scrollable — acceptable for a side panel.
+
 ---
 
 ## Usage
@@ -261,7 +291,8 @@ const { status, response, streamingText, streamingReasoning, send, cancel, reset
 | `language` | `AiPanelLanguage` | `Fr` | Interface language |
 | `labels` | `Partial<AiPanelLabels>` | — | i18n override |
 | `onPlug` | `(response, selectedKeys?) => void` | — | Integration callback; receives the response and the keys checked in the review (all keys when omitted) |
-| `adapter` | `AiAdapterConfig` | — | Provider config (type, enabled, model, apiKey, baseUrl) |
+| `adapter` | `AiAdapterConfig` | `DEFAULT_CONFIGS[opencode]` | Provider config (type, enabled, model, apiKey, baseUrl). When omitted, the Opencode default (enabled) is used |
+| `onAdapterChange` | `(config: AiAdapterConfig) => void` | — | Fired on every Settings sheet change (persist it and feed it back via `adapter`) |
 | `onSend` | `AiPanelSendHandler` | — | Custom send handler (takes precedence over the adapter) |
 | `parser` | `AiPanelResponseParser` | — | Custom parser (takes precedence over automatic validation) |
 | `invalidMode` | `AiPanelInvalidMode` | `Warn` | `Warn` or `Block` (disables integration while invalid) |
@@ -297,6 +328,46 @@ Before integration, the panel compares each ticket against the existing content 
 ## Adapters
 
 Three adapters are provided: `opencode` (local server, default `http://localhost:4096`), `shadcn` (@shadcn/helpers SDK), `fallback` (direct HTTP). `register()` lets you add custom providers.
+
+### Default configuration
+
+`DEFAULT_CONFIGS` (exported) is the per-provider baseline:
+
+```ts
+{
+  opencode: { type: "opencode", enabled: true,  model: "big-pickle" },          // only one enabled by default
+  shadcn:   { type: "shadcn",   enabled: false, apiKey: "", baseUrl: "", model: "" },
+  fallback: { type: "fallback", enabled: false, apiUrl: "/api/ai/generate" },
+}
+```
+
+The defaults are applied in three places:
+
+1. **Panel mount** when no `adapter` prop is passed → `currentAdapter = DEFAULT_CONFIGS[opencode]`, so **Generate works out of the box** (v1.2.4+).
+2. **Settings sheet form** initialization (`adapter ?? DEFAULT_CONFIGS[opencode]`).
+3. **Switching provider** in the Settings sheet → the form resets to that provider's baseline.
+
+### When the Settings sheet config takes effect
+
+Every field change in the Settings sheet calls `onAdapterChange` immediately, which updates the panel's internal `currentAdapter` and rebuilds the send handler — **the next "Generate" click uses the new config**. Disabling the adapter (`enabled: false`) makes Generate inactive until re-enabled or a provider is chosen.
+
+### Persistence
+
+The sheet config lives in React state only. To persist it (localStorage, DB, …), pass `onAdapterChange` and feed the stored value back through the `adapter` prop (controlled pattern):
+
+```tsx
+const [adapter, setAdapter] = useState<AiAdapterConfig>()
+
+<OneShotAiPanel
+  adapter={adapter}
+  onAdapterChange={(next) => {
+    setAdapter(next)
+    localStorage.setItem("ai-panel-adapter", JSON.stringify(next))
+  }}
+/>
+```
+
+`useSyncedState` re-syncs the panel whenever the `adapter` prop reference changes, so a persisted config is picked up on remount.
 
 ---
 
@@ -339,7 +410,7 @@ The module source keeps its `@/` imports: the bundler (tsup) resolves them to `s
 
 ## Exports
 
-`OneShotAiPanel`, `StatusBar`, `PromptSection`, `FilesSection`, `TicketsSection`, `TicketItem`, `ResponseSection`, `FeedbackSection`, `InfoSheet`, `QuestionDialog`, `PermissionDialog`, `useAiPanel`, `useStreaming`, adapters, `PROVIDER_META`, `ProviderType`, `AiPanelJsonType`, `AiPanelInvalidMode`, `defaultLabels`, `translations`, `AI_PANEL_PROJECT_LINKS`.
+`OneShotAiPanel`, `StatusBar`, `PromptSection`, `FilesSection`, `TicketsSection`, `TicketItem`, `ResponseSection`, `FeedbackSection`, `InfoSheet`, `QuestionDialog`, `PermissionDialog`, `useAiPanel`, `useStreaming`, adapters, `DEFAULT_CONFIGS`, `PROVIDER_META`, `ProviderType`, `AiPanelJsonType`, `AiPanelInvalidMode`, `defaultLabels`, `translations`, `AI_PANEL_PROJECT_LINKS`.
 
 ---
 

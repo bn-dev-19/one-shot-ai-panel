@@ -5057,6 +5057,7 @@ function OneShotAiPanel({
   children,
   className,
   adapter,
+  onAdapterChange,
   onSend,
   parser,
   invalidMode: invalidModeProp = AiPanelInvalidMode.Warn,
@@ -5068,6 +5069,10 @@ function OneShotAiPanel({
   const [currentLanguage, setCurrentLanguage] = useSyncedState(language);
   const labels = useMemo3(() => ({ ...translations[currentLanguage], ...labelsProp }), [currentLanguage, labelsProp]);
   const [currentAdapter, setCurrentAdapter] = useSyncedState(adapter ?? DEFAULT_CONFIGS[ProviderType.Opencode]);
+  const handleAdapterChange = useCallback5((next) => {
+    setCurrentAdapter(next);
+    onAdapterChange?.(next);
+  }, [setCurrentAdapter, onAdapterChange]);
   const [invalidMode, setInvalidMode] = useSyncedState(invalidModeProp);
   const [systemPrompt, setSystemPrompt] = useSyncedState(systemPromptProp ?? "");
   const [userPrompt, setUserPrompt] = useSyncedState(initialUserPrompt ?? "");
@@ -5164,7 +5169,7 @@ function OneShotAiPanel({
             language: currentLanguage,
             onLanguageChange: setCurrentLanguage,
             adapter: currentAdapter,
-            onAdapterChange: setCurrentAdapter,
+            onAdapterChange: handleAdapterChange,
             invalidMode,
             onInvalidModeChange: setInvalidMode
           }
