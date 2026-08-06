@@ -140,7 +140,7 @@ export function DiffDialog({
           </div>
 
           <div className="min-h-0 flex-1 overflow-auto rounded-md border">
-            <table className="w-full border-collapse font-mono text-xs leading-relaxed">
+            <table className="w-full table-fixed border-collapse font-mono text-xs leading-relaxed">
               <tbody>
                 {rows.length === 0 ? (
                   <tr>

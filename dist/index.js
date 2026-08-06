@@ -3821,7 +3821,7 @@ function DiffDialog({
             /* @__PURE__ */ jsx15("div", { className: "border-r border-muted/60 bg-muted/40 px-2 py-1 text-xs font-medium text-foreground", children: labels.diffExisting }),
             /* @__PURE__ */ jsx15("div", { className: "bg-muted/40 px-2 py-1 text-xs font-medium text-foreground", children: labels.diffProposed })
           ] }),
-          /* @__PURE__ */ jsx15("div", { className: "min-h-0 flex-1 overflow-auto rounded-md border", children: /* @__PURE__ */ jsx15("table", { className: "w-full border-collapse font-mono text-xs leading-relaxed", children: /* @__PURE__ */ jsx15("tbody", { children: rows.length === 0 ? /* @__PURE__ */ jsx15("tr", { children: /* @__PURE__ */ jsx15("td", { className: "px-3 py-2 text-muted-foreground", colSpan: 2, children: labels.diffNoChanges }) }) : rows.map((row, i) => /* @__PURE__ */ jsx15(DiffRow, { row }, i)) }) }) }),
+          /* @__PURE__ */ jsx15("div", { className: "min-h-0 flex-1 overflow-auto rounded-md border", children: /* @__PURE__ */ jsx15("table", { className: "w-full table-fixed border-collapse font-mono text-xs leading-relaxed", children: /* @__PURE__ */ jsx15("tbody", { children: rows.length === 0 ? /* @__PURE__ */ jsx15("tr", { children: /* @__PURE__ */ jsx15("td", { className: "px-3 py-2 text-muted-foreground", colSpan: 2, children: labels.diffNoChanges }) }) : rows.map((row, i) => /* @__PURE__ */ jsx15(DiffRow, { row }, i)) }) }) }),
           /* @__PURE__ */ jsx15(DialogFooter, { className: "shrink-0", children: /* @__PURE__ */ jsx15(DialogClose, { render: /* @__PURE__ */ jsx15(Button, { variant: "outline", size: "sm" }), children: labels.diffClose }) })
         ]
       }
