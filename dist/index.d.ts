@@ -502,6 +502,7 @@ interface OneShotAiPanelProps {
     language?: AiPanelLanguage;
     labels?: Partial<AiPanelLabels>;
     onPlug?: (response: AiPanelResponse, selectedKeys?: string[]) => void;
+    onDone?: (response: AiPanelResponse) => void;
     children?: React.ReactNode;
     className?: string;
     adapter?: AiAdapterConfig;
@@ -514,7 +515,7 @@ interface OneShotAiPanelProps {
     showInfoButton?: boolean;
     showSettingsButton?: boolean;
 }
-declare function OneShotAiPanel({ title, systemPrompt: systemPromptProp, initialUserPrompt, files, tickets, actionLabel, language, labels: labelsProp, onPlug, children, className, adapter, onAdapterChange, onSend, parser, invalidMode: invalidModeProp, showInfoIntegration, showInfoCredits, showInfoButton, showSettingsButton, }: OneShotAiPanelProps): react.JSX.Element;
+declare function OneShotAiPanel({ title, systemPrompt: systemPromptProp, initialUserPrompt, files, tickets, actionLabel, language, labels: labelsProp, onPlug, onDone, children, className, adapter, onAdapterChange, onSend, parser, invalidMode: invalidModeProp, showInfoIntegration, showInfoCredits, showInfoButton, showSettingsButton, }: OneShotAiPanelProps): react.JSX.Element;
 
 interface StatusBarProps {
     labels: AiPanelLabels;

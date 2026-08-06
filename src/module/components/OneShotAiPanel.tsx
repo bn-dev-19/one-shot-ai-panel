@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback, useRef } from "react"
+import { useState, useMemo, useCallback, useRef, useEffect } from "react"
 import { Bot, Sparkles, Eye, Copy, Check, Loader2, RotateCcw } from "lucide-react"
 import { cn } from "../lib/utils"
 import { AiPanelLanguage, translations } from "../i18n"
@@ -48,6 +48,7 @@ export interface OneShotAiPanelProps {
   language?: AiPanelLanguage
   labels?: Partial<AiPanelLabels>
   onPlug?: (response: AiPanelResponse, selectedKeys?: string[]) => void
+  onDone?: (response: AiPanelResponse) => void
   children?: React.ReactNode
   className?: string
 
@@ -142,6 +143,7 @@ export function OneShotAiPanel({
   language = AiPanelLanguage.Fr,
   labels: labelsProp,
   onPlug,
+  onDone,
   children,
   className,
   adapter,
@@ -197,6 +199,12 @@ export function OneShotAiPanel({
   })
 
   const feedback = response?.validation && !response.validation.ok ? response.validation : null
+
+  useEffect(() => {
+    if (status === AiPanelStatus.Done && response?.parsed && response.validation?.ok) {
+      onDone?.(response)
+    }
+  }, [status, response, onDone])
 
   const allFiles = useMemo(() => [...(files ?? []), ...customFiles], [files, customFiles])
 

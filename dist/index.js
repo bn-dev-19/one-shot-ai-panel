@@ -1,5 +1,5 @@
 // src/module/components/OneShotAiPanel.tsx
-import { useState as useState13, useMemo as useMemo3, useCallback as useCallback5, useRef as useRef4 } from "react";
+import { useState as useState13, useMemo as useMemo3, useCallback as useCallback5, useRef as useRef4, useEffect as useEffect2 } from "react";
 import { Bot as Bot2, Sparkles as Sparkles5, Eye, Copy, Check as Check4, Loader2 as Loader23, RotateCcw } from "lucide-react";
 
 // src/module/lib/utils.ts
@@ -5061,6 +5061,7 @@ function OneShotAiPanel({
   language = AiPanelLanguage.Fr,
   labels: labelsProp,
   onPlug,
+  onDone,
   children,
   className,
   adapter,
@@ -5112,6 +5113,11 @@ function OneShotAiPanel({
     parser
   });
   const feedback = response?.validation && !response.validation.ok ? response.validation : null;
+  useEffect2(() => {
+    if (status === AiPanelStatus.Done && response?.parsed && response.validation?.ok) {
+      onDone?.(response);
+    }
+  }, [status, response, onDone]);
   const allFiles = useMemo3(() => [...files ?? [], ...customFiles], [files, customFiles]);
   const resolvedFiles = useMemo3(() => allFiles.map((f) => ({
     ...f,
