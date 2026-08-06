@@ -76,6 +76,7 @@ export const ja: AiPanelLabels = {
   feedbackDescription:
     "前回のレスポンスの解析エラーです。これらのエラーを繰り返さず、要求されたレスポンス形式を厳守してください。",
   includeErrorsInPrompt: "プロンプトにエラーを含める",
+  ticketKeyLabel: "キー",
   ticketDescription: "説明",
   ticketExplanation: "説明文",
   ticketExistingContent: "既存のコンテンツ",

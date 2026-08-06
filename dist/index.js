@@ -109,6 +109,7 @@ var fr = {
   promptSectionFeedback: "--- Erreurs de la g\xE9n\xE9ration pr\xE9c\xE9dente ---",
   feedbackDescription: "Voici les erreurs de parsing de la r\xE9ponse pr\xE9c\xE9dente. \xC9vite de reproduire ces erreurs et respecte strictement le format de r\xE9ponse demand\xE9.",
   includeErrorsInPrompt: "Inclure les erreurs dans le prompt",
+  ticketKeyLabel: "Cl\xE9",
   ticketDescription: "Description",
   ticketExplanation: "Explication",
   ticketExistingContent: "Contenu existant",
@@ -279,6 +280,7 @@ var en = {
   promptSectionFeedback: "--- Previous generation errors ---",
   feedbackDescription: "Here are the parsing errors of the previous response. Avoid repeating these errors and strictly respect the requested response format.",
   includeErrorsInPrompt: "Include errors in the prompt",
+  ticketKeyLabel: "Key",
   ticketDescription: "Description",
   ticketExplanation: "Explanation",
   ticketExistingContent: "Existing content",
@@ -449,6 +451,7 @@ var ja = {
   promptSectionFeedback: "--- \u524D\u56DE\u306E\u751F\u6210\u30A8\u30E9\u30FC ---",
   feedbackDescription: "\u524D\u56DE\u306E\u30EC\u30B9\u30DD\u30F3\u30B9\u306E\u89E3\u6790\u30A8\u30E9\u30FC\u3067\u3059\u3002\u3053\u308C\u3089\u306E\u30A8\u30E9\u30FC\u3092\u7E70\u308A\u8FD4\u3055\u305A\u3001\u8981\u6C42\u3055\u308C\u305F\u30EC\u30B9\u30DD\u30F3\u30B9\u5F62\u5F0F\u3092\u53B3\u5B88\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
   includeErrorsInPrompt: "\u30D7\u30ED\u30F3\u30D7\u30C8\u306B\u30A8\u30E9\u30FC\u3092\u542B\u3081\u308B",
+  ticketKeyLabel: "\u30AD\u30FC",
   ticketDescription: "\u8AAC\u660E",
   ticketExplanation: "\u8AAC\u660E\u6587",
   ticketExistingContent: "\u65E2\u5B58\u306E\u30B3\u30F3\u30C6\u30F3\u30C4",
@@ -607,6 +610,7 @@ var zh = {
   promptSectionFeedback: "--- \u4E0A\u4E00\u6B21\u751F\u6210\u7684\u9519\u8BEF ---",
   feedbackDescription: "\u4EE5\u4E0B\u662F\u4E0A\u4E00\u6B21\u54CD\u5E94\u7684\u89E3\u6790\u9519\u8BEF\u3002\u8BF7\u907F\u514D\u91CD\u590D\u8FD9\u4E9B\u9519\u8BEF\uFF0C\u5E76\u4E25\u683C\u9075\u5B88\u6240\u8981\u6C42\u7684\u54CD\u5E94\u683C\u5F0F\u3002",
   includeErrorsInPrompt: "\u5C06\u9519\u8BEF\u5305\u542B\u5728\u63D0\u793A\u8BCD\u4E2D",
+  ticketKeyLabel: "\u952E",
   ticketDescription: "\u63CF\u8FF0",
   ticketExplanation: "\u8BF4\u660E",
   ticketExistingContent: "\u73B0\u6709\u5185\u5BB9",
@@ -765,6 +769,7 @@ var es = {
   promptSectionFeedback: "--- Errores de la generaci\xF3n anterior ---",
   feedbackDescription: "Estos son los errores de parsing de la respuesta anterior. Evita repetir estos errores y respeta estrictamente el formato de respuesta solicitado.",
   includeErrorsInPrompt: "Incluir los errores en el prompt",
+  ticketKeyLabel: "Clave",
   ticketDescription: "Descripci\xF3n",
   ticketExplanation: "Explicaci\xF3n",
   ticketExistingContent: "Contenido existente",
@@ -923,6 +928,7 @@ var ar = {
   promptSectionFeedback: "--- \u0623\u062E\u0637\u0627\u0621 \u0627\u0644\u062A\u0648\u0644\u064A\u062F \u0627\u0644\u0633\u0627\u0628\u0642\u0629 ---",
   feedbackDescription: "\u0647\u0630\u0647 \u0623\u062E\u0637\u0627\u0621 \u062A\u062D\u0644\u064A\u0644 \u0627\u0644\u0627\u0633\u062A\u062C\u0627\u0628\u0629 \u0627\u0644\u0633\u0627\u0628\u0642\u0629. \u062A\u062C\u0646\u064E\u0651\u0628 \u062A\u0643\u0631\u0627\u0631 \u0647\u0630\u0647 \u0627\u0644\u0623\u062E\u0637\u0627\u0621 \u0648\u0627\u0644\u062A\u0632\u0645 \u0628\u062F\u0642\u0629 \u0628\u0635\u064A\u063A\u0629 \u0627\u0644\u0627\u0633\u062A\u062C\u0627\u0628\u0629 \u0627\u0644\u0645\u0637\u0644\u0648\u0628\u0629.",
   includeErrorsInPrompt: "\u062A\u0636\u0645\u064A\u0646 \u0627\u0644\u0623\u062E\u0637\u0627\u0621 \u0641\u064A \u0627\u0644\u0645\u0648\u062C\u0647",
+  ticketKeyLabel: "\u0627\u0644\u0645\u0641\u062A\u0627\u062D",
   ticketDescription: "\u0627\u0644\u0648\u0635\u0641",
   ticketExplanation: "\u0627\u0644\u062A\u0641\u0633\u064A\u0631",
   ticketExistingContent: "\u0645\u062D\u062A\u0648\u0649 \u0645\u0648\u062C\u0648\u062F",
@@ -2333,6 +2339,7 @@ var defaultLabels = {
   promptSectionFeedback: "--- Erreurs de la g\xE9n\xE9ration pr\xE9c\xE9dente ---",
   feedbackDescription: "Voici les erreurs de parsing de la r\xE9ponse pr\xE9c\xE9dente. \xC9vite de reproduire ces erreurs et respecte strictement le format de r\xE9ponse demand\xE9.",
   includeErrorsInPrompt: "Inclure les erreurs dans le prompt",
+  ticketKeyLabel: "Cl\xE9",
   ticketDescription: "Description",
   ticketExplanation: "Explication",
   ticketExistingContent: "Contenu existant",
@@ -4999,7 +5006,7 @@ function assembleFullPrompt(labels, systemPrompt, userPrompt, additionalContext,
   if (enabledTickets.length > 0) {
     ctxParts.push(labels.promptSectionTickets);
     for (const t of enabledTickets) {
-      let line = `[${t.label}]`;
+      let line = `[${t.label}] (${labels.ticketKeyLabel} : ${t.key})`;
       if (t.description) line += `
 ${labels.ticketDescription} : ${t.description}`;
       if (t.explication) line += `

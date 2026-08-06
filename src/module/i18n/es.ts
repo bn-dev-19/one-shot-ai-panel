@@ -76,6 +76,7 @@ export const es: AiPanelLabels = {
   feedbackDescription:
     "Estos son los errores de parsing de la respuesta anterior. Evita repetir estos errores y respeta estrictamente el formato de respuesta solicitado.",
   includeErrorsInPrompt: "Incluir los errores en el prompt",
+  ticketKeyLabel: "Clave",
   ticketDescription: "Descripción",
   ticketExplanation: "Explicación",
   ticketExistingContent: "Contenido existente",

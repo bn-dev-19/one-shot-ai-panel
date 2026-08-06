@@ -76,6 +76,7 @@ export const zh: AiPanelLabels = {
   feedbackDescription:
     "以下是上一次响应的解析错误。请避免重复这些错误，并严格遵守所要求的响应格式。",
   includeErrorsInPrompt: "将错误包含在提示词中",
+  ticketKeyLabel: "键",
   ticketDescription: "描述",
   ticketExplanation: "说明",
   ticketExistingContent: "现有内容",

@@ -220,6 +220,7 @@ export interface AiPanelLabels {
   promptSectionFeedback: string
   feedbackDescription: string
   includeErrorsInPrompt: string
+  ticketKeyLabel: string
   ticketDescription: string
   ticketExplanation: string
   ticketExistingContent: string

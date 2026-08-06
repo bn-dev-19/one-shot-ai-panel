@@ -97,7 +97,7 @@ function assembleFullPrompt(
   if (enabledTickets.length > 0) {
     ctxParts.push(labels.promptSectionTickets)
     for (const t of enabledTickets) {
-      let line = `[${t.label}]`
+      let line = `[${t.label}] (${labels.ticketKeyLabel} : ${t.key})`
       if (t.description) line += `\n${labels.ticketDescription} : ${t.description}`
       if (t.explication) line += `\n${labels.ticketExplanation} : ${t.explication}`
       line += `\n${labels.responseSchema} :\n\`\`\`json\n${JSON.stringify(t.responseSchema, null, 2)}\n\`\`\``

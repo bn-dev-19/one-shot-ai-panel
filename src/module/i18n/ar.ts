@@ -76,6 +76,7 @@ export const ar: AiPanelLabels = {
   feedbackDescription:
     "هذه أخطاء تحليل الاستجابة السابقة. تجنَّب تكرار هذه الأخطاء والتزم بدقة بصيغة الاستجابة المطلوبة.",
   includeErrorsInPrompt: "تضمين الأخطاء في الموجه",
+  ticketKeyLabel: "المفتاح",
   ticketDescription: "الوصف",
   ticketExplanation: "التفسير",
   ticketExistingContent: "محتوى موجود",

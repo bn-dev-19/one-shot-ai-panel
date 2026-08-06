@@ -307,6 +307,8 @@ const { status, response, streamingText, streamingReasoning, send, cancel, reset
 
 The model must respond **in JSON ONLY**: an array of objects, one per active ticket, each shaped `{ "ticket-key": value }`. The value is validated against the ticket's `responseSchema` using **Zod**.
 
+Each ticket is presented in the prompt with its **label and key** (e.g. `[Vérification des réponses] (Clé : verification)`), so the model knows exactly which key to use in its response.
+
 A custom parser can be provided via the `parser` prop; it takes precedence over automatic validation.
 
 The displayed response is automatically reformatted as indented JSON (2 spaces). Streaming renders the reasoning and the response in real time.
