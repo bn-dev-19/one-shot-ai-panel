@@ -12,6 +12,7 @@ export type {
 } from "./types"
 export { buildSend, register } from "./registry"
 export { registerDefaultAdapters } from "./register-defaults"
+export { DEFAULT_CONFIGS } from "./defaults"
 export { OpenCodeAdapter } from "./opencode"
 export { ShadcnAdapter } from "./shadcn"
 export { FallbackAdapter } from "./fallback"

@@ -6,7 +6,7 @@ import { cn } from "../lib/utils"
 import { AiPanelLanguage, translations } from "../i18n"
 import { useAiPanel } from "../hooks/useAiPanel"
 import { useSyncedState } from "../hooks/useSyncedState"
-import { buildSend, registerDefaultAdapters } from "../adapters"
+import { buildSend, registerDefaultAdapters, DEFAULT_CONFIGS, ProviderType } from "../adapters"
 import type { AiPanelSendHandler } from "../adapters/types"
 import type {
   AiPanelLabels, AiPanelResponse,
@@ -154,7 +154,7 @@ export function OneShotAiPanel({
 }: OneShotAiPanelProps) {
   const [currentLanguage, setCurrentLanguage] = useSyncedState<AiPanelLanguage>(language)
   const labels = useMemo(() => ({ ...translations[currentLanguage], ...labelsProp }), [currentLanguage, labelsProp])
-  const [currentAdapter, setCurrentAdapter] = useSyncedState<AiAdapterConfig | undefined>(adapter)
+  const [currentAdapter, setCurrentAdapter] = useSyncedState<AiAdapterConfig>(adapter ?? DEFAULT_CONFIGS[ProviderType.Opencode])
   const [invalidMode, setInvalidMode] = useSyncedState<AiPanelInvalidMode>(invalidModeProp)
   const [systemPrompt, setSystemPrompt] = useSyncedState<string>(systemPromptProp ?? "")
   const [userPrompt, setUserPrompt] = useSyncedState<string>(initialUserPrompt ?? "")

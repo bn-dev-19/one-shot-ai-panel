@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sheet"
 import { AiPanelLanguage, PROVIDER_INFO, AiPanelLanguageNames, AI_PANEL_LANGUAGES } from "../i18n"
 import type { ProviderInfo } from "../i18n"
-import { PROVIDER_META, ProviderType, OpenCodeModels, ShadcnModels, modelDisplayName } from "../adapters"
+import { PROVIDER_META, ProviderType, OpenCodeModels, ShadcnModels, modelDisplayName, DEFAULT_CONFIGS } from "../adapters"
 import type {
   AiAdapterConfig,
   OpenCodeAdapterConfig,
@@ -44,12 +44,6 @@ interface ConfigSheetProps {
   onAdapterChange?: (config: AiAdapterConfig) => void
   invalidMode: AiPanelInvalidMode
   onInvalidModeChange: (mode: AiPanelInvalidMode) => void
-}
-
-const DEFAULT_CONFIGS: Record<ProviderType, AiAdapterConfig> = {
-  [ProviderType.Opencode]: { type: ProviderType.Opencode, enabled: true, model: "big-pickle" },
-  [ProviderType.Shadcn]: { type: ProviderType.Shadcn, enabled: false, apiKey: "", baseUrl: "", model: "" },
-  [ProviderType.Fallback]: { type: ProviderType.Fallback, enabled: false, apiUrl: "/api/ai/generate" },
 }
 
 export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterChange, invalidMode, onInvalidModeChange }: ConfigSheetProps) {

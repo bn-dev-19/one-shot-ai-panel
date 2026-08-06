@@ -424,6 +424,8 @@ declare function buildSend(config: AiAdapterConfig): AiPanelSendHandler;
 
 declare function registerDefaultAdapters(): void;
 
+declare const DEFAULT_CONFIGS: Record<ProviderType$1, AiAdapterConfig>;
+
 declare class OpenCodeAdapter implements AiPanelAdapter {
     type: "opencode";
     private client;
@@ -685,4 +687,4 @@ declare const ProviderType: {
     readonly Fallback: "fallback";
 };
 
-export { AI_PANEL_LANGUAGES, AI_PANEL_PROJECT_LINKS, type AiAdapterConfig, type AiPanelAdapter, type AiPanelContextFile, AiPanelInvalidMode, type AiPanelJsonSchema, AiPanelJsonType, type AiPanelLabels, AiPanelLanguage, AiPanelLanguageNames, type AiPanelPendingPermission, type AiPanelPendingQuestion, type AiPanelPermissionResponse, type AiPanelQuestion, type AiPanelQuestionOption, type AiPanelResponse, type AiPanelResponseParser, type AiPanelResponseValidation, type AiPanelSendContext, type AiPanelSendHandler, AiPanelStatus, type AiPanelSubTicket, type AiPanelTicket, type AiPanelTicketValidationError, type AiPanelToolActivity, DiffDialog, FallbackAdapter, type FallbackAdapterConfig, FeedbackSection, FilesSection, InfoSheet, OneShotAiPanel, type OneShotAiPanelProps, OpenCodeAdapter, type OpenCodeAdapterConfig, OpenCodeModels, PROVIDER_INFO, PROVIDER_META, PermissionDialog, PromptSection, type ProviderMeta, ProviderType, QuestionDialog, ResponseSection, ShadcnAdapter, type ShadcnAdapterConfig, ShadcnModels, StatusBar, TicketItem, TicketsSection, type UseAiPanelOptions, type UseAiPanelReturn, type UseStreamingReturn, aiPanelLanguageFromLocale, buildSend, defaultLabels, modelDisplayName, register, registerDefaultAdapters, translations, useAiPanel, useStreaming };
+export { AI_PANEL_LANGUAGES, AI_PANEL_PROJECT_LINKS, type AiAdapterConfig, type AiPanelAdapter, type AiPanelContextFile, AiPanelInvalidMode, type AiPanelJsonSchema, AiPanelJsonType, type AiPanelLabels, AiPanelLanguage, AiPanelLanguageNames, type AiPanelPendingPermission, type AiPanelPendingQuestion, type AiPanelPermissionResponse, type AiPanelQuestion, type AiPanelQuestionOption, type AiPanelResponse, type AiPanelResponseParser, type AiPanelResponseValidation, type AiPanelSendContext, type AiPanelSendHandler, AiPanelStatus, type AiPanelSubTicket, type AiPanelTicket, type AiPanelTicketValidationError, type AiPanelToolActivity, DEFAULT_CONFIGS, DiffDialog, FallbackAdapter, type FallbackAdapterConfig, FeedbackSection, FilesSection, InfoSheet, OneShotAiPanel, type OneShotAiPanelProps, OpenCodeAdapter, type OpenCodeAdapterConfig, OpenCodeModels, PROVIDER_INFO, PROVIDER_META, PermissionDialog, PromptSection, type ProviderMeta, ProviderType, QuestionDialog, ResponseSection, ShadcnAdapter, type ShadcnAdapterConfig, ShadcnModels, StatusBar, TicketItem, TicketsSection, type UseAiPanelOptions, type UseAiPanelReturn, type UseStreamingReturn, aiPanelLanguageFromLocale, buildSend, defaultLabels, modelDisplayName, register, registerDefaultAdapters, translations, useAiPanel, useStreaming };

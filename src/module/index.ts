@@ -27,6 +27,7 @@ export {
   buildSend,
   register,
   registerDefaultAdapters,
+  DEFAULT_CONFIGS,
   OpenCodeAdapter,
   ShadcnAdapter,
   FallbackAdapter,

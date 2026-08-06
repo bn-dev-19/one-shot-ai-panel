@@ -1759,6 +1759,13 @@ function registerDefaultAdapters() {
   register(ProviderType.Shadcn, ShadcnAdapter);
 }
 
+// src/module/adapters/defaults.ts
+var DEFAULT_CONFIGS = {
+  [ProviderType.Opencode]: { type: ProviderType.Opencode, enabled: true, model: "big-pickle" },
+  [ProviderType.Shadcn]: { type: ProviderType.Shadcn, enabled: false, apiKey: "", baseUrl: "", model: "" },
+  [ProviderType.Fallback]: { type: ProviderType.Fallback, enabled: false, apiUrl: "/api/ai/generate" }
+};
+
 // src/module/i18n/provider-info.ts
 var PROVIDER_INFO = {
   [AiPanelLanguage.Fr]: {
@@ -4420,11 +4427,6 @@ var INVALID_MODE_NAMES = {
   [AiPanelInvalidMode.Warn]: (labels) => labels.invalidModeWarn,
   [AiPanelInvalidMode.Block]: (labels) => labels.invalidModeBlock
 };
-var DEFAULT_CONFIGS = {
-  [ProviderType.Opencode]: { type: ProviderType.Opencode, enabled: true, model: "big-pickle" },
-  [ProviderType.Shadcn]: { type: ProviderType.Shadcn, enabled: false, apiKey: "", baseUrl: "", model: "" },
-  [ProviderType.Fallback]: { type: ProviderType.Fallback, enabled: false, apiUrl: "/api/ai/generate" }
-};
 function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterChange, invalidMode, onInvalidModeChange }) {
   const [config, setConfig] = useState10(adapter ?? DEFAULT_CONFIGS[ProviderType.Opencode]);
   const info = PROVIDER_INFO[language]?.[config.type];
@@ -5065,7 +5067,7 @@ function OneShotAiPanel({
 }) {
   const [currentLanguage, setCurrentLanguage] = useSyncedState(language);
   const labels = useMemo3(() => ({ ...translations[currentLanguage], ...labelsProp }), [currentLanguage, labelsProp]);
-  const [currentAdapter, setCurrentAdapter] = useSyncedState(adapter);
+  const [currentAdapter, setCurrentAdapter] = useSyncedState(adapter ?? DEFAULT_CONFIGS[ProviderType.Opencode]);
   const [invalidMode, setInvalidMode] = useSyncedState(invalidModeProp);
   const [systemPrompt, setSystemPrompt] = useSyncedState(systemPromptProp ?? "");
   const [userPrompt, setUserPrompt] = useSyncedState(initialUserPrompt ?? "");
@@ -5357,6 +5359,7 @@ export {
   AiPanelJsonType,
   AiPanelLanguage,
   AiPanelLanguageNames,
+  DEFAULT_CONFIGS,
   DiffDialog,
   FallbackAdapter,
   FeedbackSection,
