@@ -90,13 +90,16 @@ export class OpenCodeAdapter implements AiPanelAdapter {
   private seenQuestions = new Set<string>()
 
   constructor(config: OpenCodeAdapterConfig) {
-    this.baseUrl = config.apiUrl ?? DEFAULT_OPENCODE_URL
+    const raw = config.apiUrl?.trim()
+    const hasUrl = !!raw
+    const validUrl = hasUrl && /^https?:\/\//i.test(raw)
+    this.baseUrl = validUrl ? raw : DEFAULT_OPENCODE_URL
     this.modelId = config.model
-    this.password = config.password
+    this.password = validUrl ? config.password : hasUrl ? undefined : config.password
     this.client = createOpencodeClient({
       baseUrl: this.baseUrl,
       throwOnError: true,
-      headers: config.password ? { Authorization: `Bearer ${config.password}` } : undefined,
+      headers: this.password ? { Authorization: `Bearer ${this.password}` } : undefined,
     })
   }
 
