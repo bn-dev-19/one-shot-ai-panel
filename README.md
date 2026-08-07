@@ -329,7 +329,7 @@ Before integration, the panel compares each ticket against the existing content 
 
 ## Adapters
 
-Three adapters are provided: `opencode` (local server, default `http://localhost:4096`), `shadcn` (@shadcn/helpers SDK), `fallback` (direct HTTP). `register()` lets you add custom providers.
+Four adapters are provided: `opencode` (local server, default `http://localhost:4096`), `zen` (OpenCode Zen gateway, same-origin proxy `/api/zen/v1`), `shadcn` (@shadcn/helpers SDK, local mock), `fallback` (direct HTTP to your backend). `register()` lets you add custom providers.
 
 ### Default configuration
 
@@ -338,10 +338,24 @@ Three adapters are provided: `opencode` (local server, default `http://localhost
 ```ts
 {
   opencode: { type: "opencode", enabled: true,  model: "big-pickle" },          // only one enabled by default
+  zen:      { type: "zen",      enabled: false, model: "big-pickle", baseUrl: "/api/zen/v1" },
   shadcn:   { type: "shadcn",   enabled: false, apiKey: "", baseUrl: "", model: "" },
   fallback: { type: "fallback", enabled: false, apiUrl: "/api/ai/generate" },
 }
 ```
+
+### OpenCode Zen and the same-origin proxy
+
+Zen (`https://opencode.ai/zen/v1`) does **not** send CORS headers, so the browser blocks any direct call — no client SDK (this package's `openai` client or `@ai-sdk/openai-compatible`) can get around that. Zen must therefore be reached through a **same-origin** hop: the browser calls `/api/zen/v1/*`, your server relays it to `opencode.ai`.
+
+The CLI installer handles this for you — zero code to write:
+
+| Framework | What the installer generates |
+| --- | --- |
+| **Next.js (App Router)** | `app/api/zen/v1/[...path]/route.ts` — a self-contained relay (copied from the package's `src/next-proxy/zen.ts`, updated on every `install --force`) |
+| **Vite / plain React** | `vite.zen-proxy.mjs` — a dev-server proxy snippet to wire into `server.proxy` (one line). Production still needs your backend to relay `/api/zen` and hold the API key. |
+
+Skip it with `--no-proxy`. If you manage your own relay, just point the Zen `baseUrl` at it (same-origin or CORS-enabled).
 
 The defaults are applied in three places:
 
