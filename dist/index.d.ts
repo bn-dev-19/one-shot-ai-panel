@@ -309,8 +309,6 @@ declare const translations: Record<AiPanelLanguage, AiPanelLabels>;
 declare const ProviderType$1: {
     readonly Opencode: "opencode";
     readonly Zen: "zen";
-    readonly Shadcn: "shadcn";
-    readonly Fallback: "fallback";
 };
 type ProviderType$1 = (typeof ProviderType$1)[keyof typeof ProviderType$1];
 interface ProviderMeta {
@@ -353,19 +351,7 @@ interface ZenAdapterConfig {
     baseUrl?: string;
     model?: string;
 }
-interface ShadcnAdapterConfig {
-    type: typeof ProviderType$1.Shadcn;
-    enabled?: boolean;
-    apiKey?: string;
-    baseUrl?: string;
-    model?: string;
-}
-interface FallbackAdapterConfig {
-    type: typeof ProviderType$1.Fallback;
-    enabled?: boolean;
-    apiUrl?: string;
-}
-type AiAdapterConfig = OpenCodeAdapterConfig | ZenAdapterConfig | ShadcnAdapterConfig | FallbackAdapterConfig;
+type AiAdapterConfig = OpenCodeAdapterConfig | ZenAdapterConfig;
 type AiPanelSendHandler = ((prompt: string, context?: AiPanelSendContext) => Promise<ReadableStream<Uint8Array>>) & {
     adapter?: AiPanelAdapter;
 };
@@ -415,16 +401,6 @@ declare const OpenCodeModels: {
     readonly GoDeepSeekV4Pro: "opencode-go/deepseek-v4-pro";
     readonly GoDeepSeekV4Flash: "opencode-go/deepseek-v4-flash";
     readonly GoHy3: "opencode-go/hy3";
-};
-declare const ShadcnModels: {
-    readonly None: "";
-    readonly Gpt4o: "gpt-4o";
-    readonly Gpt4oMini: "gpt-4o-mini";
-    readonly Gpt41: "gpt-4.1";
-    readonly ClaudeSonnet4: "claude-sonnet-4-20250514";
-    readonly ClaudeSonnet35: "claude-3.5-sonnet";
-    readonly ClaudeHaiku35: "claude-3.5-haiku";
-    readonly Gemini20Flash: "gemini-2.0-flash";
 };
 declare const ZenModels: {
     readonly None: "";
@@ -507,22 +483,6 @@ declare class ZenAdapter implements AiPanelAdapter {
     abort(): Promise<void>;
     cancel(): Promise<void>;
     getContextInfo(): AiPanelContextInfo | undefined;
-    send(prompt: string): Promise<ReadableStream<Uint8Array>>;
-}
-
-/**
- * Adapter utilisant @shadcn/helpers/ai-sdk pour le développement / démo.
- * Il crée un chat pré-défini qui streame via le transport local.
- */
-declare class ShadcnAdapter implements AiPanelAdapter {
-    type: "shadcn";
-    send(prompt: string): Promise<ReadableStream<Uint8Array>>;
-}
-
-declare class FallbackAdapter implements AiPanelAdapter {
-    type: "fallback";
-    private apiUrl;
-    constructor(config: FallbackAdapterConfig);
     send(prompt: string): Promise<ReadableStream<Uint8Array>>;
 }
 
@@ -740,8 +700,6 @@ declare const defaultLabels: AiPanelLabels;
 declare const ProviderType: {
     readonly Opencode: "opencode";
     readonly Zen: "zen";
-    readonly Shadcn: "shadcn";
-    readonly Fallback: "fallback";
 };
 
-export { AI_PANEL_LANGUAGES, AI_PANEL_PROJECT_LINKS, type AiAdapterConfig, type AiPanelAdapter, type AiPanelContextFile, AiPanelInvalidMode, type AiPanelJsonSchema, AiPanelJsonType, type AiPanelLabels, AiPanelLanguage, AiPanelLanguageNames, type AiPanelPendingPermission, type AiPanelPendingQuestion, type AiPanelPermissionResponse, type AiPanelQuestion, type AiPanelQuestionOption, type AiPanelResponse, type AiPanelResponseParser, type AiPanelResponseValidation, type AiPanelSendContext, type AiPanelSendHandler, AiPanelStatus, type AiPanelSubTicket, type AiPanelTicket, type AiPanelTicketValidationError, type AiPanelToolActivity, DEFAULT_CONFIGS, DiffDialog, FallbackAdapter, type FallbackAdapterConfig, FeedbackSection, FilesSection, InfoSheet, OneShotAiPanel, type OneShotAiPanelProps, OpenCodeAdapter, type OpenCodeAdapterConfig, OpenCodeModels, PROVIDER_INFO, PROVIDER_META, PermissionDialog, PromptSection, type ProviderMeta, ProviderType, QuestionDialog, ResponseSection, ShadcnAdapter, type ShadcnAdapterConfig, ShadcnModels, StatusBar, TicketItem, TicketsSection, type UseAiPanelOptions, type UseAiPanelReturn, type UseStreamingReturn, ZenAdapter, type ZenAdapterConfig, ZenModels, aiPanelLanguageFromLocale, buildSend, defaultLabels, modelDisplayName, register, registerDefaultAdapters, translations, useAiPanel, useStreaming };
+export { AI_PANEL_LANGUAGES, AI_PANEL_PROJECT_LINKS, type AiAdapterConfig, type AiPanelAdapter, type AiPanelContextFile, AiPanelInvalidMode, type AiPanelJsonSchema, AiPanelJsonType, type AiPanelLabels, AiPanelLanguage, AiPanelLanguageNames, type AiPanelPendingPermission, type AiPanelPendingQuestion, type AiPanelPermissionResponse, type AiPanelQuestion, type AiPanelQuestionOption, type AiPanelResponse, type AiPanelResponseParser, type AiPanelResponseValidation, type AiPanelSendContext, type AiPanelSendHandler, AiPanelStatus, type AiPanelSubTicket, type AiPanelTicket, type AiPanelTicketValidationError, type AiPanelToolActivity, DEFAULT_CONFIGS, DiffDialog, FeedbackSection, FilesSection, InfoSheet, OneShotAiPanel, type OneShotAiPanelProps, OpenCodeAdapter, type OpenCodeAdapterConfig, OpenCodeModels, PROVIDER_INFO, PROVIDER_META, PermissionDialog, PromptSection, type ProviderMeta, ProviderType, QuestionDialog, ResponseSection, StatusBar, TicketItem, TicketsSection, type UseAiPanelOptions, type UseAiPanelReturn, type UseStreamingReturn, ZenAdapter, type ZenAdapterConfig, ZenModels, aiPanelLanguageFromLocale, buildSend, defaultLabels, modelDisplayName, register, registerDefaultAdapters, translations, useAiPanel, useStreaming };

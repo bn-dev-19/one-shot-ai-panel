@@ -147,13 +147,13 @@ var fr = {
   infoStatusTitle: "Statut & score",
   infoStatusBody: "La barre de statut r\xE9sume l'\xE9tat du panel : prompt syst\xE8me, instructions, contexte, fichiers, tickets et erreurs de parsing.\n\n\u2022 Vert : \xE9l\xE9ment requis correctement fourni.\n\u2022 Orange : attention (aucun fichier pr\xE9sent).\n\u2022 Rouge : \xE9l\xE9ment requis manquant.\n\nLe score global devient vert d\xE8s que tous les \xE9l\xE9ments requis sont fournis.",
   infoConfigTitle: "Provider & mod\xE8le",
-  infoConfigBody: "Le bouton \xAB Param\xE8tres \xBB ouvre la configuration du panel :\n\u2022 Langue de l'interface.\n\u2022 Provider (OpenCode, shadcn, HTTP g\xE9n\xE9rique) et son activation.\n\u2022 Mod\xE8le, cl\xE9 API et URL de base selon le provider.",
+  infoConfigBody: "Le bouton \xAB Param\xE8tres \xBB ouvre la configuration du panel :\n\u2022 Langue de l'interface.\n\u2022 Provider (OpenCode, OpenCode Zen) et son activation.\n\u2022 Mod\xE8le, cl\xE9 API et URL de base selon le provider.",
   infoActionsTitle: "Actions",
   infoActionsBody: "En bas du panel :\n\u2022 \xAB Voir le prompt \xBB : aper\xE7u complet du prompt qui sera envoy\xE9.\n\u2022 \xAB G\xE9n\xE9rer \xBB : lance la g\xE9n\xE9ration en streaming (devient \xAB Annuler \xBB en cours).\n\u2022 \xAB Int\xE9grer la s\xE9lection \xBB : ouvre la revue des modifications (tickets coch\xE9s par d\xE9faut), compare chaque proposition au contenu existant et n'int\xE8gre que les tickets s\xE9lectionn\xE9s.",
   infoReviewTitle: "Revue des modifications",
   infoReviewBody: "Avant d'int\xE9grer la r\xE9ponse, le panel affiche une revue par ticket :\n\u2022 Chaque ticket est coch\xE9 par d\xE9faut ; d\xE9cochez ceux \xE0 exclure.\n\u2022 Le statut indique Identique, Modifi\xE9, Nouveau ou Supprim\xE9.\n\u2022 Les changements sont list\xE9s (ajouts, suppressions, modifications) avec le chemin concern\xE9.\n\u2022 Le bouton \xAB Diffs \xBB ouvre un dialogue c\xF4te \xE0 c\xF4te : contenu existant vs proposition, lignes num\xE9rot\xE9es, ajouts en vert et suppressions en rouge.\n\u2022 Les cl\xE9s inconnues (sans ticket associ\xE9) sont affich\xE9es mais non coch\xE9es par d\xE9faut.\n\nLe bouton \xAB Int\xE9grer la s\xE9lection (n) \xBB n'applique que les tickets coch\xE9s.",
   infoIntegrationTitle: "Int\xE9gration dans le code",
-  infoIntegrationBody: "Le panel est un module React importable dans n'importe quel projet :\n\u2022 <OneShotAiPanel> : composant complet avec les props systemPrompt, files, tickets, invalidMode, parser, labels, language, adapter, onSend et onPlug.\n\u2022 onPlug(response, selectedKeys?) : re\xE7oit la r\xE9ponse et les cl\xE9s coch\xE9es dans la revue (toutes si le param\xE8tre est absent) ; appelez-le sans l'UI pour int\xE9grer la r\xE9ponse compl\xE8te.\n\u2022 useAiPanel() : hook headless pour piloter la g\xE9n\xE9ration sans l'UI (envoi du prompt, parsing, validation, streaming).\n\u2022 Revue des modifications : avant l'int\xE9gration, le panel compare chaque ticket au contenu existant (statut Identique / Modifi\xE9 / Nouveau / Supprim\xE9) et propose un dialogue \xAB Diffs \xBB c\xF4te \xE0 c\xF4te.\n\u2022 parser : fournissez votre propre fonction de parsing, prioritaire sur la validation automatique par sch\xE9ma.\n\u2022 invalidMode : \xAB warn \xBB (avertit) ou \xAB block \xBB (d\xE9sactive l'int\xE9gration tant que la r\xE9ponse est invalide).\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton : masquer les blocs d'aide ou les boutons \xAB Info \xBB et \xAB Param\xE8tres \xBB ; sans l'UI, la configuration (language, adapter, invalidMode) passe par les props.\n\u2022 Adapters : OpenCode, shadcn et HTTP g\xE9n\xE9rique sont fournis ; register() permet d'ajouter vos propres providers.\n\u2022 labels : toutes les cha\xEEnes UI sont surchargeables (fr / en / par d\xE9faut) pour une localisation compl\xE8te.",
+  infoIntegrationBody: "Le panel est un module React importable dans n'importe quel projet :\n\u2022 <OneShotAiPanel> : composant complet avec les props systemPrompt, files, tickets, invalidMode, parser, labels, language, adapter, onSend et onPlug.\n\u2022 onPlug(response, selectedKeys?) : re\xE7oit la r\xE9ponse et les cl\xE9s coch\xE9es dans la revue (toutes si le param\xE8tre est absent) ; appelez-le sans l'UI pour int\xE9grer la r\xE9ponse compl\xE8te.\n\u2022 useAiPanel() : hook headless pour piloter la g\xE9n\xE9ration sans l'UI (envoi du prompt, parsing, validation, streaming).\n\u2022 Revue des modifications : avant l'int\xE9gration, le panel compare chaque ticket au contenu existant (statut Identique / Modifi\xE9 / Nouveau / Supprim\xE9) et propose un dialogue \xAB Diffs \xBB c\xF4te \xE0 c\xF4te.\n\u2022 parser : fournissez votre propre fonction de parsing, prioritaire sur la validation automatique par sch\xE9ma.\n\u2022 invalidMode : \xAB warn \xBB (avertit) ou \xAB block \xBB (d\xE9sactive l'int\xE9gration tant que la r\xE9ponse est invalide).\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton : masquer les blocs d'aide ou les boutons \xAB Info \xBB et \xAB Param\xE8tres \xBB ; sans l'UI, la configuration (language, adapter, invalidMode) passe par les props.\n\u2022 Adapters : OpenCode et OpenCode Zen sont fournis ; register() permet d'ajouter vos propres providers.\n\u2022 labels : toutes les cha\xEEnes UI sont surchargeables (fr / en / par d\xE9faut) pour une localisation compl\xE8te.",
   infoCreditsTitle: "Cr\xE9dits",
   infoCreditsBody: "OneShot AI Panel est un composant React open source, con\xE7u pour \xEAtre r\xE9utilis\xE9 dans vos projets. Consultez la landing page et le d\xE9p\xF4t GitHub pour la documentation compl\xE8te, les exemples et les versions.",
   infoCreditsLandingLabel: "Landing page",
@@ -318,13 +318,13 @@ var en = {
   infoStatusTitle: "Status & score",
   infoStatusBody: "The status bar summarizes the panel state: system prompt, instructions, context, files, tickets and parsing errors.\n\n\u2022 Green: required element correctly provided.\n\u2022 Orange: warning (no file present).\n\u2022 Red: required element missing.\n\nThe global score turns green as soon as every required element is provided.",
   infoConfigTitle: "Provider & model",
-  infoConfigBody: "The 'Settings' button opens the panel configuration:\n\u2022 Interface language.\n\u2022 Provider (OpenCode, shadcn, generic HTTP) and its enablement.\n\u2022 Model, API key and base URL depending on the provider.",
+  infoConfigBody: "The 'Settings' button opens the panel configuration:\n\u2022 Interface language.\n\u2022 Provider (OpenCode, OpenCode Zen) and its enablement.\n\u2022 Model, API key and base URL depending on the provider.",
   infoActionsTitle: "Actions",
   infoActionsBody: "At the bottom of the panel:\n\u2022 'View prompt': full preview of the prompt that will be sent.\n\u2022 'Generate': starts streaming generation (becomes 'Cancel' while running).\n\u2022 'Plug selection': opens the review (tickets checked by default), compares each proposal against the existing content, and only plugs in the selected tickets.",
   infoReviewTitle: "Review changes",
   infoReviewBody: "Before plugging the response in, the panel shows a per-ticket review:\n\u2022 Each ticket is checked by default; uncheck the ones to exclude.\n\u2022 The status shows Identical, Modified, New or Removed.\n\u2022 Changes are listed (additions, removals, edits) with the affected path.\n\u2022 The 'Diffs' button opens a side-by-side dialog: existing vs proposed content, numbered lines, additions in green and removals in red.\n\u2022 Unknown keys (no associated ticket) are shown but not checked by default.\n\nThe 'Plug selection (n)' button only applies the checked tickets.",
   infoIntegrationTitle: "Code integration",
-  infoIntegrationBody: "The panel is an importable React module in any project:\n\u2022 <OneShotAiPanel>: full component with the props systemPrompt, files, tickets, invalidMode, parser, labels, language, adapter, onSend and onPlug.\n\u2022 onPlug(response, selectedKeys?): receives the response and the keys checked in the review (all of them when the parameter is omitted); call it without the UI to plug in the full response.\n\u2022 useAiPanel(): headless hook to drive generation without the UI (prompt sending, parsing, validation, streaming).\n\u2022 Review: before plugging in, the panel compares each ticket against the existing content (Identical / Modified / New / Removed status) and offers a side-by-side 'Diffs' dialog.\n\u2022 parser: provide your own parsing function, taking precedence over the automatic schema-based validation.\n\u2022 invalidMode: 'warn' (warns) or 'block' (disables integration while the response is invalid).\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton: hide help blocks or the 'Info' and 'Settings' buttons; without the UI, the configuration (language, adapter, invalidMode) goes through the props.\n\u2022 Adapters: OpenCode, shadcn and generic HTTP are provided; register() lets you add your own providers.\n\u2022 labels: every UI string is overridable (fr / en / defaults) for full localization.",
+  infoIntegrationBody: "The panel is an importable React module in any project:\n\u2022 <OneShotAiPanel>: full component with the props systemPrompt, files, tickets, invalidMode, parser, labels, language, adapter, onSend and onPlug.\n\u2022 onPlug(response, selectedKeys?): receives the response and the keys checked in the review (all of them when the parameter is omitted); call it without the UI to plug in the full response.\n\u2022 useAiPanel(): headless hook to drive generation without the UI (prompt sending, parsing, validation, streaming).\n\u2022 Review: before plugging in, the panel compares each ticket against the existing content (Identical / Modified / New / Removed status) and offers a side-by-side 'Diffs' dialog.\n\u2022 parser: provide your own parsing function, taking precedence over the automatic schema-based validation.\n\u2022 invalidMode: 'warn' (warns) or 'block' (disables integration while the response is invalid).\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton: hide help blocks or the 'Info' and 'Settings' buttons; without the UI, the configuration (language, adapter, invalidMode) goes through the props.\n\u2022 Adapters: OpenCode and OpenCode Zen are provided; register() lets you add your own providers.\n\u2022 labels: every UI string is overridable (fr / en / defaults) for full localization.",
   infoCreditsTitle: "Credits",
   infoCreditsBody: "OneShot AI Panel is an open-source React component, built to be reused in your projects. Check out the landing page and the GitHub repository for full documentation, examples and releases.",
   infoCreditsLandingLabel: "Landing page",
@@ -489,13 +489,13 @@ var ja = {
   infoStatusTitle: "\u30B9\u30C6\u30FC\u30BF\u30B9\u3068\u30B9\u30B3\u30A2",
   infoStatusBody: "\u30B9\u30C6\u30FC\u30BF\u30B9\u30D0\u30FC\u306F\u3001\u30D1\u30CD\u30EB\u306E\u72B6\u614B\u3092\u8981\u7D04\u3057\u307E\u3059\uFF1A\u30B7\u30B9\u30C6\u30E0\u30D7\u30ED\u30F3\u30D7\u30C8\u3001\u6307\u793A\u3001\u30B3\u30F3\u30C6\u30AD\u30B9\u30C8\u3001\u30D5\u30A1\u30A4\u30EB\u3001\u30C1\u30B1\u30C3\u30C8\u3001\u89E3\u6790\u30A8\u30E9\u30FC\u3002\n\n\u2022 \u7DD1\uFF1A\u5FC5\u9808\u8981\u7D20\u304C\u6B63\u3057\u304F\u63D0\u4F9B\u3055\u308C\u3066\u3044\u307E\u3059\u3002\n\u2022 \u30AA\u30EC\u30F3\u30B8\uFF1A\u8B66\u544A\uFF08\u30D5\u30A1\u30A4\u30EB\u304C\u5B58\u5728\u3057\u306A\u3044\uFF09\u3002\n\u2022 \u8D64\uFF1A\u5FC5\u9808\u8981\u7D20\u304C\u3042\u308A\u307E\u305B\u3093\u3002\n\n\u3059\u3079\u3066\u306E\u5FC5\u9808\u8981\u7D20\u304C\u63D0\u4F9B\u3055\u308C\u308B\u3068\u3001\u30B0\u30ED\u30FC\u30D0\u30EB\u30B9\u30B3\u30A2\u306F\u7DD1\u306B\u306A\u308A\u307E\u3059\u3002",
   infoConfigTitle: "\u30D7\u30ED\u30D0\u30A4\u30C0\u30FC\u3068\u30E2\u30C7\u30EB",
-  infoConfigBody: "\u300C\u8A2D\u5B9A\u300D\u30DC\u30BF\u30F3\u3067\u30D1\u30CD\u30EB\u306E\u8A2D\u5B9A\u3092\u958B\u304D\u307E\u3059\uFF1A\n\u2022 \u30A4\u30F3\u30BF\u30FC\u30D5\u30A7\u30FC\u30B9\u8A00\u8A9E\u3002\n\u2022 \u30D7\u30ED\u30D0\u30A4\u30C0\u30FC\uFF08OpenCode\u3001shadcn\u3001\u6C4E\u7528HTTP\uFF09\u3068\u305D\u306E\u6709\u52B9\u5316\u3002\n\u2022 \u30D7\u30ED\u30D0\u30A4\u30C0\u30FC\u306B\u5FDC\u3058\u305F\u30E2\u30C7\u30EB\u3001API\u30AD\u30FC\u3001\u30D9\u30FC\u30B9URL\u3002",
+  infoConfigBody: "\u300C\u8A2D\u5B9A\u300D\u30DC\u30BF\u30F3\u3067\u30D1\u30CD\u30EB\u306E\u8A2D\u5B9A\u3092\u958B\u304D\u307E\u3059\uFF1A\n\u2022 \u30A4\u30F3\u30BF\u30FC\u30D5\u30A7\u30FC\u30B9\u8A00\u8A9E\u3002\n\u2022 \u30D7\u30ED\u30D0\u30A4\u30C0\u30FC\uFF08OpenCode\u3001OpenCode Zen\uFF09\u3068\u305D\u306E\u6709\u52B9\u5316\u3002\n\u2022 \u30D7\u30ED\u30D0\u30A4\u30C0\u30FC\u306B\u5FDC\u3058\u305F\u30E2\u30C7\u30EB\u3001API\u30AD\u30FC\u3001\u30D9\u30FC\u30B9URL\u3002",
   infoActionsTitle: "\u30A2\u30AF\u30B7\u30E7\u30F3",
   infoActionsBody: "\u30D1\u30CD\u30EB\u4E0B\u90E8\uFF1A\n\u2022 \u300C\u30D7\u30ED\u30F3\u30D7\u30C8\u3092\u8868\u793A\u300D\uFF1A\u9001\u4FE1\u3055\u308C\u308B\u30D7\u30ED\u30F3\u30D7\u30C8\u306E\u5B8C\u5168\u306A\u30D7\u30EC\u30D3\u30E5\u30FC\u3002\n\u2022 \u300C\u751F\u6210\u300D\uFF1A\u30B9\u30C8\u30EA\u30FC\u30DF\u30F3\u30B0\u751F\u6210\u3092\u958B\u59CB\uFF08\u5B9F\u884C\u4E2D\u306F\u300C\u30AD\u30E3\u30F3\u30BB\u30EB\u300D\u306B\u306A\u308A\u307E\u3059\uFF09\u3002\n\u2022 \u300C\u9078\u629E\u3092\u30D7\u30E9\u30B0\u30A4\u30F3\u300D\uFF1A\u30EC\u30D3\u30E5\u30FC\u3092\u958B\u304D\uFF08\u30C1\u30B1\u30C3\u30C8\u306F\u30C7\u30D5\u30A9\u30EB\u30C8\u3067\u30C1\u30A7\u30C3\u30AF\uFF09\u3001\u5404\u63D0\u6848\u3092\u65E2\u5B58\u306E\u30B3\u30F3\u30C6\u30F3\u30C4\u3068\u6BD4\u8F03\u3057\u3001\u9078\u629E\u3057\u305F\u30C1\u30B1\u30C3\u30C8\u306E\u307F\u3092\u30D7\u30E9\u30B0\u30A4\u30F3\u3057\u307E\u3059\u3002",
   infoReviewTitle: "\u5909\u66F4\u306E\u30EC\u30D3\u30E5\u30FC",
   infoReviewBody: "\u30EC\u30B9\u30DD\u30F3\u30B9\u3092\u30D7\u30E9\u30B0\u30A4\u30F3\u3059\u308B\u524D\u306B\u3001\u30D1\u30CD\u30EB\u306F\u30C1\u30B1\u30C3\u30C8\u3054\u3068\u306E\u30EC\u30D3\u30E5\u30FC\u3092\u8868\u793A\u3057\u307E\u3059\uFF1A\n\u2022 \u5404\u30C1\u30B1\u30C3\u30C8\u306F\u30C7\u30D5\u30A9\u30EB\u30C8\u3067\u30C1\u30A7\u30C3\u30AF\u3055\u308C\u3066\u3044\u307E\u3059\uFF1B\u9664\u5916\u3059\u308B\u3082\u306E\u3092\u30AA\u30D5\u306B\u3057\u307E\u3059\u3002\n\u2022 \u30B9\u30C6\u30FC\u30BF\u30B9\u306F\u3001\u540C\u4E00\u3001\u5909\u66F4\u3001\u65B0\u898F\u3001\u524A\u9664\u3092\u793A\u3057\u307E\u3059\u3002\n\u2022 \u5909\u66F4\u306F\u3001\u5F71\u97FF\u3092\u53D7\u3051\u308B\u30D1\u30B9\u3068\u3068\u3082\u306B\u30EA\u30B9\u30C8\u3055\u308C\u307E\u3059\uFF08\u8FFD\u52A0\u3001\u524A\u9664\u3001\u7DE8\u96C6\uFF09\u3002\n\u2022 \u300C\u5DEE\u5206\u300D\u30DC\u30BF\u30F3\u3067\u3001\u65E2\u5B58\u30B3\u30F3\u30C6\u30F3\u30C4\u3068\u63D0\u6848\u3092\u4E26\u3079\u3066\u8868\u793A\u3059\u308B\u30C0\u30A4\u30A2\u30ED\u30B0\u304C\u958B\u304D\u307E\u3059\uFF1A\u884C\u756A\u53F7\u4ED8\u304D\u3001\u8FFD\u52A0\u306F\u7DD1\u3001\u524A\u9664\u306F\u8D64\u3002\n\u2022 \u4E0D\u660E\u306A\u30AD\u30FC\uFF08\u95A2\u9023\u3059\u308B\u30C1\u30B1\u30C3\u30C8\u304C\u306A\u3044\uFF09\u306F\u8868\u793A\u3055\u308C\u307E\u3059\u304C\u3001\u30C7\u30D5\u30A9\u30EB\u30C8\u3067\u306F\u30C1\u30A7\u30C3\u30AF\u3055\u308C\u307E\u305B\u3093\u3002\n\n\u300C\u9078\u629E\u3092\u30D7\u30E9\u30B0\u30A4\u30F3 (n)\u300D\u30DC\u30BF\u30F3\u306F\u3001\u30C1\u30A7\u30C3\u30AF\u3055\u308C\u305F\u30C1\u30B1\u30C3\u30C8\u306E\u307F\u3092\u9069\u7528\u3057\u307E\u3059\u3002",
   infoIntegrationTitle: "\u30B3\u30FC\u30C9\u7D71\u5408",
-  infoIntegrationBody: "\u30D1\u30CD\u30EB\u306F\u3001\u4EFB\u610F\u306E\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3067\u30A4\u30F3\u30DD\u30FC\u30C8\u3067\u304D\u308BReact\u30E2\u30B8\u30E5\u30FC\u30EB\u3067\u3059\uFF1A\n\u2022 <OneShotAiPanel>\uFF1AsystemPrompt\u3001files\u3001tickets\u3001invalidMode\u3001parser\u3001labels\u3001language\u3001adapter\u3001onSend\u3001onPlug \u306E\u30D7\u30ED\u30C3\u30D7\u3092\u6301\u3064\u5B8C\u5168\u306A\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8\u3002\n\u2022 onPlug(response, selectedKeys?)\uFF1A\u30EC\u30B9\u30DD\u30F3\u30B9\u3068\u30EC\u30D3\u30E5\u30FC\u3067\u30C1\u30A7\u30C3\u30AF\u3055\u308C\u305F\u30AD\u30FC\u3092\u53D7\u3051\u53D6\u308A\u307E\u3059\uFF08\u30D1\u30E9\u30E1\u30FC\u30BF\u3092\u7701\u7565\u3059\u308B\u3068\u3059\u3079\u3066\uFF09\u3002UI\u306A\u3057\u3067\u547C\u3073\u51FA\u3057\u3066\u3001\u5B8C\u5168\u306A\u30EC\u30B9\u30DD\u30F3\u30B9\u3092\u30D7\u30E9\u30B0\u30A4\u30F3\u3057\u307E\u3059\u3002\n\u2022 useAiPanel()\uFF1AUI\u306A\u3057\u3067\u751F\u6210\u3092\u99C6\u52D5\u3059\u308B\u30D8\u30C3\u30C9\u30EC\u30B9\u30D5\u30C3\u30AF\uFF08\u30D7\u30ED\u30F3\u30D7\u30C8\u9001\u4FE1\u3001\u89E3\u6790\u3001\u691C\u8A3C\u3001\u30B9\u30C8\u30EA\u30FC\u30DF\u30F3\u30B0\uFF09\u3002\n\u2022 \u30EC\u30D3\u30E5\u30FC\uFF1A\u30D7\u30E9\u30B0\u30A4\u30F3\u524D\u306B\u3001\u30D1\u30CD\u30EB\u306F\u5404\u30C1\u30B1\u30C3\u30C8\u3092\u65E2\u5B58\u306E\u30B3\u30F3\u30C6\u30F3\u30C4\u3068\u6BD4\u8F03\u3057\uFF08\u540C\u4E00/\u5909\u66F4/\u65B0\u898F/\u524A\u9664\u306E\u30B9\u30C6\u30FC\u30BF\u30B9\uFF09\u3001\u4E26\u3079\u3066\u8868\u793A\u3059\u308B\u300C\u5DEE\u5206\u300D\u30C0\u30A4\u30A2\u30ED\u30B0\u3092\u63D0\u4F9B\u3057\u307E\u3059\u3002\n\u2022 parser\uFF1A\u72EC\u81EA\u306E\u89E3\u6790\u95A2\u6570\u3092\u63D0\u4F9B\u3002\u81EA\u52D5\u30B9\u30AD\u30FC\u30DE\u691C\u8A3C\u3088\u308A\u512A\u5148\u3055\u308C\u307E\u3059\u3002\n\u2022 invalidMode\uFF1A\u300Cwarn\u300D\uFF08\u8B66\u544A\uFF09\u307E\u305F\u306F\u300Cblock\u300D\uFF08\u30EC\u30B9\u30DD\u30F3\u30B9\u304C\u7121\u52B9\u306A\u9593\u306F\u7D71\u5408\u3092\u7121\u52B9\u5316\uFF09\u3002\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton\uFF1A\u30D8\u30EB\u30D7\u30D6\u30ED\u30C3\u30AF\u307E\u305F\u306F\u300C\u60C5\u5831\u300D\u3068\u300C\u8A2D\u5B9A\u300D\u30DC\u30BF\u30F3\u3092\u975E\u8868\u793A\u306B\u3057\u307E\u3059\uFF1BUI\u306A\u3057\u3067\u306F\u3001\u8A2D\u5B9A\uFF08language\u3001adapter\u3001invalidMode\uFF09\u306F\u30D7\u30ED\u30C3\u30D7\u3092\u4ECB\u3057\u3066\u884C\u308F\u308C\u307E\u3059\u3002\n\u2022 \u30A2\u30C0\u30D7\u30BF\u30FC\uFF1AOpenCode\u3001shadcn\u3001\u6C4E\u7528HTTP\u304C\u63D0\u4F9B\u3055\u308C\u307E\u3059\uFF1Bregister() \u3067\u72EC\u81EA\u306E\u30D7\u30ED\u30D0\u30A4\u30C0\u30FC\u3092\u8FFD\u52A0\u3067\u304D\u307E\u3059\u3002\n\u2022 labels\uFF1A\u3059\u3079\u3066\u306EUI\u6587\u5B57\u5217\u306F\u30AA\u30FC\u30D0\u30FC\u30E9\u30A4\u30C9\u53EF\u80FD\uFF08fr / en / \u30C7\u30D5\u30A9\u30EB\u30C8\uFF09\u3067\u3001\u5B8C\u5168\u306A\u30ED\u30FC\u30AB\u30E9\u30A4\u30BC\u30FC\u30B7\u30E7\u30F3\u3092\u5B9F\u73FE\u3057\u307E\u3059\u3002",
+  infoIntegrationBody: "\u30D1\u30CD\u30EB\u306F\u3001\u4EFB\u610F\u306E\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3067\u30A4\u30F3\u30DD\u30FC\u30C8\u3067\u304D\u308BReact\u30E2\u30B8\u30E5\u30FC\u30EB\u3067\u3059\uFF1A\n\u2022 <OneShotAiPanel>\uFF1AsystemPrompt\u3001files\u3001tickets\u3001invalidMode\u3001parser\u3001labels\u3001language\u3001adapter\u3001onSend\u3001onPlug \u306E\u30D7\u30ED\u30C3\u30D7\u3092\u6301\u3064\u5B8C\u5168\u306A\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8\u3002\n\u2022 onPlug(response, selectedKeys?)\uFF1A\u30EC\u30B9\u30DD\u30F3\u30B9\u3068\u30EC\u30D3\u30E5\u30FC\u3067\u30C1\u30A7\u30C3\u30AF\u3055\u308C\u305F\u30AD\u30FC\u3092\u53D7\u3051\u53D6\u308A\u307E\u3059\uFF08\u30D1\u30E9\u30E1\u30FC\u30BF\u3092\u7701\u7565\u3059\u308B\u3068\u3059\u3079\u3066\uFF09\u3002UI\u306A\u3057\u3067\u547C\u3073\u51FA\u3057\u3066\u3001\u5B8C\u5168\u306A\u30EC\u30B9\u30DD\u30F3\u30B9\u3092\u30D7\u30E9\u30B0\u30A4\u30F3\u3057\u307E\u3059\u3002\n\u2022 useAiPanel()\uFF1AUI\u306A\u3057\u3067\u751F\u6210\u3092\u99C6\u52D5\u3059\u308B\u30D8\u30C3\u30C9\u30EC\u30B9\u30D5\u30C3\u30AF\uFF08\u30D7\u30ED\u30F3\u30D7\u30C8\u9001\u4FE1\u3001\u89E3\u6790\u3001\u691C\u8A3C\u3001\u30B9\u30C8\u30EA\u30FC\u30DF\u30F3\u30B0\uFF09\u3002\n\u2022 \u30EC\u30D3\u30E5\u30FC\uFF1A\u30D7\u30E9\u30B0\u30A4\u30F3\u524D\u306B\u3001\u30D1\u30CD\u30EB\u306F\u5404\u30C1\u30B1\u30C3\u30C8\u3092\u65E2\u5B58\u306E\u30B3\u30F3\u30C6\u30F3\u30C4\u3068\u6BD4\u8F03\u3057\uFF08\u540C\u4E00/\u5909\u66F4/\u65B0\u898F/\u524A\u9664\u306E\u30B9\u30C6\u30FC\u30BF\u30B9\uFF09\u3001\u4E26\u3079\u3066\u8868\u793A\u3059\u308B\u300C\u5DEE\u5206\u300D\u30C0\u30A4\u30A2\u30ED\u30B0\u3092\u63D0\u4F9B\u3057\u307E\u3059\u3002\n\u2022 parser\uFF1A\u72EC\u81EA\u306E\u89E3\u6790\u95A2\u6570\u3092\u63D0\u4F9B\u3002\u81EA\u52D5\u30B9\u30AD\u30FC\u30DE\u691C\u8A3C\u3088\u308A\u512A\u5148\u3055\u308C\u307E\u3059\u3002\n\u2022 invalidMode\uFF1A\u300Cwarn\u300D\uFF08\u8B66\u544A\uFF09\u307E\u305F\u306F\u300Cblock\u300D\uFF08\u30EC\u30B9\u30DD\u30F3\u30B9\u304C\u7121\u52B9\u306A\u9593\u306F\u7D71\u5408\u3092\u7121\u52B9\u5316\uFF09\u3002\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton\uFF1A\u30D8\u30EB\u30D7\u30D6\u30ED\u30C3\u30AF\u307E\u305F\u306F\u300C\u60C5\u5831\u300D\u3068\u300C\u8A2D\u5B9A\u300D\u30DC\u30BF\u30F3\u3092\u975E\u8868\u793A\u306B\u3057\u307E\u3059\uFF1BUI\u306A\u3057\u3067\u306F\u3001\u8A2D\u5B9A\uFF08language\u3001adapter\u3001invalidMode\uFF09\u306F\u30D7\u30ED\u30C3\u30D7\u3092\u4ECB\u3057\u3066\u884C\u308F\u308C\u307E\u3059\u3002\n\u2022 \u30A2\u30C0\u30D7\u30BF\u30FC\uFF1AOpenCode\u3001OpenCode Zen\u304C\u63D0\u4F9B\u3055\u308C\u307E\u3059\uFF1Bregister() \u3067\u72EC\u81EA\u306E\u30D7\u30ED\u30D0\u30A4\u30C0\u30FC\u3092\u8FFD\u52A0\u3067\u304D\u307E\u3059\u3002\n\u2022 labels\uFF1A\u3059\u3079\u3066\u306EUI\u6587\u5B57\u5217\u306F\u30AA\u30FC\u30D0\u30FC\u30E9\u30A4\u30C9\u53EF\u80FD\uFF08fr / en / \u30C7\u30D5\u30A9\u30EB\u30C8\uFF09\u3067\u3001\u5B8C\u5168\u306A\u30ED\u30FC\u30AB\u30E9\u30A4\u30BC\u30FC\u30B7\u30E7\u30F3\u3092\u5B9F\u73FE\u3057\u307E\u3059\u3002",
   infoCreditsTitle: "\u30AF\u30EC\u30B8\u30C3\u30C8",
   infoCreditsBody: "OneShot AI Panel\u306F\u3001\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3067\u518D\u5229\u7528\u3067\u304D\u308B\u3088\u3046\u306B\u8A2D\u8A08\u3055\u308C\u305F\u30AA\u30FC\u30D7\u30F3\u30BD\u30FC\u30B9\u306EReact\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8\u3067\u3059\u3002\u5B8C\u5168\u306A\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8\u3001\u4F8B\u3001\u30EA\u30EA\u30FC\u30B9\u306B\u3064\u3044\u3066\u306F\u3001\u30E9\u30F3\u30C7\u30A3\u30F3\u30B0\u30DA\u30FC\u30B8\u3068GitHub\u30EA\u30DD\u30B8\u30C8\u30EA\u3092\u3054\u89A7\u304F\u3060\u3055\u3044\u3002",
   infoCreditsLandingLabel: "\u30E9\u30F3\u30C7\u30A3\u30F3\u30B0\u30DA\u30FC\u30B8",
@@ -648,13 +648,13 @@ var zh = {
   infoStatusTitle: "\u72B6\u6001\u4E0E\u8BC4\u5206",
   infoStatusBody: "\u72B6\u6001\u680F\u603B\u7ED3\u4E86\u9762\u677F\u72B6\u6001\uFF1A\u7CFB\u7EDF\u63D0\u793A\u8BCD\u3001\u6307\u4EE4\u3001\u4E0A\u4E0B\u6587\u3001\u6587\u4EF6\u3001\u5DE5\u5355\u548C\u89E3\u6790\u9519\u8BEF\u3002\n\n\u2022 \u7EFF\u8272\uFF1A\u5FC5\u9700\u5143\u7D20\u5DF2\u6B63\u786E\u63D0\u4F9B\u3002\n\u2022 \u6A59\u8272\uFF1A\u8B66\u544A\uFF08\u6CA1\u6709\u6587\u4EF6\u5B58\u5728\uFF09\u3002\n\u2022 \u7EA2\u8272\uFF1A\u7F3A\u5C11\u5FC5\u9700\u5143\u7D20\u3002\n\n\u4E00\u65E6\u6240\u6709\u5FC5\u9700\u5143\u7D20\u90FD\u63D0\u4F9B\uFF0C\u5168\u5C40\u8BC4\u5206\u5C31\u4F1A\u53D8\u7EFF\u3002",
   infoConfigTitle: "\u63D0\u4F9B\u5546\u4E0E\u6A21\u578B",
-  infoConfigBody: "\u300C\u8BBE\u7F6E\u300D\u6309\u94AE\u6253\u5F00\u9762\u677F\u914D\u7F6E\uFF1A\n\u2022 \u754C\u9762\u8BED\u8A00\u3002\n\u2022 \u63D0\u4F9B\u5546\uFF08OpenCode\u3001shadcn\u3001\u901A\u7528 HTTP\uFF09\u53CA\u5176\u542F\u7528\u72B6\u6001\u3002\n\u2022 \u6839\u636E\u63D0\u4F9B\u5546\u9009\u62E9\u6A21\u578B\u3001API \u5BC6\u94A5\u548C\u57FA\u7840 URL\u3002",
+  infoConfigBody: "\u300C\u8BBE\u7F6E\u300D\u6309\u94AE\u6253\u5F00\u9762\u677F\u914D\u7F6E\uFF1A\n\u2022 \u754C\u9762\u8BED\u8A00\u3002\n\u2022 \u63D0\u4F9B\u5546\uFF08OpenCode\u3001OpenCode Zen\uFF09\u53CA\u5176\u542F\u7528\u72B6\u6001\u3002\n\u2022 \u6839\u636E\u63D0\u4F9B\u5546\u9009\u62E9\u6A21\u578B\u3001API \u5BC6\u94A5\u548C\u57FA\u7840 URL\u3002",
   infoActionsTitle: "\u64CD\u4F5C",
   infoActionsBody: "\u9762\u677F\u5E95\u90E8\uFF1A\n\u2022 \u300C\u67E5\u770B\u63D0\u793A\u8BCD\u300D\uFF1A\u5C06\u8981\u53D1\u9001\u7684\u63D0\u793A\u8BCD\u7684\u5B8C\u6574\u9884\u89C8\u3002\n\u2022 \u300C\u751F\u6210\u300D\uFF1A\u5F00\u59CB\u6D41\u5F0F\u751F\u6210\uFF08\u8FD0\u884C\u65F6\u53D8\u4E3A\u300C\u53D6\u6D88\u300D\uFF09\u3002\n\u2022 \u300C\u63A5\u5165\u9009\u62E9\u300D\uFF1A\u6253\u5F00\u8BC4\u5BA1\uFF08\u5DE5\u5355\u9ED8\u8BA4\u52FE\u9009\uFF09\uFF0C\u5C06\u6BCF\u4E2A\u63D0\u6848\u4E0E\u73B0\u6709\u5185\u5BB9\u8FDB\u884C\u6BD4\u8F83\uFF0C\u5E76\u4E14\u53EA\u63A5\u5165\u9009\u4E2D\u7684\u5DE5\u5355\u3002",
   infoReviewTitle: "\u8BC4\u5BA1\u66F4\u6539",
   infoReviewBody: "\u63A5\u5165\u54CD\u5E94\u524D\uFF0C\u9762\u677F\u4F1A\u663E\u793A\u6BCF\u4E2A\u5DE5\u5355\u7684\u8BC4\u5BA1\uFF1A\n\u2022 \u6BCF\u4E2A\u5DE5\u5355\u9ED8\u8BA4\u52FE\u9009\uFF1B\u53D6\u6D88\u52FE\u9009\u8981\u6392\u9664\u7684\u5DE5\u5355\u3002\n\u2022 \u72B6\u6001\u663E\u793A\u4E3A\u76F8\u540C\u3001\u5DF2\u4FEE\u6539\u3001\u65B0\u589E\u6216\u5DF2\u5220\u9664\u3002\n\u2022 \u66F4\u6539\u4F1A\u5217\u51FA\uFF08\u6DFB\u52A0\u3001\u5220\u9664\u3001\u7F16\u8F91\uFF09\u5E76\u5E26\u6709\u53D7\u5F71\u54CD\u7684\u8DEF\u5F84\u3002\n\u2022 \u300C\u5DEE\u5F02\u300D\u6309\u94AE\u4F1A\u6253\u5F00\u5E76\u6392\u5BF9\u8BDD\u6846\uFF1A\u73B0\u6709\u5185\u5BB9\u4E0E\u63D0\u6848\u3001\u5E26\u884C\u53F7\u3001\u6DFB\u52A0\u4E3A\u7EFF\u8272\u3001\u5220\u9664\u4E3A\u7EA2\u8272\u3002\n\u2022 \u672A\u77E5\u952E\uFF08\u6CA1\u6709\u5173\u8054\u5DE5\u5355\uFF09\u4F1A\u663E\u793A\uFF0C\u4F46\u9ED8\u8BA4\u4E0D\u52FE\u9009\u3002\n\n\u300C\u63A5\u5165\u9009\u62E9 (n)\u300D\u6309\u94AE\u53EA\u5E94\u7528\u52FE\u9009\u7684\u5DE5\u5355\u3002",
   infoIntegrationTitle: "\u4EE3\u7801\u96C6\u6210",
-  infoIntegrationBody: "\u9762\u677F\u662F\u4E00\u4E2A\u53EF\u5728\u4EFB\u4F55\u9879\u76EE\u4E2D\u5BFC\u5165\u7684 React \u6A21\u5757\uFF1A\n\u2022 <OneShotAiPanel>\uFF1A\u5B8C\u6574\u7EC4\u4EF6\uFF0C\u5E26\u6709 systemPrompt\u3001files\u3001tickets\u3001invalidMode\u3001parser\u3001labels\u3001language\u3001adapter\u3001onSend \u548C onPlug \u5C5E\u6027\u3002\n\u2022 onPlug(response, selectedKeys?)\uFF1A\u63A5\u6536\u54CD\u5E94\u548C\u8BC4\u5BA1\u4E2D\u52FE\u9009\u7684\u952E\uFF08\u7701\u7565\u53C2\u6570\u65F6\u4E3A\u5168\u90E8\uFF09\uFF1B\u4E0D\u5E26 UI \u8C03\u7528\u5373\u53EF\u63A5\u5165\u5B8C\u6574\u54CD\u5E94\u3002\n\u2022 useAiPanel()\uFF1A\u65E0 UI \u9A71\u52A8\u751F\u6210\u7684\u65E0\u5934 hook\uFF08\u63D0\u793A\u8BCD\u53D1\u9001\u3001\u89E3\u6790\u3001\u9A8C\u8BC1\u3001\u6D41\u5F0F\u4F20\u8F93\uFF09\u3002\n\u2022 \u8BC4\u5BA1\uFF1A\u63A5\u5165\u524D\uFF0C\u9762\u677F\u4F1A\u5C06\u6BCF\u4E2A\u5DE5\u5355\u4E0E\u73B0\u6709\u5185\u5BB9\u8FDB\u884C\u6BD4\u8F83\uFF08\u76F8\u540C/\u5DF2\u4FEE\u6539/\u65B0\u589E/\u5DF2\u5220\u9664\u72B6\u6001\uFF09\uFF0C\u5E76\u63D0\u4F9B\u5E76\u6392\u7684\u300C\u5DEE\u5F02\u300D\u5BF9\u8BDD\u6846\u3002\n\u2022 parser\uFF1A\u63D0\u4F9B\u60A8\u81EA\u5DF1\u7684\u89E3\u6790\u51FD\u6570\uFF0C\u4F18\u5148\u4E8E\u81EA\u52A8\u6A21\u5F0F\u9A8C\u8BC1\u3002\n\u2022 invalidMode\uFF1A\u300Cwarn\u300D\uFF08\u8B66\u544A\uFF09\u6216\u300Cblock\u300D\uFF08\u54CD\u5E94\u65E0\u6548\u65F6\u7981\u7528\u63A5\u5165\uFF09\u3002\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton\uFF1A\u9690\u85CF\u5E2E\u52A9\u5757\u6216\u300C\u4FE1\u606F\u300D\u548C\u300C\u8BBE\u7F6E\u300D\u6309\u94AE\uFF1B\u65E0 UI \u65F6\uFF0C\u914D\u7F6E\uFF08language\u3001adapter\u3001invalidMode\uFF09\u901A\u8FC7\u5C5E\u6027\u4F20\u9012\u3002\n\u2022 \u9002\u914D\u5668\uFF1A\u63D0\u4F9B OpenCode\u3001shadcn \u548C\u901A\u7528 HTTP\uFF1Bregister() \u53EF\u8BA9\u60A8\u6DFB\u52A0\u81EA\u5DF1\u7684\u63D0\u4F9B\u5546\u3002\n\u2022 labels\uFF1A\u6240\u6709 UI \u5B57\u7B26\u4E32\u90FD\u53EF\u8986\u76D6\uFF08fr / en / \u9ED8\u8BA4\uFF09\uFF0C\u5B9E\u73B0\u5B8C\u5168\u672C\u5730\u5316\u3002",
+  infoIntegrationBody: "\u9762\u677F\u662F\u4E00\u4E2A\u53EF\u5728\u4EFB\u4F55\u9879\u76EE\u4E2D\u5BFC\u5165\u7684 React \u6A21\u5757\uFF1A\n\u2022 <OneShotAiPanel>\uFF1A\u5B8C\u6574\u7EC4\u4EF6\uFF0C\u5E26\u6709 systemPrompt\u3001files\u3001tickets\u3001invalidMode\u3001parser\u3001labels\u3001language\u3001adapter\u3001onSend \u548C onPlug \u5C5E\u6027\u3002\n\u2022 onPlug(response, selectedKeys?)\uFF1A\u63A5\u6536\u54CD\u5E94\u548C\u8BC4\u5BA1\u4E2D\u52FE\u9009\u7684\u952E\uFF08\u7701\u7565\u53C2\u6570\u65F6\u4E3A\u5168\u90E8\uFF09\uFF1B\u4E0D\u5E26 UI \u8C03\u7528\u5373\u53EF\u63A5\u5165\u5B8C\u6574\u54CD\u5E94\u3002\n\u2022 useAiPanel()\uFF1A\u65E0 UI \u9A71\u52A8\u751F\u6210\u7684\u65E0\u5934 hook\uFF08\u63D0\u793A\u8BCD\u53D1\u9001\u3001\u89E3\u6790\u3001\u9A8C\u8BC1\u3001\u6D41\u5F0F\u4F20\u8F93\uFF09\u3002\n\u2022 \u8BC4\u5BA1\uFF1A\u63A5\u5165\u524D\uFF0C\u9762\u677F\u4F1A\u5C06\u6BCF\u4E2A\u5DE5\u5355\u4E0E\u73B0\u6709\u5185\u5BB9\u8FDB\u884C\u6BD4\u8F83\uFF08\u76F8\u540C/\u5DF2\u4FEE\u6539/\u65B0\u589E/\u5DF2\u5220\u9664\u72B6\u6001\uFF09\uFF0C\u5E76\u63D0\u4F9B\u5E76\u6392\u7684\u300C\u5DEE\u5F02\u300D\u5BF9\u8BDD\u6846\u3002\n\u2022 parser\uFF1A\u63D0\u4F9B\u60A8\u81EA\u5DF1\u7684\u89E3\u6790\u51FD\u6570\uFF0C\u4F18\u5148\u4E8E\u81EA\u52A8\u6A21\u5F0F\u9A8C\u8BC1\u3002\n\u2022 invalidMode\uFF1A\u300Cwarn\u300D\uFF08\u8B66\u544A\uFF09\u6216\u300Cblock\u300D\uFF08\u54CD\u5E94\u65E0\u6548\u65F6\u7981\u7528\u63A5\u5165\uFF09\u3002\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton\uFF1A\u9690\u85CF\u5E2E\u52A9\u5757\u6216\u300C\u4FE1\u606F\u300D\u548C\u300C\u8BBE\u7F6E\u300D\u6309\u94AE\uFF1B\u65E0 UI \u65F6\uFF0C\u914D\u7F6E\uFF08language\u3001adapter\u3001invalidMode\uFF09\u901A\u8FC7\u5C5E\u6027\u4F20\u9012\u3002\n\u2022 \u9002\u914D\u5668\uFF1A\u63D0\u4F9B OpenCode \u548C OpenCode Zen\uFF1Bregister() \u53EF\u8BA9\u60A8\u6DFB\u52A0\u81EA\u5DF1\u7684\u63D0\u4F9B\u5546\u3002\n\u2022 labels\uFF1A\u6240\u6709 UI \u5B57\u7B26\u4E32\u90FD\u53EF\u8986\u76D6\uFF08fr / en / \u9ED8\u8BA4\uFF09\uFF0C\u5B9E\u73B0\u5B8C\u5168\u672C\u5730\u5316\u3002",
   infoCreditsTitle: "\u81F4\u8C22",
   infoCreditsBody: "OneShot AI Panel \u662F\u4E00\u4E2A\u5F00\u6E90 React \u7EC4\u4EF6\uFF0C\u65E8\u5728\u60A8\u7684\u9879\u76EE\u4E2D\u590D\u7528\u3002\u8BF7\u67E5\u770B\u843D\u5730\u9875\u548C GitHub \u4ED3\u5E93\u83B7\u53D6\u5B8C\u6574\u6587\u6863\u3001\u793A\u4F8B\u548C\u7248\u672C\u3002",
   infoCreditsLandingLabel: "\u843D\u5730\u9875",
@@ -807,13 +807,13 @@ var es = {
   infoStatusTitle: "Estado y puntuaci\xF3n",
   infoStatusBody: "La barra de estado resume el estado del panel: prompt del sistema, instrucciones, contexto, archivos, tickets y errores de parsing.\n\n\u2022 Verde: elemento requerido correctamente proporcionado.\n\u2022 Naranja: aviso (ning\xFAn archivo presente).\n\u2022 Rojo: elemento requerido ausente.\n\nLa puntuaci\xF3n global se vuelve verde en cuanto todos los elementos requeridos est\xE1n presentes.",
   infoConfigTitle: "Proveedor y modelo",
-  infoConfigBody: "El bot\xF3n \xABAjustes\xBB abre la configuraci\xF3n del panel:\n\u2022 Idioma de la interfaz.\n\u2022 Proveedor (OpenCode, shadcn, HTTP gen\xE9rico) y su activaci\xF3n.\n\u2022 Modelo, clave API y URL base seg\xFAn el proveedor.",
+  infoConfigBody: "El bot\xF3n \xABAjustes\xBB abre la configuraci\xF3n del panel:\n\u2022 Idioma de la interfaz.\n\u2022 Proveedor (OpenCode, OpenCode Zen) y su activaci\xF3n.\n\u2022 Modelo, clave API y URL base seg\xFAn el proveedor.",
   infoActionsTitle: "Acciones",
   infoActionsBody: "Al final del panel:\n\u2022 \xABVer el prompt\xBB: vista previa completa del prompt que se enviar\xE1.\n\u2022 \xABGenerar\xBB: inicia la generaci\xF3n en streaming (se convierte en \xABCancelar\xBB mientras se ejecuta).\n\u2022 \xABIntegrar la selecci\xF3n\xBB: abre la revisi\xF3n (tickets marcados por defecto), compara cada propuesta con el contenido existente y solo integra los tickets seleccionados.",
   infoReviewTitle: "Revisi\xF3n de cambios",
   infoReviewBody: "Antes de integrar la respuesta, el panel muestra una revisi\xF3n por ticket:\n\u2022 Cada ticket est\xE1 marcado por defecto; desmarca los que quieras excluir.\n\u2022 El estado indica Id\xE9ntico, Modificado, Nuevo o Eliminado.\n\u2022 Los cambios se enumeran (adiciones, eliminaciones, modificaciones) con la ruta afectada.\n\u2022 El bot\xF3n \xABDiffs\xBB abre un di\xE1logo lado a lado: contenido existente vs propuesta, l\xEDneas numeradas, adiciones en verde y eliminaciones en rojo.\n\u2022 Las claves desconocidas (sin ticket asociado) se muestran pero no se marcan por defecto.\n\nEl bot\xF3n \xABIntegrar la selecci\xF3n (n)\xBB solo aplica los tickets marcados.",
   infoIntegrationTitle: "Integraci\xF3n en el c\xF3digo",
-  infoIntegrationBody: "El panel es un m\xF3dulo React importable en cualquier proyecto:\n\u2022 <OneShotAiPanel>: componente completo con las props systemPrompt, files, tickets, invalidMode, parser, labels, language, adapter, onSend y onPlug.\n\u2022 onPlug(response, selectedKeys?): recibe la respuesta y las claves marcadas en la revisi\xF3n (todas si se omite el par\xE1metro); ll\xE1malo sin la UI para integrar la respuesta completa.\n\u2022 useAiPanel(): hook headless para impulsar la generaci\xF3n sin la UI (env\xEDo del prompt, parsing, validaci\xF3n, streaming).\n\u2022 Revisi\xF3n: antes de integrar, el panel compara cada ticket con el contenido existente (estado Id\xE9ntico / Modificado / Nuevo / Eliminado) y ofrece un di\xE1logo \xABDiffs\xBB lado a lado.\n\u2022 parser: proporciona tu propia funci\xF3n de parsing, prioritaria sobre la validaci\xF3n autom\xE1tica por esquema.\n\u2022 invalidMode: \xABwarn\xBB (avisa) o \xABblock\xBB (desactiva la integraci\xF3n mientras la respuesta sea inv\xE1lida).\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton: ocultar bloques de ayuda o los botones \xABInfo\xBB y \xABAjustes\xBB; sin la UI, la configuraci\xF3n (language, adapter, invalidMode) pasa por las props.\n\u2022 Adaptadores: se proporcionan OpenCode, shadcn y HTTP gen\xE9rico; register() permite a\xF1adir tus propios proveedores.\n\u2022 labels: todas las cadenas de la UI son sobreescribibles (fr / en / por defecto) para una localizaci\xF3n completa.",
+  infoIntegrationBody: "El panel es un m\xF3dulo React importable en cualquier proyecto:\n\u2022 <OneShotAiPanel>: componente completo con las props systemPrompt, files, tickets, invalidMode, parser, labels, language, adapter, onSend y onPlug.\n\u2022 onPlug(response, selectedKeys?): recibe la respuesta y las claves marcadas en la revisi\xF3n (todas si se omite el par\xE1metro); ll\xE1malo sin la UI para integrar la respuesta completa.\n\u2022 useAiPanel(): hook headless para impulsar la generaci\xF3n sin la UI (env\xEDo del prompt, parsing, validaci\xF3n, streaming).\n\u2022 Revisi\xF3n: antes de integrar, el panel compara cada ticket con el contenido existente (estado Id\xE9ntico / Modificado / Nuevo / Eliminado) y ofrece un di\xE1logo \xABDiffs\xBB lado a lado.\n\u2022 parser: proporciona tu propia funci\xF3n de parsing, prioritaria sobre la validaci\xF3n autom\xE1tica por esquema.\n\u2022 invalidMode: \xABwarn\xBB (avisa) o \xABblock\xBB (desactiva la integraci\xF3n mientras la respuesta sea inv\xE1lida).\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton: ocultar bloques de ayuda o los botones \xABInfo\xBB y \xABAjustes\xBB; sin la UI, la configuraci\xF3n (language, adapter, invalidMode) pasa por las props.\n\u2022 Adaptadores: se proporcionan OpenCode y OpenCode Zen; register() permite a\xF1adir tus propios proveedores.\n\u2022 labels: todas las cadenas de la UI son sobreescribibles (fr / en / por defecto) para una localizaci\xF3n completa.",
   infoCreditsTitle: "Cr\xE9ditos",
   infoCreditsBody: "OneShot AI Panel es un componente React de c\xF3digo abierto, dise\xF1ado para reutilizarse en tus proyectos. Consulta la landing page y el repositorio de GitHub para la documentaci\xF3n completa, ejemplos y versiones.",
   infoCreditsLandingLabel: "Landing page",
@@ -966,13 +966,13 @@ var ar = {
   infoStatusTitle: "\u0627\u0644\u062D\u0627\u0644\u0629 \u0648\u0627\u0644\u0646\u062A\u064A\u062C\u0629",
   infoStatusBody: "\u064A\u0644\u062E\u0651\u0635 \u0634\u0631\u064A\u0637 \u0627\u0644\u062D\u0627\u0644\u0629 \u062D\u0627\u0644\u0629 \u0627\u0644\u0644\u0648\u062D\u0629: \u0645\u0648\u062C\u0647 \u0627\u0644\u0646\u0638\u0627\u0645\u060C \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u0627\u062A\u060C \u0627\u0644\u0633\u064A\u0627\u0642\u060C \u0627\u0644\u0645\u0644\u0641\u0627\u062A\u060C \u0627\u0644\u062A\u0630\u0627\u0643\u0631 \u0648\u0623\u062E\u0637\u0627\u0621 \u0627\u0644\u062A\u062D\u0644\u064A\u0644.\n\n\u2022 \u0623\u062E\u0636\u0631: \u0639\u0646\u0635\u0631 \u0645\u0637\u0644\u0648\u0628 \u0645\u064F\u0642\u062F\u064E\u0651\u0645 \u0628\u0634\u0643\u0644 \u0635\u062D\u064A\u062D.\n\u2022 \u0628\u0631\u062A\u0642\u0627\u0644\u064A: \u062A\u0646\u0628\u064A\u0647 (\u0644\u0627 \u064A\u0648\u062C\u062F \u0645\u0644\u0641).\n\u2022 \u0623\u062D\u0645\u0631: \u0639\u0646\u0635\u0631 \u0645\u0637\u0644\u0648\u0628 \u0645\u0641\u0642\u0648\u062F.\n\n\u062A\u0635\u0628\u062D \u0627\u0644\u0646\u062A\u064A\u062C\u0629 \u0627\u0644\u0639\u0627\u0645\u0629 \u062E\u0636\u0631\u0627\u0621 \u0628\u0645\u062C\u0631\u062F \u062A\u0642\u062F\u064A\u0645 \u062C\u0645\u064A\u0639 \u0627\u0644\u0639\u0646\u0627\u0635\u0631 \u0627\u0644\u0645\u0637\u0644\u0648\u0628\u0629.",
   infoConfigTitle: "\u0627\u0644\u0645\u0632\u0648\u062F \u0648\u0627\u0644\u0646\u0645\u0648\u0630\u062C",
-  infoConfigBody: "\u064A\u0641\u062A\u062D \u0632\u0631 \xAB\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A\xBB \u062A\u0647\u064A\u0626\u0629 \u0627\u0644\u0644\u0648\u062D\u0629:\n\u2022 \u0644\u063A\u0629 \u0627\u0644\u0648\u0627\u062C\u0647\u0629.\n\u2022 \u0627\u0644\u0645\u0632\u0648\u062F (OpenCode\u060C shadcn\u060C HTTP \u0639\u0627\u0645) \u0648\u062A\u0641\u0639\u064A\u0644\u0647.\n\u2022 \u0627\u0644\u0646\u0645\u0648\u0630\u062C \u0648\u0645\u0641\u062A\u0627\u062D API \u0648\u0639\u0646\u0648\u0627\u0646 URL \u0627\u0644\u0623\u0633\u0627\u0633\u064A \u062D\u0633\u0628 \u0627\u0644\u0645\u0632\u0648\u062F.",
+  infoConfigBody: "\u064A\u0641\u062A\u062D \u0632\u0631 \xAB\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A\xBB \u062A\u0647\u064A\u0626\u0629 \u0627\u0644\u0644\u0648\u062D\u0629:\n\u2022 \u0644\u063A\u0629 \u0627\u0644\u0648\u0627\u062C\u0647\u0629.\n\u2022 \u0627\u0644\u0645\u0632\u0648\u062F (OpenCode\u060C OpenCode Zen) \u0648\u062A\u0641\u0639\u064A\u0644\u0647.\n\u2022 \u0627\u0644\u0646\u0645\u0648\u0630\u062C \u0648\u0645\u0641\u062A\u0627\u062D API \u0648\u0639\u0646\u0648\u0627\u0646 URL \u0627\u0644\u0623\u0633\u0627\u0633\u064A \u062D\u0633\u0628 \u0627\u0644\u0645\u0632\u0648\u062F.",
   infoActionsTitle: "\u0627\u0644\u0625\u062C\u0631\u0627\u0621\u0627\u062A",
   infoActionsBody: "\u0641\u064A \u0623\u0633\u0641\u0644 \u0627\u0644\u0644\u0648\u062D\u0629:\n\u2022 \xAB\u0639\u0631\u0636 \u0627\u0644\u0645\u0648\u062C\u0647\xBB: \u0645\u0639\u0627\u064A\u0646\u0629 \u0643\u0627\u0645\u0644\u0629 \u0644\u0644\u0645\u0648\u062C\u0647 \u0627\u0644\u0630\u064A \u0633\u064A\u064F\u0631\u0633\u0644.\n\u2022 \xAB\u062A\u0648\u0644\u064A\u062F\xBB: \u064A\u0628\u062F\u0623 \u0627\u0644\u062A\u0648\u0644\u064A\u062F \u0628\u0627\u0644\u0628\u062B (\u064A\u062A\u062D\u0648\u0644 \u0625\u0644\u0649 \xAB\u0625\u0644\u063A\u0627\u0621\xBB \u0623\u062B\u0646\u0627\u0621 \u0627\u0644\u062A\u0634\u063A\u064A\u0644).\n\u2022 \xAB\u062F\u0645\u062C \u0627\u0644\u062A\u062D\u062F\u064A\u062F\xBB: \u064A\u0641\u062A\u062D \u0627\u0644\u0645\u0631\u0627\u062C\u0639\u0629 (\u0627\u0644\u062A\u0630\u0627\u0643\u0631 \u0645\u062D\u062F\u062F\u0629 \u0627\u0641\u062A\u0631\u0627\u0636\u064A\u064B\u0627)\u060C \u0648\u064A\u0642\u0627\u0631\u0646 \u0643\u0644 \u0627\u0642\u062A\u0631\u0627\u062D \u0628\u0627\u0644\u0645\u062D\u062A\u0648\u0649 \u0627\u0644\u0645\u0648\u062C\u0648\u062F \u0648\u064A\u062F\u0645\u062C \u0627\u0644\u062A\u0630\u0627\u0643\u0631 \u0627\u0644\u0645\u062D\u062F\u062F\u0629 \u0641\u0642\u0637.",
   infoReviewTitle: "\u0645\u0631\u0627\u062C\u0639\u0629 \u0627\u0644\u062A\u063A\u064A\u064A\u0631\u0627\u062A",
   infoReviewBody: "\u0642\u0628\u0644 \u062F\u0645\u062C \u0627\u0644\u0627\u0633\u062A\u062C\u0627\u0628\u0629\u060C \u062A\u0639\u0631\u0636 \u0627\u0644\u0644\u0648\u062D\u0629 \u0645\u0631\u0627\u062C\u0639\u0629 \u0644\u0643\u0644 \u062A\u0630\u0643\u0631\u0629:\n\u2022 \u0643\u0644 \u062A\u0630\u0643\u0631\u0629 \u0645\u062D\u062F\u062F\u0629 \u0627\u0641\u062A\u0631\u0627\u0636\u064A\u064B\u0627\u061B \u0623\u0644\u063A\u0650 \u062A\u062D\u062F\u064A\u062F \u0645\u0627 \u062A\u0631\u064A\u062F \u0627\u0633\u062A\u0628\u0639\u0627\u062F\u0647.\n\u2022 \u062A\u0634\u064A\u0631 \u0627\u0644\u062D\u0627\u0644\u0629 \u0625\u0644\u0649: \u0645\u0637\u0627\u0628\u0642\u060C \u0645\u0639\u062F\u064E\u0651\u0644\u060C \u062C\u062F\u064A\u062F \u0623\u0648 \u0645\u062D\u0630\u0648\u0641.\n\u2022 \u062A\u064F\u062F\u0631\u062C \u0627\u0644\u062A\u063A\u064A\u064A\u0631\u0627\u062A (\u0625\u0636\u0627\u0641\u0627\u062A\u060C \u062D\u0630\u0641\u060C \u062A\u0639\u062F\u064A\u0644\u0627\u062A) \u0645\u0639 \u0627\u0644\u0645\u0633\u0627\u0631 \u0627\u0644\u0645\u062A\u0623\u062B\u0631.\n\u2022 \u064A\u0641\u062A\u062D \u0632\u0631 \xAB\u0627\u0644\u0627\u062E\u062A\u0644\u0627\u0641\u0627\u062A\xBB \u062D\u0648\u0627\u0631\u064B\u0627 \u062C\u0646\u0628\u064B\u0627 \u0625\u0644\u0649 \u062C\u0646\u0628: \u0627\u0644\u0645\u062D\u062A\u0648\u0649 \u0627\u0644\u0645\u0648\u062C\u0648\u062F \u0645\u0642\u0627\u0628\u0644 \u0627\u0644\u0627\u0642\u062A\u0631\u0627\u062D\u060C \u0623\u0633\u0637\u0631 \u0645\u0631\u0642\u0651\u0645\u0629\u060C \u0627\u0644\u0625\u0636\u0627\u0641\u0627\u062A \u0628\u0627\u0644\u0623\u062E\u0636\u0631 \u0648\u0627\u0644\u062D\u0630\u0641 \u0628\u0627\u0644\u0623\u062D\u0645\u0631.\n\u2022 \u062A\u064F\u0639\u0631\u0636 \u0627\u0644\u0645\u0641\u0627\u062A\u064A\u062D \u063A\u064A\u0631 \u0627\u0644\u0645\u0639\u0631\u0648\u0641\u0629 (\u0628\u062F\u0648\u0646 \u062A\u0630\u0643\u0631\u0629 \u0645\u0631\u062A\u0628\u0637\u0629) \u0644\u0643\u0646\u0647\u0627 \u063A\u064A\u0631 \u0645\u062D\u062F\u062F\u0629 \u0627\u0641\u062A\u0631\u0627\u0636\u064A\u064B\u0627.\n\n\u0644\u0627 \u064A\u0637\u0628\u0651\u0642 \u0632\u0631 \xAB\u062F\u0645\u062C \u0627\u0644\u062A\u062D\u062F\u064A\u062F (n)\xBB \u0625\u0644\u0627 \u0627\u0644\u062A\u0630\u0627\u0643\u0631 \u0627\u0644\u0645\u062D\u062F\u062F\u0629.",
   infoIntegrationTitle: "\u0627\u0644\u062F\u0645\u062C \u0641\u064A \u0627\u0644\u0643\u0648\u062F",
-  infoIntegrationBody: "\u0627\u0644\u0644\u0648\u062D\u0629 \u0648\u062D\u062F\u0629 React \u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u0627\u0633\u062A\u064A\u0631\u0627\u062F \u0641\u064A \u0623\u064A \u0645\u0634\u0631\u0648\u0639:\n\u2022 <OneShotAiPanel>: \u0645\u0643\u0648\u0651\u0646 \u0643\u0627\u0645\u0644 \u0628\u062E\u0635\u0627\u0626\u0635 systemPrompt \u0648files \u0648tickets \u0648invalidMode \u0648parser \u0648labels \u0648language \u0648adapter \u0648onSend \u0648onPlug.\n\u2022 onPlug(response, selectedKeys?): \u064A\u0633\u062A\u0642\u0628\u0644 \u0627\u0644\u0627\u0633\u062A\u062C\u0627\u0628\u0629 \u0648\u0627\u0644\u0645\u0641\u0627\u062A\u064A\u062D \u0627\u0644\u0645\u062D\u062F\u062F\u0629 \u0641\u064A \u0627\u0644\u0645\u0631\u0627\u062C\u0639\u0629 (\u0627\u0644\u0643\u0644 \u0639\u0646\u062F \u062D\u0630\u0641 \u0627\u0644\u0645\u0639\u0627\u0645\u0644)\u061B \u0627\u0633\u062A\u062F\u0639\u0647 \u062F\u0648\u0646 \u0627\u0644\u0648\u0627\u062C\u0647\u0629 \u0644\u062F\u0645\u062C \u0627\u0644\u0627\u0633\u062A\u062C\u0627\u0628\u0629 \u0643\u0627\u0645\u0644\u0629.\n\u2022 useAiPanel(): \u062E\u0637\u0627\u0641 \u0628\u062F\u0648\u0646 \u0648\u0627\u062C\u0647\u0629 \u0644\u0642\u064A\u0627\u062F\u0629 \u0627\u0644\u062A\u0648\u0644\u064A\u062F (\u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0645\u0648\u062C\u0647\u060C \u0627\u0644\u062A\u062D\u0644\u064A\u0644\u060C \u0627\u0644\u062A\u062D\u0642\u0642\u060C \u0627\u0644\u0628\u062B).\n\u2022 \u0627\u0644\u0645\u0631\u0627\u062C\u0639\u0629: \u0642\u0628\u0644 \u0627\u0644\u062F\u0645\u062C\u060C \u062A\u0642\u0627\u0631\u0646 \u0627\u0644\u0644\u0648\u062D\u0629 \u0643\u0644 \u062A\u0630\u0643\u0631\u0629 \u0628\u0627\u0644\u0645\u062D\u062A\u0648\u0649 \u0627\u0644\u0645\u0648\u062C\u0648\u062F (\u062D\u0627\u0644\u0629 \u0645\u0637\u0627\u0628\u0642 / \u0645\u0639\u062F\u064E\u0651\u0644 / \u062C\u062F\u064A\u062F / \u0645\u062D\u0630\u0648\u0641) \u0648\u062A\u0642\u062F\u0645 \u062D\u0648\u0627\u0631 \xAB\u0627\u0644\u0627\u062E\u062A\u0644\u0627\u0641\u0627\u062A\xBB \u062C\u0646\u0628\u064B\u0627 \u0625\u0644\u0649 \u062C\u0646\u0628.\n\u2022 parser: \u0642\u062F\u0651\u0645 \u062F\u0627\u0644\u0629 \u0627\u0644\u062A\u062D\u0644\u064A\u0644 \u0627\u0644\u062E\u0627\u0635\u0629 \u0628\u0643\u060C \u0630\u0627\u062A \u0627\u0644\u0623\u0648\u0644\u0648\u064A\u0629 \u0639\u0644\u0649 \u0627\u0644\u062A\u062D\u0642\u0642 \u0627\u0644\u062A\u0644\u0642\u0627\u0626\u064A \u0628\u0627\u0644\u0645\u062E\u0637\u0637.\n\u2022 invalidMode: \xABwarn\xBB (\u064A\u0646\u0628\u0651\u0647) \u0623\u0648 \xABblock\xBB (\u064A\u0639\u0637\u0651\u0644 \u0627\u0644\u062F\u0645\u062C \u0645\u0627 \u062F\u0627\u0645\u062A \u0627\u0644\u0627\u0633\u062A\u062C\u0627\u0628\u0629 \u063A\u064A\u0631 \u0635\u0627\u0644\u062D\u0629).\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton: \u0625\u062E\u0641\u0627\u0621 \u0643\u062A\u0644 \u0627\u0644\u0645\u0633\u0627\u0639\u062F\u0629 \u0623\u0648 \u0632\u0631\u064A \xAB\u0645\u0639\u0644\u0648\u0645\u0627\u062A\xBB \u0648\xAB\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A\xBB\u061B \u062F\u0648\u0646 \u0627\u0644\u0648\u0627\u062C\u0647\u0629\u060C \u062A\u062A\u0645 \u0627\u0644\u062A\u0647\u064A\u0626\u0629 (language\u060C adapter\u060C invalidMode) \u0639\u0628\u0631 \u0627\u0644\u062E\u0635\u0627\u0626\u0635.\n\u2022 \u0627\u0644\u0645\u0647\u0627\u064A\u0626\u0627\u062A: \u062A\u062A\u0648\u0641\u0631 OpenCode \u0648shadcn \u0648HTTP \u0627\u0644\u0639\u0627\u0645\u061B register() \u064A\u062A\u064A\u062D \u0625\u0636\u0627\u0641\u0629 \u0645\u0632\u0648\u062F\u064A\u0646 \u062E\u0627\u0635\u064A\u0646 \u0628\u0643.\n\u2022 labels: \u0643\u0644 \u0633\u0644\u0627\u0633\u0644 \u0627\u0644\u0648\u0627\u062C\u0647\u0629 \u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u062A\u062C\u0627\u0648\u0632 (fr / en / \u0627\u0644\u0627\u0641\u062A\u0631\u0627\u0636\u064A) \u0644\u062A\u0631\u062C\u0645\u0629 \u0643\u0627\u0645\u0644\u0629.",
+  infoIntegrationBody: "\u0627\u0644\u0644\u0648\u062D\u0629 \u0648\u062D\u062F\u0629 React \u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u0627\u0633\u062A\u064A\u0631\u0627\u062F \u0641\u064A \u0623\u064A \u0645\u0634\u0631\u0648\u0639:\n\u2022 <OneShotAiPanel>: \u0645\u0643\u0648\u0651\u0646 \u0643\u0627\u0645\u0644 \u0628\u062E\u0635\u0627\u0626\u0635 systemPrompt \u0648files \u0648tickets \u0648invalidMode \u0648parser \u0648labels \u0648language \u0648adapter \u0648onSend \u0648onPlug.\n\u2022 onPlug(response, selectedKeys?): \u064A\u0633\u062A\u0642\u0628\u0644 \u0627\u0644\u0627\u0633\u062A\u062C\u0627\u0628\u0629 \u0648\u0627\u0644\u0645\u0641\u0627\u062A\u064A\u062D \u0627\u0644\u0645\u062D\u062F\u062F\u0629 \u0641\u064A \u0627\u0644\u0645\u0631\u0627\u062C\u0639\u0629 (\u0627\u0644\u0643\u0644 \u0639\u0646\u062F \u062D\u0630\u0641 \u0627\u0644\u0645\u0639\u0627\u0645\u0644)\u061B \u0627\u0633\u062A\u062F\u0639\u0647 \u062F\u0648\u0646 \u0627\u0644\u0648\u0627\u062C\u0647\u0629 \u0644\u062F\u0645\u062C \u0627\u0644\u0627\u0633\u062A\u062C\u0627\u0628\u0629 \u0643\u0627\u0645\u0644\u0629.\n\u2022 useAiPanel(): \u062E\u0637\u0627\u0641 \u0628\u062F\u0648\u0646 \u0648\u0627\u062C\u0647\u0629 \u0644\u0642\u064A\u0627\u062F\u0629 \u0627\u0644\u062A\u0648\u0644\u064A\u062F (\u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0645\u0648\u062C\u0647\u060C \u0627\u0644\u062A\u062D\u0644\u064A\u0644\u060C \u0627\u0644\u062A\u062D\u0642\u0642\u060C \u0627\u0644\u0628\u062B).\n\u2022 \u0627\u0644\u0645\u0631\u0627\u062C\u0639\u0629: \u0642\u0628\u0644 \u0627\u0644\u062F\u0645\u062C\u060C \u062A\u0642\u0627\u0631\u0646 \u0627\u0644\u0644\u0648\u062D\u0629 \u0643\u0644 \u062A\u0630\u0643\u0631\u0629 \u0628\u0627\u0644\u0645\u062D\u062A\u0648\u0649 \u0627\u0644\u0645\u0648\u062C\u0648\u062F (\u062D\u0627\u0644\u0629 \u0645\u0637\u0627\u0628\u0642 / \u0645\u0639\u062F\u064E\u0651\u0644 / \u062C\u062F\u064A\u062F / \u0645\u062D\u0630\u0648\u0641) \u0648\u062A\u0642\u062F\u0645 \u062D\u0648\u0627\u0631 \xAB\u0627\u0644\u0627\u062E\u062A\u0644\u0627\u0641\u0627\u062A\xBB \u062C\u0646\u0628\u064B\u0627 \u0625\u0644\u0649 \u062C\u0646\u0628.\n\u2022 parser: \u0642\u062F\u0651\u0645 \u062F\u0627\u0644\u0629 \u0627\u0644\u062A\u062D\u0644\u064A\u0644 \u0627\u0644\u062E\u0627\u0635\u0629 \u0628\u0643\u060C \u0630\u0627\u062A \u0627\u0644\u0623\u0648\u0644\u0648\u064A\u0629 \u0639\u0644\u0649 \u0627\u0644\u062A\u062D\u0642\u0642 \u0627\u0644\u062A\u0644\u0642\u0627\u0626\u064A \u0628\u0627\u0644\u0645\u062E\u0637\u0637.\n\u2022 invalidMode: \xABwarn\xBB (\u064A\u0646\u0628\u0651\u0647) \u0623\u0648 \xABblock\xBB (\u064A\u0639\u0637\u0651\u0644 \u0627\u0644\u062F\u0645\u062C \u0645\u0627 \u062F\u0627\u0645\u062A \u0627\u0644\u0627\u0633\u062A\u062C\u0627\u0628\u0629 \u063A\u064A\u0631 \u0635\u0627\u0644\u062D\u0629).\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton: \u0625\u062E\u0641\u0627\u0621 \u0643\u062A\u0644 \u0627\u0644\u0645\u0633\u0627\u0639\u062F\u0629 \u0623\u0648 \u0632\u0631\u064A \xAB\u0645\u0639\u0644\u0648\u0645\u0627\u062A\xBB \u0648\xAB\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A\xBB\u061B \u062F\u0648\u0646 \u0627\u0644\u0648\u0627\u062C\u0647\u0629\u060C \u062A\u062A\u0645 \u0627\u0644\u062A\u0647\u064A\u0626\u0629 (language\u060C adapter\u060C invalidMode) \u0639\u0628\u0631 \u0627\u0644\u062E\u0635\u0627\u0626\u0635.\n\u2022 \u0627\u0644\u0645\u0647\u0627\u064A\u0626\u0627\u062A: \u062A\u062A\u0648\u0641\u0631 OpenCode \u0648OpenCode Zen\u061B register() \u064A\u062A\u064A\u062D \u0625\u0636\u0627\u0641\u0629 \u0645\u0632\u0648\u062F\u064A\u0646 \u062E\u0627\u0635\u064A\u0646 \u0628\u0643.\n\u2022 labels: \u0643\u0644 \u0633\u0644\u0627\u0633\u0644 \u0627\u0644\u0648\u0627\u062C\u0647\u0629 \u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u062A\u062C\u0627\u0648\u0632 (fr / en / \u0627\u0644\u0627\u0641\u062A\u0631\u0627\u0636\u064A) \u0644\u062A\u0631\u062C\u0645\u0629 \u0643\u0627\u0645\u0644\u0629.",
   infoCreditsTitle: "\u0627\u0644\u0627\u0639\u062A\u0645\u0627\u062F\u0627\u062A",
   infoCreditsBody: "OneShot AI Panel \u0645\u0643\u0648\u0651\u0646 React \u0645\u0641\u062A\u0648\u062D \u0627\u0644\u0645\u0635\u062F\u0631\u060C \u0645\u0635\u0645\u064E\u0651\u0645 \u0644\u0625\u0639\u0627\u062F\u0629 \u0627\u0633\u062A\u062E\u062F\u0627\u0645\u0647 \u0641\u064A \u0645\u0634\u0627\u0631\u064A\u0639\u0643. \u0627\u0637\u0651\u0644\u0639 \u0639\u0644\u0649 \u0627\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u062A\u0639\u0631\u064A\u0641\u064A\u0629 \u0648\u0645\u0633\u062A\u0648\u062F\u0639 GitHub \u0644\u0644\u062A\u0648\u062B\u064A\u0642 \u0627\u0644\u0643\u0627\u0645\u0644 \u0648\u0627\u0644\u0623\u0645\u062B\u0644\u0629 \u0648\u0627\u0644\u0625\u0635\u062F\u0627\u0631\u0627\u062A.",
   infoCreditsLandingLabel: "\u0627\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u062A\u0639\u0631\u064A\u0641\u064A\u0629",
@@ -1068,16 +1068,6 @@ var OpenCodeModels = {
   GoDeepSeekV4Flash: "opencode-go/deepseek-v4-flash",
   GoHy3: "opencode-go/hy3"
 };
-var ShadcnModels = {
-  None: "",
-  Gpt4o: "gpt-4o",
-  Gpt4oMini: "gpt-4o-mini",
-  Gpt41: "gpt-4.1",
-  ClaudeSonnet4: "claude-sonnet-4-20250514",
-  ClaudeSonnet35: "claude-3.5-sonnet",
-  ClaudeHaiku35: "claude-3.5-haiku",
-  Gemini20Flash: "gemini-2.0-flash"
-};
 var ZenModels = {
   None: "",
   BigPickle: "big-pickle",
@@ -1104,11 +1094,7 @@ var ZenModels = {
 var MODEL_NAMES = {
   "gpt-4o": "GPT-4o",
   "gpt-4o-mini": "GPT-4o Mini",
-  "gpt-4.1": "GPT-4.1",
-  "claude-sonnet-4-20250514": "Claude Sonnet 4",
   "claude-3.5-sonnet": "Claude 3.5 Sonnet",
-  "claude-3.5-haiku": "Claude 3.5 Haiku",
-  "gemini-2.0-flash": "Gemini 2.0 Flash",
   "deepseek-chat": "DeepSeek Chat",
   "big-pickle": "Big Pickle",
   "deepseek-v4-flash-free": "DeepSeek V4 Flash Free",
@@ -1165,9 +1151,7 @@ function modelDisplayName(model) {
 // src/module/adapters/types.ts
 var ProviderType = {
   Opencode: "opencode",
-  Zen: "zen",
-  Shadcn: "shadcn",
-  Fallback: "fallback"
+  Zen: "zen"
 };
 var PROVIDER_META = {
   [ProviderType.Opencode]: {
@@ -1187,24 +1171,6 @@ var PROVIDER_META = {
     docLinks: [
       { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" }
     ]
-  },
-  [ProviderType.Shadcn]: {
-    value: ProviderType.Shadcn,
-    label: "shadcn AI SDK",
-    description: "D\xE9mo / d\xE9veloppement via @shadcn/helpers",
-    models: Object.values(ShadcnModels).filter(Boolean),
-    docLinks: [
-      { label: "@shadcn/helpers", url: "https://shadcn.com/docs/helpers/ai-sdk" }
-    ]
-  },
-  [ProviderType.Fallback]: {
-    value: ProviderType.Fallback,
-    label: "HTTP Fallback",
-    description: "API HTTP directe (sans SDK)",
-    models: [],
-    docLinks: [
-      { label: "MDN fetch", url: "https://developer.mozilla.org/en-US/docs/Web/API/fetch" }
-    ]
   }
 };
 
@@ -1223,45 +1189,6 @@ function buildSend(config) {
   handler.adapter = adapter;
   return handler;
 }
-
-// src/module/adapters/fallback.ts
-var FallbackAdapter = class {
-  constructor(config) {
-    this.type = ProviderType.Fallback;
-    this.apiUrl = config.apiUrl ?? "/api/ai/generate";
-  }
-  async send(prompt) {
-    const res = await fetch(this.apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
-    });
-    if (!res.ok) {
-      throw new Error(`AI request failed: ${res.status} ${res.statusText}`);
-    }
-    return res.body;
-  }
-};
-
-// src/module/adapters/shadcn.ts
-var ShadcnAdapter = class {
-  constructor() {
-    this.type = ProviderType.Shadcn;
-  }
-  async send(prompt) {
-    const encoder = new TextEncoder();
-    return new ReadableStream({
-      async start(controller) {
-        const words = prompt.split(/\s+/);
-        for (const word of words) {
-          controller.enqueue(encoder.encode(word + " "));
-          await new Promise((r) => setTimeout(r, 30));
-        }
-        controller.close();
-      }
-    });
-  }
-};
 
 // src/module/adapters/opencode.ts
 import { createOpencodeClient } from "@opencode-ai/sdk/client";
@@ -1950,8 +1877,6 @@ function registerDefaultAdapters() {
   registered = true;
   register(ProviderType.Opencode, OpenCodeAdapter);
   register(ProviderType.Zen, ZenAdapter);
-  register(ProviderType.Fallback, FallbackAdapter);
-  register(ProviderType.Shadcn, ShadcnAdapter);
 }
 
 // src/module/adapters/defaults.ts
@@ -1962,9 +1887,7 @@ var DEFAULT_CONFIGS = {
     enabled: false,
     model: "big-pickle",
     baseUrl: "/api/zen/v1"
-  },
-  [ProviderType.Shadcn]: { type: ProviderType.Shadcn, enabled: false, apiKey: "", baseUrl: "", model: "" },
-  [ProviderType.Fallback]: { type: ProviderType.Fallback, enabled: false, apiUrl: "/api/ai/generate" }
+  }
 };
 
 // src/module/i18n/provider-info.ts
@@ -1994,31 +1917,6 @@ var PROVIDER_INFO = {
       docLinks: [
         { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" }
       ]
-    },
-    [ProviderType.Shadcn]: {
-      description: "Utilise le SDK @shadcn/helpers avec un provider AI (OpenAI, Anthropic...)",
-      help: "Configure une cl\xE9 API aupr\xE8s de ton provider (OpenAI, Anthropic, etc.) et renseigne-la ci-dessous. Le SDK utilise le mod\xE8le s\xE9lectionn\xE9 pour g\xE9n\xE9rer les r\xE9ponses.",
-      modelPlaceholder: "Mod\xE8le (ex: gpt-4o)",
-      apiKeyLabel: "Cl\xE9 API",
-      apiKeyPlaceholder: "sk-...",
-      baseUrlLabel: "URL de base",
-      baseUrlPlaceholder: "https://api.openai.com/v1",
-      docLinks: [
-        { label: "@shadcn/helpers", url: "https://ui.shadcn.com/docs/helpers/ai-sdk" },
-        { label: "OpenAI API Keys", url: "https://platform.openai.com/api-keys" }
-      ]
-    },
-    [ProviderType.Fallback]: {
-      description: "Requ\xEAte HTTP directe vers une API externe",
-      help: "Le panel envoie une requ\xEAte POST \xE0 l'URL configur\xE9e avec un body JSON { prompt }. La r\xE9ponse doit \xEAtre un ReadableStream ou du texte brut. Utilise ce mode pour une API compatible OpenAI ou un proxy custom.",
-      modelPlaceholder: "Mod\xE8le (non utilis\xE9 en fallback)",
-      apiKeyLabel: "Cl\xE9 API",
-      apiKeyPlaceholder: "Optionnelle (transmise dans l'en-t\xEAte Authorization)",
-      baseUrlLabel: "URL de l'API",
-      baseUrlPlaceholder: "/api/ai/generate",
-      docLinks: [
-        { label: "MDN fetch", url: "https://developer.mozilla.org/en-US/docs/Web/API/fetch" }
-      ]
     }
   },
   [AiPanelLanguage.En]: {
@@ -2045,31 +1943,6 @@ var PROVIDER_INFO = {
       baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" }
-      ]
-    },
-    [ProviderType.Shadcn]: {
-      description: "Uses the @shadcn/helpers SDK with an AI provider (OpenAI, Anthropic...)",
-      help: "Configure an API key from your provider (OpenAI, Anthropic, etc.) and enter it below. The SDK uses the selected model to generate responses.",
-      modelPlaceholder: "Model (e.g. gpt-4o)",
-      apiKeyLabel: "API Key",
-      apiKeyPlaceholder: "sk-...",
-      baseUrlLabel: "Base URL",
-      baseUrlPlaceholder: "https://api.openai.com/v1",
-      docLinks: [
-        { label: "@shadcn/helpers", url: "https://shadcn.com/docs/helpers/ai-sdk" },
-        { label: "OpenAI API Keys", url: "https://platform.openai.com/api-keys" }
-      ]
-    },
-    [ProviderType.Fallback]: {
-      description: "Direct HTTP request to an external API",
-      help: "The panel sends a POST request to the configured URL with a JSON body { prompt }. The response must be a ReadableStream or raw text. Use this mode for an OpenAI-compatible API or a custom proxy.",
-      modelPlaceholder: "Model (not used in fallback mode)",
-      apiKeyLabel: "API Key",
-      apiKeyPlaceholder: "Optional (sent in the Authorization header)",
-      baseUrlLabel: "API URL",
-      baseUrlPlaceholder: "/api/ai/generate",
-      docLinks: [
-        { label: "MDN fetch", url: "https://developer.mozilla.org/en-US/docs/Web/API/fetch" }
       ]
     }
   },
@@ -2098,31 +1971,6 @@ var PROVIDER_INFO = {
       docLinks: [
         { label: "OpenCode Zen \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8", url: "https://opencode.ai/docs/zen" }
       ]
-    },
-    [ProviderType.Shadcn]: {
-      description: "@shadcn/helpers SDK \u3068 AI \u30D7\u30ED\u30D0\u30A4\u30C0\u30FC\uFF08OpenAI\u3001Anthropic...\uFF09\u3092\u4F7F\u7528",
-      help: "\u30D7\u30ED\u30D0\u30A4\u30C0\u30FC\uFF08OpenAI\u3001Anthropic \u306A\u3069\uFF09\u3067 API \u30AD\u30FC\u3092\u8A2D\u5B9A\u3057\u3001\u4EE5\u4E0B\u306B\u5165\u529B\u3057\u307E\u3059\u3002SDK \u306F\u9078\u629E\u3057\u305F\u30E2\u30C7\u30EB\u3092\u4F7F\u7528\u3057\u3066\u30EC\u30B9\u30DD\u30F3\u30B9\u3092\u751F\u6210\u3057\u307E\u3059\u3002",
-      modelPlaceholder: "\u30E2\u30C7\u30EB\uFF08\u4F8B: gpt-4o\uFF09",
-      apiKeyLabel: "API \u30AD\u30FC",
-      apiKeyPlaceholder: "sk-...",
-      baseUrlLabel: "\u30D9\u30FC\u30B9 URL",
-      baseUrlPlaceholder: "https://api.openai.com/v1",
-      docLinks: [
-        { label: "@shadcn/helpers", url: "https://shadcn.com/docs/helpers/ai-sdk" },
-        { label: "OpenAI API \u30AD\u30FC", url: "https://platform.openai.com/api-keys" }
-      ]
-    },
-    [ProviderType.Fallback]: {
-      description: "\u5916\u90E8 API \u3078\u306E\u76F4\u63A5 HTTP \u30EA\u30AF\u30A8\u30B9\u30C8",
-      help: "\u30D1\u30CD\u30EB\u306F\u8A2D\u5B9A\u3055\u308C\u305F URL \u306B JSON \u30DC\u30C7\u30A3 { prompt } \u3067 POST \u30EA\u30AF\u30A8\u30B9\u30C8\u3092\u9001\u4FE1\u3057\u307E\u3059\u3002\u30EC\u30B9\u30DD\u30F3\u30B9\u306F ReadableStream \u307E\u305F\u306F\u30D7\u30EC\u30FC\u30F3\u30C6\u30AD\u30B9\u30C8\u3067\u3042\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002OpenAI \u4E92\u63DB API \u3084\u30AB\u30B9\u30BF\u30E0\u30D7\u30ED\u30AD\u30B7\u306B\u3053\u306E\u30E2\u30FC\u30C9\u3092\u4F7F\u7528\u3057\u307E\u3059\u3002",
-      modelPlaceholder: "\u30E2\u30C7\u30EB\uFF08\u30D5\u30A9\u30FC\u30EB\u30D0\u30C3\u30AF\u3067\u306F\u672A\u4F7F\u7528\uFF09",
-      apiKeyLabel: "API \u30AD\u30FC",
-      apiKeyPlaceholder: "\u30AA\u30D7\u30B7\u30E7\u30F3\uFF08Authorization \u30D8\u30C3\u30C0\u30FC\u3067\u9001\u4FE1\uFF09",
-      baseUrlLabel: "API URL",
-      baseUrlPlaceholder: "/api/ai/generate",
-      docLinks: [
-        { label: "MDN fetch", url: "https://developer.mozilla.org/en-US/docs/Web/API/fetch" }
-      ]
     }
   },
   [AiPanelLanguage.Zh]: {
@@ -2149,31 +1997,6 @@ var PROVIDER_INFO = {
       baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "OpenCode Zen \u6587\u6863", url: "https://opencode.ai/docs/zen" }
-      ]
-    },
-    [ProviderType.Shadcn]: {
-      description: "\u4F7F\u7528 @shadcn/helpers SDK \u4E0E AI \u63D0\u4F9B\u5546\uFF08OpenAI\u3001Anthropic...\uFF09",
-      help: "\u4ECE\u4F60\u7684\u63D0\u4F9B\u5546\uFF08OpenAI\u3001Anthropic \u7B49\uFF09\u914D\u7F6E API \u5BC6\u94A5\u5E76\u5728\u4E0B\u9762\u8F93\u5165\u3002SDK \u4F7F\u7528\u6240\u9009\u6A21\u578B\u751F\u6210\u54CD\u5E94\u3002",
-      modelPlaceholder: "\u6A21\u578B\uFF08\u4F8B\u5982 gpt-4o\uFF09",
-      apiKeyLabel: "API \u5BC6\u94A5",
-      apiKeyPlaceholder: "sk-...",
-      baseUrlLabel: "\u57FA\u7840 URL",
-      baseUrlPlaceholder: "https://api.openai.com/v1",
-      docLinks: [
-        { label: "@shadcn/helpers", url: "https://shadcn.com/docs/helpers/ai-sdk" },
-        { label: "OpenAI API \u5BC6\u94A5", url: "https://platform.openai.com/api-keys" }
-      ]
-    },
-    [ProviderType.Fallback]: {
-      description: "\u76F4\u63A5\u5411\u5916\u90E8 API \u53D1\u9001 HTTP \u8BF7\u6C42",
-      help: "\u9762\u677F\u5411\u914D\u7F6E\u7684 URL \u53D1\u9001\u4E00\u4E2A JSON \u6B63\u6587 { prompt } \u7684 POST \u8BF7\u6C42\u3002\u54CD\u5E94\u5FC5\u987B\u662F ReadableStream \u6216\u7EAF\u6587\u672C\u3002\u5C06\u6B64\u6A21\u5F0F\u7528\u4E8E\u517C\u5BB9 OpenAI \u7684 API \u6216\u81EA\u5B9A\u4E49\u4EE3\u7406\u3002",
-      modelPlaceholder: "\u6A21\u578B\uFF08\u56DE\u9000\u6A21\u5F0F\u4E0B\u4E0D\u4F7F\u7528\uFF09",
-      apiKeyLabel: "API \u5BC6\u94A5",
-      apiKeyPlaceholder: "\u53EF\u9009\uFF08\u5728 Authorization \u6807\u5934\u4E2D\u53D1\u9001\uFF09",
-      baseUrlLabel: "API URL",
-      baseUrlPlaceholder: "/api/ai/generate",
-      docLinks: [
-        { label: "MDN fetch", url: "https://developer.mozilla.org/en-US/docs/Web/API/fetch" }
       ]
     }
   },
@@ -2202,31 +2025,6 @@ var PROVIDER_INFO = {
       docLinks: [
         { label: "Documentaci\xF3n de OpenCode Zen", url: "https://opencode.ai/docs/zen" }
       ]
-    },
-    [ProviderType.Shadcn]: {
-      description: "Usa el SDK @shadcn/helpers con un proveedor de IA (OpenAI, Anthropic...)",
-      help: "Configura una clave API en tu proveedor (OpenAI, Anthropic, etc.) e introd\xFAcela abajo. El SDK usa el modelo seleccionado para generar las respuestas.",
-      modelPlaceholder: "Modelo (p. ej. gpt-4o)",
-      apiKeyLabel: "Clave API",
-      apiKeyPlaceholder: "sk-...",
-      baseUrlLabel: "URL base",
-      baseUrlPlaceholder: "https://api.openai.com/v1",
-      docLinks: [
-        { label: "@shadcn/helpers", url: "https://shadcn.com/docs/helpers/ai-sdk" },
-        { label: "Claves API de OpenAI", url: "https://platform.openai.com/api-keys" }
-      ]
-    },
-    [ProviderType.Fallback]: {
-      description: "Petici\xF3n HTTP directa a una API externa",
-      help: "El panel env\xEDa una petici\xF3n POST a la URL configurada con un body JSON { prompt }. La respuesta debe ser un ReadableStream o texto plano. Usa este modo para una API compatible con OpenAI o un proxy personalizado.",
-      modelPlaceholder: "Modelo (no se usa en fallback)",
-      apiKeyLabel: "Clave API",
-      apiKeyPlaceholder: "Opcional (se env\xEDa en la cabecera Authorization)",
-      baseUrlLabel: "URL de la API",
-      baseUrlPlaceholder: "/api/ai/generate",
-      docLinks: [
-        { label: "MDN fetch", url: "https://developer.mozilla.org/en-US/docs/Web/API/fetch" }
-      ]
     }
   },
   [AiPanelLanguage.Ar]: {
@@ -2253,31 +2051,6 @@ var PROVIDER_INFO = {
       baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "\u0648\u062B\u0627\u0626\u0642 OpenCode Zen", url: "https://opencode.ai/docs/zen" }
-      ]
-    },
-    [ProviderType.Shadcn]: {
-      description: "\u064A\u0633\u062A\u062E\u062F\u0645 SDK @shadcn/helpers \u0645\u0639 \u0645\u0632\u0648\u062F \u0630\u0643\u0627\u0621 \u0627\u0635\u0637\u0646\u0627\u0639\u064A (OpenAI\u060C Anthropic...)",
-      help: "\u0639\u064A\u0651\u0646 \u0645\u0641\u062A\u0627\u062D API \u0644\u062F\u0649 \u0645\u0632\u0648\u062F\u0643 (OpenAI\u060C Anthropic\u060C \u0625\u0644\u062E) \u0648\u0623\u062F\u062E\u0644\u0647 \u0623\u062F\u0646\u0627\u0647. \u064A\u0633\u062A\u062E\u062F\u0645 SDK \u0627\u0644\u0646\u0645\u0648\u0630\u062C \u0627\u0644\u0645\u062D\u062F\u062F \u0644\u062A\u0648\u0644\u064A\u062F \u0627\u0644\u0627\u0633\u062A\u062C\u0627\u0628\u0627\u062A.",
-      modelPlaceholder: "\u0627\u0644\u0646\u0645\u0648\u0630\u062C (\u0645\u062B\u0627\u0644: gpt-4o)",
-      apiKeyLabel: "\u0645\u0641\u062A\u0627\u062D API",
-      apiKeyPlaceholder: "sk-...",
-      baseUrlLabel: "\u0639\u0646\u0648\u0627\u0646 URL \u0627\u0644\u0623\u0633\u0627\u0633\u064A",
-      baseUrlPlaceholder: "https://api.openai.com/v1",
-      docLinks: [
-        { label: "@shadcn/helpers", url: "https://shadcn.com/docs/helpers/ai-sdk" },
-        { label: "\u0645\u0641\u0627\u062A\u064A\u062D API \u0645\u0646 OpenAI", url: "https://platform.openai.com/api-keys" }
-      ]
-    },
-    [ProviderType.Fallback]: {
-      description: "\u0637\u0644\u0628 HTTP \u0645\u0628\u0627\u0634\u0631 \u0625\u0644\u0649 API \u062E\u0627\u0631\u062C\u064A\u0629",
-      help: "\u062A\u0631\u0633\u0644 \u0627\u0644\u0644\u0648\u062D\u0629 \u0637\u0644\u0628 POST \u0625\u0644\u0649 \u0639\u0646\u0648\u0627\u0646 URL \u0627\u0644\u0645\u062D\u062F\u062F \u0628\u062C\u0633\u0645 JSON { prompt }. \u064A\u062C\u0628 \u0623\u0646 \u062A\u0643\u0648\u0646 \u0627\u0644\u0627\u0633\u062A\u062C\u0627\u0628\u0629 ReadableStream \u0623\u0648 \u0646\u0635\u064B\u0627 \u062E\u0627\u0645\u064B\u0627. \u0627\u0633\u062A\u062E\u062F\u0645 \u0647\u0630\u0627 \u0627\u0644\u0648\u0636\u0639 \u0644\u0648\u0627\u062C\u0647\u0629 \u0645\u062A\u0648\u0627\u0641\u0642\u0629 \u0645\u0639 OpenAI \u0623\u0648 \u0648\u0643\u064A\u0644 \u0645\u062E\u0635\u0635.",
-      modelPlaceholder: "\u0627\u0644\u0646\u0645\u0648\u0630\u062C (\u063A\u064A\u0631 \u0645\u0633\u062A\u062E\u062F\u0645 \u0641\u064A \u0648\u0636\u0639 \u0627\u0644\u0631\u062C\u0648\u0639)",
-      apiKeyLabel: "\u0645\u0641\u062A\u0627\u062D API",
-      apiKeyPlaceholder: "\u0627\u062E\u062A\u064A\u0627\u0631\u064A (\u064A\u064F\u0631\u0633\u0644 \u0641\u064A \u062A\u0631\u0648\u064A\u0633\u0629 Authorization)",
-      baseUrlLabel: "\u0639\u0646\u0648\u0627\u0646 API",
-      baseUrlPlaceholder: "/api/ai/generate",
-      docLinks: [
-        { label: "MDN fetch", url: "https://developer.mozilla.org/en-US/docs/Web/API/fetch" }
       ]
     }
   }
@@ -2644,13 +2417,13 @@ var defaultLabels = {
   infoStatusTitle: "Statut & score",
   infoStatusBody: "La barre de statut r\xE9sume l'\xE9tat du panel : prompt syst\xE8me, instructions, contexte, fichiers, tickets et erreurs de parsing.\n\n\u2022 Vert : \xE9l\xE9ment requis correctement fourni.\n\u2022 Orange : attention (aucun fichier pr\xE9sent).\n\u2022 Rouge : \xE9l\xE9ment requis manquant.\n\nLe score global devient vert d\xE8s que tous les \xE9l\xE9ments requis sont fournis.",
   infoConfigTitle: "Provider & mod\xE8le",
-  infoConfigBody: "Le bouton \xAB Param\xE8tres \xBB ouvre la configuration du panel :\n\u2022 Langue de l'interface.\n\u2022 Provider (OpenCode, shadcn, HTTP g\xE9n\xE9rique) et son activation.\n\u2022 Mod\xE8le, cl\xE9 API et URL de base selon le provider.",
+  infoConfigBody: "Le bouton \xAB Param\xE8tres \xBB ouvre la configuration du panel :\n\u2022 Langue de l'interface.\n\u2022 Provider (OpenCode, OpenCode Zen) et son activation.\n\u2022 Mod\xE8le, cl\xE9 API et URL de base selon le provider.",
   infoActionsTitle: "Actions",
   infoActionsBody: "En bas du panel :\n\u2022 \xAB Voir le prompt \xBB : aper\xE7u complet du prompt qui sera envoy\xE9.\n\u2022 \xAB G\xE9n\xE9rer \xBB : lance la g\xE9n\xE9ration en streaming (devient \xAB Annuler \xBB en cours).\n\u2022 \xAB Int\xE9grer la s\xE9lection \xBB : ouvre la revue des modifications (tickets coch\xE9s par d\xE9faut), compare chaque proposition au contenu existant et n'int\xE8gre que les tickets s\xE9lectionn\xE9s.",
   infoReviewTitle: "Revue des modifications",
   infoReviewBody: "Avant d'int\xE9grer la r\xE9ponse, le panel affiche une revue par ticket :\n\u2022 Chaque ticket est coch\xE9 par d\xE9faut ; d\xE9cochez ceux \xE0 exclure.\n\u2022 Le statut indique Identique, Modifi\xE9, Nouveau ou Supprim\xE9.\n\u2022 Les changements sont list\xE9s (ajouts, suppressions, modifications) avec le chemin concern\xE9.\n\u2022 Le bouton \xAB Diffs \xBB ouvre un dialogue c\xF4te \xE0 c\xF4te : contenu existant vs proposition, lignes num\xE9rot\xE9es, ajouts en vert et suppressions en rouge.\n\u2022 Les cl\xE9s inconnues (sans ticket associ\xE9) sont affich\xE9es mais non coch\xE9es par d\xE9faut.\n\nLe bouton \xAB Int\xE9grer la s\xE9lection (n) \xBB n'applique que les tickets coch\xE9s.",
   infoIntegrationTitle: "Int\xE9gration dans le code",
-  infoIntegrationBody: "Le panel est un module React importable dans n'importe quel projet :\n\u2022 <OneShotAiPanel> : composant complet avec les props systemPrompt, files, tickets, invalidMode, parser, labels, language, adapter, onSend et onPlug.\n\u2022 onPlug(response, selectedKeys?) : re\xE7oit la r\xE9ponse et les cl\xE9s coch\xE9es dans la revue (toutes si le param\xE8tre est absent) ; appelez-le sans l'UI pour int\xE9grer la r\xE9ponse compl\xE8te.\n\u2022 useAiPanel() : hook headless pour piloter la g\xE9n\xE9ration sans l'UI (envoi du prompt, parsing, validation, streaming).\n\u2022 Revue des modifications : avant l'int\xE9gration, le panel compare chaque ticket au contenu existant (statut Identique / Modifi\xE9 / Nouveau / Supprim\xE9) et propose un dialogue \xAB Diffs \xBB c\xF4te \xE0 c\xF4te.\n\u2022 parser : fournissez votre propre fonction de parsing, prioritaire sur la validation automatique par sch\xE9ma.\n\u2022 invalidMode : \xAB warn \xBB (avertit) ou \xAB block \xBB (d\xE9sactive l'int\xE9gration tant que la r\xE9ponse est invalide).\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton : masquer les blocs d'aide ou les boutons \xAB Info \xBB et \xAB Param\xE8tres \xBB ; sans l'UI, la configuration (language, adapter, invalidMode) passe par les props.\n\u2022 Adapters : OpenCode, shadcn et HTTP g\xE9n\xE9rique sont fournis ; register() permet d'ajouter vos propres providers.\n\u2022 labels : toutes les cha\xEEnes UI sont surchargeables (fr / en / par d\xE9faut) pour une localisation compl\xE8te.",
+  infoIntegrationBody: "Le panel est un module React importable dans n'importe quel projet :\n\u2022 <OneShotAiPanel> : composant complet avec les props systemPrompt, files, tickets, invalidMode, parser, labels, language, adapter, onSend et onPlug.\n\u2022 onPlug(response, selectedKeys?) : re\xE7oit la r\xE9ponse et les cl\xE9s coch\xE9es dans la revue (toutes si le param\xE8tre est absent) ; appelez-le sans l'UI pour int\xE9grer la r\xE9ponse compl\xE8te.\n\u2022 useAiPanel() : hook headless pour piloter la g\xE9n\xE9ration sans l'UI (envoi du prompt, parsing, validation, streaming).\n\u2022 Revue des modifications : avant l'int\xE9gration, le panel compare chaque ticket au contenu existant (statut Identique / Modifi\xE9 / Nouveau / Supprim\xE9) et propose un dialogue \xAB Diffs \xBB c\xF4te \xE0 c\xF4te.\n\u2022 parser : fournissez votre propre fonction de parsing, prioritaire sur la validation automatique par sch\xE9ma.\n\u2022 invalidMode : \xAB warn \xBB (avertit) ou \xAB block \xBB (d\xE9sactive l'int\xE9gration tant que la r\xE9ponse est invalide).\n\u2022 showInfoIntegration / showInfoCredits / showInfoButton / showSettingsButton : masquer les blocs d'aide ou les boutons \xAB Info \xBB et \xAB Param\xE8tres \xBB ; sans l'UI, la configuration (language, adapter, invalidMode) passe par les props.\n\u2022 Adapters : OpenCode et OpenCode Zen sont fournis ; register() permet d'ajouter vos propres providers.\n\u2022 labels : toutes les cha\xEEnes UI sont surchargeables (fr / en / par d\xE9faut) pour une localisation compl\xE8te.",
   infoCreditsTitle: "Cr\xE9dits",
   infoCreditsBody: "OneShot AI Panel est un composant React open source, con\xE7u pour \xEAtre r\xE9utilis\xE9 dans vos projets. Consultez la landing page et le d\xE9p\xF4t GitHub pour la documentation compl\xE8te, les exemples et les versions.",
   infoCreditsLandingLabel: "Landing page",
@@ -4832,24 +4605,6 @@ function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterCha
               info,
               onChange: updateViewing
             }
-          ),
-          config.type === ProviderType.Shadcn && /* @__PURE__ */ jsx22(
-            ShadcnFields,
-            {
-              config,
-              labels,
-              info,
-              onChange: updateViewing
-            }
-          ),
-          config.type === ProviderType.Fallback && /* @__PURE__ */ jsx22(
-            FallbackFields,
-            {
-              config,
-              labels,
-              info,
-              onChange: updateViewing
-            }
           )
         ] })
       ] })
@@ -4960,75 +4715,6 @@ function ZenFields({
       )
     ] })
   ] });
-}
-function ShadcnFields({
-  config,
-  labels,
-  info,
-  onChange
-}) {
-  return /* @__PURE__ */ jsxs15("div", { className: "space-y-3", children: [
-    /* @__PURE__ */ jsxs15("div", { className: "space-y-1.5", children: [
-      /* @__PURE__ */ jsx22(Label, { className: "text-xs font-medium", children: info.apiKeyLabel }),
-      /* @__PURE__ */ jsx22(
-        Input,
-        {
-          className: "h-8 text-xs",
-          autoComplete: "off",
-          placeholder: info.apiKeyPlaceholder,
-          value: config.apiKey ?? "",
-          onChange: (e) => onChange({ ...config, apiKey: e.target.value })
-        }
-      )
-    ] }),
-    /* @__PURE__ */ jsxs15("div", { className: "space-y-1.5", children: [
-      /* @__PURE__ */ jsx22(Label, { className: "text-xs font-medium", children: info.baseUrlLabel }),
-      /* @__PURE__ */ jsx22(
-        Input,
-        {
-          className: "h-8 text-xs",
-          placeholder: info.baseUrlPlaceholder,
-          value: config.baseUrl ?? "",
-          onChange: (e) => onChange({ ...config, baseUrl: e.target.value || void 0 })
-        }
-      )
-    ] }),
-    /* @__PURE__ */ jsxs15("div", { className: "space-y-1.5", children: [
-      /* @__PURE__ */ jsx22(Label, { className: "text-xs font-medium", children: labels.modelLabel }),
-      /* @__PURE__ */ jsxs15(
-        Select,
-        {
-          value: config.model ?? "",
-          onValueChange: (v) => onChange({ ...config, model: v || void 0 }),
-          children: [
-            /* @__PURE__ */ jsx22(SelectTrigger, { className: "h-8 text-xs w-full cursor-pointer", children: config.model ? modelDisplayName(config.model) : labels.modelNone }),
-            /* @__PURE__ */ jsxs15(SelectContent, { children: [
-              /* @__PURE__ */ jsx22(SelectItem, { value: "", className: "text-xs cursor-pointer", children: labels.modelNone }),
-              Object.values(ShadcnModels).filter(Boolean).map((m) => /* @__PURE__ */ jsx22(SelectItem, { value: m, className: "text-xs cursor-pointer", children: modelDisplayName(m) }, m))
-            ] })
-          ]
-        }
-      )
-    ] })
-  ] });
-}
-function FallbackFields({
-  config,
-  info,
-  onChange
-}) {
-  return /* @__PURE__ */ jsx22("div", { className: "space-y-3", children: /* @__PURE__ */ jsxs15("div", { className: "space-y-1.5", children: [
-    /* @__PURE__ */ jsx22(Label, { className: "text-xs font-medium", children: info.baseUrlLabel }),
-    /* @__PURE__ */ jsx22(
-      Input,
-      {
-        className: "h-8 text-xs",
-        placeholder: info.baseUrlPlaceholder,
-        value: config.apiUrl ?? "",
-        onChange: (e) => onChange({ ...config, apiUrl: e.target.value || void 0 })
-      }
-    )
-  ] }) });
 }
 
 // src/module/components/info-sheet.tsx
@@ -5727,7 +5413,6 @@ export {
   AiPanelLanguageNames,
   DEFAULT_CONFIGS,
   DiffDialog,
-  FallbackAdapter,
   FeedbackSection,
   FilesSection,
   InfoSheet,
@@ -5741,8 +5426,6 @@ export {
   ProviderType2 as ProviderType,
   QuestionDialog,
   ResponseSection,
-  ShadcnAdapter,
-  ShadcnModels,
   StatusBar,
   TicketItem,
   TicketsSection,

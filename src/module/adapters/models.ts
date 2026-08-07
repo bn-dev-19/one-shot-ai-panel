@@ -47,19 +47,6 @@ export const OpenCodeModels = {
 
 export type OpenCodeModel = (typeof OpenCodeModels)[keyof typeof OpenCodeModels]
 
-export const ShadcnModels = {
-  None: "",
-  Gpt4o: "gpt-4o",
-  Gpt4oMini: "gpt-4o-mini",
-  Gpt41: "gpt-4.1",
-  ClaudeSonnet4: "claude-sonnet-4-20250514",
-  ClaudeSonnet35: "claude-3.5-sonnet",
-  ClaudeHaiku35: "claude-3.5-haiku",
-  Gemini20Flash: "gemini-2.0-flash",
-} as const
-
-export type ShadcnModel = (typeof ShadcnModels)[keyof typeof ShadcnModels]
-
 export const ZenModels = {
   None: "",
   BigPickle: "big-pickle",
@@ -86,16 +73,12 @@ export const ZenModels = {
 
 export type ZenModel = (typeof ZenModels)[keyof typeof ZenModels]
 
-export type AiPanelModel = OpenCodeModel | ShadcnModel | ZenModel
+export type AiPanelModel = OpenCodeModel | ZenModel
 
 const MODEL_NAMES: Record<Exclude<AiPanelModel, "">, string> = {
   "gpt-4o": "GPT-4o",
   "gpt-4o-mini": "GPT-4o Mini",
-  "gpt-4.1": "GPT-4.1",
-  "claude-sonnet-4-20250514": "Claude Sonnet 4",
   "claude-3.5-sonnet": "Claude 3.5 Sonnet",
-  "claude-3.5-haiku": "Claude 3.5 Haiku",
-  "gemini-2.0-flash": "Gemini 2.0 Flash",
   "deepseek-chat": "DeepSeek Chat",
   "big-pickle": "Big Pickle",
   "deepseek-v4-flash-free": "DeepSeek V4 Flash Free",

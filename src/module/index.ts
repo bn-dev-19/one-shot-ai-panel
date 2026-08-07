@@ -30,10 +30,7 @@ export {
   DEFAULT_CONFIGS,
   OpenCodeAdapter,
   ZenAdapter,
-  ShadcnAdapter,
-  FallbackAdapter,
   OpenCodeModels,
-  ShadcnModels,
   ZenModels,
   modelDisplayName,
 } from "./adapters"
@@ -47,8 +44,6 @@ export type {
   AiPanelSendContext,
   OpenCodeAdapterConfig,
   ZenAdapterConfig,
-  ShadcnAdapterConfig,
-  FallbackAdapterConfig,
 } from "./adapters"
 
 // Types

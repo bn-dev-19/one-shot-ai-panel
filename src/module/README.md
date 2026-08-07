@@ -99,7 +99,7 @@ A custom parser can be provided via the `parser` prop; it takes precedence over 
 
 ## Provider configuration
 
-Three adapters provided (`adapters/`): `opencode` (local server, optional Bearer password, default `http://localhost:4096`), `shadcn` (@shadcn/helpers SDK), `fallback` (direct HTTP). `register()` lets you add custom providers.
+Two adapters provided (`adapters/`): `opencode` (local server, optional Bearer password, default `http://localhost:4096`) and `zen` (OpenCode Zen, OpenAI-compatible gateway, default `baseUrl` `/api/zen/v1`). `register()` lets you add custom providers.
 
 ## Internationalization
 

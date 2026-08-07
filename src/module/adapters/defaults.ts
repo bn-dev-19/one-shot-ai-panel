@@ -9,6 +9,4 @@ export const DEFAULT_CONFIGS: Record<ProviderType, AiAdapterConfig> = {
     model: "big-pickle",
     baseUrl: "/api/zen/v1",
   },
-  [ProviderType.Shadcn]: { type: ProviderType.Shadcn, enabled: false, apiKey: "", baseUrl: "", model: "" },
-  [ProviderType.Fallback]: { type: ProviderType.Fallback, enabled: false, apiUrl: "/api/ai/generate" },
 }

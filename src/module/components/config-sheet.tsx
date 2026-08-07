@@ -21,13 +21,11 @@ import {
 } from "@/components/ui/sheet"
 import { AiPanelLanguage, PROVIDER_INFO, AiPanelLanguageNames, AI_PANEL_LANGUAGES } from "../i18n"
 import type { ProviderInfo } from "../i18n"
-import { PROVIDER_META, ProviderType, OpenCodeModels, ShadcnModels, ZenModels, modelDisplayName, DEFAULT_CONFIGS } from "../adapters"
+import { PROVIDER_META, ProviderType, OpenCodeModels, ZenModels, modelDisplayName, DEFAULT_CONFIGS } from "../adapters"
 import type {
   AiAdapterConfig,
   OpenCodeAdapterConfig,
   ZenAdapterConfig,
-  ShadcnAdapterConfig,
-  FallbackAdapterConfig,
 } from "../adapters"
 import type { AiPanelLabels } from "../types"
 import { AiPanelInvalidMode } from "../types"
@@ -221,24 +219,6 @@ export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAda
                     onChange={updateViewing}
                   />
                 )}
-
-                {config.type === ProviderType.Shadcn && (
-                  <ShadcnFields
-                    config={config as ShadcnAdapterConfig}
-                    labels={labels}
-                    info={info}
-                    onChange={updateViewing}
-                  />
-                )}
-
-                {config.type === ProviderType.Fallback && (
-                  <FallbackFields
-                    config={config as FallbackAdapterConfig}
-                    labels={labels}
-                    info={info}
-                    onChange={updateViewing}
-                  />
-                )}
               </>
             )}
           </div>
@@ -358,72 +338,3 @@ function ZenFields({
   )
 }
 
-function ShadcnFields({
-  config,
-  labels,
-  info,
-  onChange,
-}: FieldProps & { config: ShadcnAdapterConfig; onChange: (c: AiAdapterConfig) => void }) {
-  return (
-    <div className="space-y-3">
-      <div className="space-y-1.5">
-        <Label className="text-xs font-medium">{info.apiKeyLabel}</Label>
-        <Input
-          className="h-8 text-xs"
-          autoComplete="off"
-          placeholder={info.apiKeyPlaceholder}
-          value={config.apiKey ?? ""}
-          onChange={(e) => onChange({ ...config, apiKey: e.target.value })}
-        />
-      </div>
-      <div className="space-y-1.5">
-        <Label className="text-xs font-medium">{info.baseUrlLabel}</Label>
-        <Input
-          className="h-8 text-xs"
-          placeholder={info.baseUrlPlaceholder}
-          value={config.baseUrl ?? ""}
-          onChange={(e) => onChange({ ...config, baseUrl: e.target.value || undefined })}
-        />
-      </div>
-      <div className="space-y-1.5">
-        <Label className="text-xs font-medium">{labels.modelLabel}</Label>
-        <Select
-          value={config.model ?? ""}
-          onValueChange={(v) => onChange({ ...config, model: v || undefined })}
-        >
-          <SelectTrigger className="h-8 text-xs w-full cursor-pointer">
-            {config.model ? modelDisplayName(config.model) : labels.modelNone}
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="" className="text-xs cursor-pointer">{labels.modelNone}</SelectItem>
-            {Object.values(ShadcnModels).filter(Boolean).map((m) => (
-              <SelectItem key={m} value={m} className="text-xs cursor-pointer">
-                {modelDisplayName(m)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
-  )
-}
-
-function FallbackFields({
-  config,
-  info,
-  onChange,
-}: FieldProps & { config: FallbackAdapterConfig; onChange: (c: AiAdapterConfig) => void }) {
-  return (
-    <div className="space-y-3">
-      <div className="space-y-1.5">
-        <Label className="text-xs font-medium">{info.baseUrlLabel}</Label>
-        <Input
-          className="h-8 text-xs"
-          placeholder={info.baseUrlPlaceholder}
-          value={config.apiUrl ?? ""}
-          onChange={(e) => onChange({ ...config, apiUrl: e.target.value || undefined })}
-        />
-      </div>
-    </div>
-  )
-}
