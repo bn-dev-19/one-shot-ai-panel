@@ -6,6 +6,14 @@ import type { AiPanelContextInfo, AiPanelTokenUsage } from "../types"
 const DEFAULT_ZEN_URL = "/api/zen/v1"
 const STREAM_TIMEOUT_MS = 15 * 60 * 1000
 
+function resolveZenBaseUrl(baseUrl: string): string {
+  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(baseUrl)) return baseUrl
+  if (typeof window !== "undefined") {
+    return new URL(baseUrl, window.location.origin).toString()
+  }
+  return baseUrl
+}
+
 type StreamFrame =
   | { t: "reasoning" | "text"; d: string; snapshot?: boolean }
   | { t: "context"; d: AiPanelContextInfo; snapshot?: boolean }
@@ -50,7 +58,7 @@ export class ZenAdapter implements AiPanelAdapter {
     this.modelId = config.model
     this.client = new OpenAI({
       apiKey: config.apiKey ?? "",
-      baseURL: this.baseUrl,
+      baseURL: resolveZenBaseUrl(this.baseUrl),
       dangerouslyAllowBrowser: true,
     })
   }

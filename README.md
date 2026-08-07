@@ -357,6 +357,8 @@ The CLI installer handles this for you — zero code to write:
 
 Skip it with `--no-proxy`. If you manage your own relay, just point the Zen `baseUrl` at it (same-origin or CORS-enabled).
 
+> `baseUrl` may be relative (the default `/api/zen/v1`): the adapter resolves it against the page origin in the browser before handing it to the `openai` SDK (which requires an absolute URL).
+
 The defaults are applied in three places:
 
 1. **Panel mount** when no `adapter` prop is passed → `currentAdapter = DEFAULT_CONFIGS[opencode]`, so **Generate works out of the box** (v1.2.4+).

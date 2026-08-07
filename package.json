@@ -1,6 +1,6 @@
 {
   "name": "one-shot-ai-panel",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Reusable OneShot AI assistant panel for React/Next.js + shadcn/ui: schema-validated JSON generation, live streaming, side-by-side diff review, and selective integration into your own project.",
   "license": "MIT",
   "type": "module",
