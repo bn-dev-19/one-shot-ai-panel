@@ -267,6 +267,7 @@ function OpenCodeFields({
         <Label className="text-xs font-medium">{info.baseUrlLabel}</Label>
         <Input
           className="h-8 text-xs"
+          autoComplete="off"
           placeholder={info.baseUrlPlaceholder}
           value={config.apiUrl ?? ""}
           onChange={(e) => onChange({ ...config, apiUrl: e.target.value || undefined })}
@@ -277,6 +278,7 @@ function OpenCodeFields({
         <Input
           className="h-8 text-xs"
           type="password"
+          autoComplete="new-password"
           placeholder={info.apiKeyPlaceholder}
           value={config.password ?? ""}
           onChange={(e) => onChange({ ...config, password: e.target.value || undefined })}
@@ -318,6 +320,7 @@ function ZenFields({
         <Input
           className="h-8 text-xs"
           type="password"
+          autoComplete="new-password"
           placeholder={info.apiKeyPlaceholder}
           value={config.apiKey ?? ""}
           onChange={(e) => onChange({ ...config, apiKey: e.target.value || undefined })}
@@ -367,6 +370,7 @@ function ShadcnFields({
         <Label className="text-xs font-medium">{info.apiKeyLabel}</Label>
         <Input
           className="h-8 text-xs"
+          autoComplete="off"
           placeholder={info.apiKeyPlaceholder}
           value={config.apiKey ?? ""}
           onChange={(e) => onChange({ ...config, apiKey: e.target.value })}

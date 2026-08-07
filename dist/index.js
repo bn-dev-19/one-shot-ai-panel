@@ -4869,6 +4869,7 @@ function OpenCodeFields({
         Input,
         {
           className: "h-8 text-xs",
+          autoComplete: "off",
           placeholder: info.baseUrlPlaceholder,
           value: config.apiUrl ?? "",
           onChange: (e) => onChange({ ...config, apiUrl: e.target.value || void 0 })
@@ -4882,6 +4883,7 @@ function OpenCodeFields({
         {
           className: "h-8 text-xs",
           type: "password",
+          autoComplete: "new-password",
           placeholder: info.apiKeyPlaceholder,
           value: config.password ?? "",
           onChange: (e) => onChange({ ...config, password: e.target.value || void 0 })
@@ -4921,6 +4923,7 @@ function ZenFields({
         {
           className: "h-8 text-xs",
           type: "password",
+          autoComplete: "new-password",
           placeholder: info.apiKeyPlaceholder,
           value: config.apiKey ?? "",
           onChange: (e) => onChange({ ...config, apiKey: e.target.value || void 0 })
@@ -4971,6 +4974,7 @@ function ShadcnFields({
         Input,
         {
           className: "h-8 text-xs",
+          autoComplete: "off",
           placeholder: info.apiKeyPlaceholder,
           value: config.apiKey ?? "",
           onChange: (e) => onChange({ ...config, apiKey: e.target.value })
