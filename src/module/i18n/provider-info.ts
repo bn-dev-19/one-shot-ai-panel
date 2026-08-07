@@ -38,13 +38,15 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
       description: "Gateway de modèles OpenCode Zen (API OpenAI-compatible)",
       help:
         "Récupère ta clé API sur https://opencode.ai/auth (dashboard Zen).\n\n" +
-        "Le panel appelle directement https://opencode.ai/zen/v1 — aucun serveur local requis.\n\n" +
+        "Base URL par défaut : /api/zen/v1 (proxy same-origin vers l'endpoint documenté https://opencode.ai/zen/v1/chat/completions). " +
+        "Zen n'autorise pas le CORS navigateur : un proxy côté serveur est requis en navigateur. " +
+        "En usage serveur/CLI, pointe directement sur https://opencode.ai/zen/v1.\n\n" +
         "Attention : Zen est un gateway chat (pas d'agent) : pas de permissions, questions, tools ni diff.",
       modelPlaceholder: "Modèle (ex: big-pickle)",
       apiKeyLabel: "Clé API",
       apiKeyPlaceholder: "sk-...",
       baseUrlLabel: "URL de base",
-      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" },
       ],
@@ -105,13 +107,15 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
       description: "OpenCode Zen model gateway (OpenAI-compatible API)",
       help:
         "Get your API key from https://opencode.ai/auth (Zen dashboard).\n\n" +
-        "The panel calls https://opencode.ai/zen/v1 directly — no local server required.\n\n" +
+        "Default base URL: /api/zen/v1 (same-origin proxy to the documented endpoint https://opencode.ai/zen/v1/chat/completions). " +
+        "Zen does not allow browser CORS: a server-side proxy is required in the browser. " +
+        "For server/CLI usage, point directly to https://opencode.ai/zen/v1.\n\n" +
         "Note: Zen is a chat-only gateway (no agent): no permissions, questions, tools or diff.",
       modelPlaceholder: "Model (e.g. big-pickle)",
       apiKeyLabel: "API Key",
       apiKeyPlaceholder: "sk-...",
       baseUrlLabel: "Base URL",
-      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" },
       ],
@@ -172,13 +176,14 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
       description: "OpenCode Zen モデルゲートウェイ（OpenAI 互換 API）",
       help:
         "API キーは https://opencode.ai/auth（Zen ダッシュボード）で取得します。\n\n" +
-        "パネルは https://opencode.ai/zen/v1 を直接呼び出します — ローカルサーバーは不要です。\n\n" +
+        "デフォルトのベース URL: /api/zen/v1（ドキュメント記載のエンドポイント https://opencode.ai/zen/v1/chat/completions への同一オリジン・プロキシ）。" +
+        "Zen はブラウザー CORS を許可していません：ブラウザーではサーバー側プロキシが必要です。サーバー/CLI では https://opencode.ai/zen/v1 を直接指定してください。\n\n" +
         "注意：Zen はチャット専用ゲートウェイ（エージェントなし）：権限、質問、ツール、diff はありません。",
       modelPlaceholder: "モデル（例: big-pickle）",
       apiKeyLabel: "API キー",
       apiKeyPlaceholder: "sk-...",
       baseUrlLabel: "ベース URL",
-      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "OpenCode Zen ドキュメント", url: "https://opencode.ai/docs/zen" },
       ],
@@ -236,13 +241,14 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
       description: "OpenCode Zen 模型网关（OpenAI 兼容 API）",
       help:
         "在 https://opencode.ai/auth（Zen 仪表盘）获取你的 API 密钥。\n\n" +
-        "面板直接调用 https://opencode.ai/zen/v1 —— 无需本地服务器。\n\n" +
+        "默认基础 URL：/api/zen/v1（指向文档端点 https://opencode.ai/zen/v1/chat/completions 的同源代理）。" +
+        "Zen 不允许浏览器 CORS：在浏览器中需要服务器端代理。服务端/CLI 使用时可直接指向 https://opencode.ai/zen/v1。\n\n" +
         "注意：Zen 仅提供聊天网关（无代理）：没有权限、问题、工具或 diff。",
       modelPlaceholder: "模型（例如 big-pickle）",
       apiKeyLabel: "API 密钥",
       apiKeyPlaceholder: "sk-...",
       baseUrlLabel: "基础 URL",
-      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "OpenCode Zen 文档", url: "https://opencode.ai/docs/zen" },
       ],
@@ -300,13 +306,15 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
       description: "Gateway de modelos OpenCode Zen (API compatible con OpenAI)",
       help:
         "Obtén tu clave API en https://opencode.ai/auth (panel de Zen).\n\n" +
-        "El panel llama directamente a https://opencode.ai/zen/v1 — no se requiere servidor local.\n\n" +
+        "URL base por defecto: /api/zen/v1 (proxy same-origin al endpoint documentado https://opencode.ai/zen/v1/chat/completions). " +
+        "Zen no permite CORS de navegador: se requiere un proxy del lado del servidor en el navegador. " +
+        "Para uso servidor/CLI, apunta directamente a https://opencode.ai/zen/v1.\n\n" +
         "Nota: Zen es un gateway solo de chat (sin agente): sin permisos, preguntas, herramientas ni diff.",
       modelPlaceholder: "Modelo (p. ej. big-pickle)",
       apiKeyLabel: "Clave API",
       apiKeyPlaceholder: "sk-...",
       baseUrlLabel: "URL base",
-      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "Documentación de OpenCode Zen", url: "https://opencode.ai/docs/zen" },
       ],
@@ -364,13 +372,15 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
       description: "بوابة نماذج OpenCode Zen (واجهة متوافقة مع OpenAI)",
       help:
         "احصل على مفتاح API من https://opencode.ai/auth (لوحة Zen).\n\n" +
-        "اللوحة تتصل مباشرة بـ https://opencode.ai/zen/v1 — لا حاجة لخادم محلي.\n\n" +
+        "عنوان URL الأساسي الافتراضي: /api/zen/v1 (بروكسي same-origin إلى نقطة النهاية الموثقة https://opencode.ai/zen/v1/chat/completions). " +
+        "Zen لا يسمح بـ CORS من المتصفح: يلزم بروكسي من جهة الخادم في المتصفح. " +
+        "للاستخدام من الخادم/CLI، وجّه مباشرة إلى https://opencode.ai/zen/v1.\n\n" +
         "ملاحظة: Zen بوابة محادثة فقط (بدون وكيل): لا توجد أذونات أو أسئلة أو أدوات أو diff.",
       modelPlaceholder: "النموذج (مثال: big-pickle)",
       apiKeyLabel: "مفتاح API",
       apiKeyPlaceholder: "sk-...",
       baseUrlLabel: "عنوان URL الأساسي",
-      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "وثائق OpenCode Zen", url: "https://opencode.ai/docs/zen" },
       ],

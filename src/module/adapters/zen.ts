@@ -3,7 +3,7 @@ import type { AiPanelAdapter, ZenAdapterConfig } from "./types"
 import { ProviderType } from "./types"
 import type { AiPanelContextInfo, AiPanelTokenUsage } from "../types"
 
-const DEFAULT_ZEN_URL = "https://opencode.ai/zen/v1"
+const DEFAULT_ZEN_URL = "/api/zen/v1"
 const STREAM_TIMEOUT_MS = 15 * 60 * 1000
 
 type StreamFrame =

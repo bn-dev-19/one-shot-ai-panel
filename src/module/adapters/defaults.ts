@@ -7,7 +7,7 @@ export const DEFAULT_CONFIGS: Record<ProviderType, AiAdapterConfig> = {
     type: ProviderType.Zen,
     enabled: false,
     model: "big-pickle",
-    baseUrl: "https://opencode.ai/zen/v1",
+    baseUrl: "/api/zen/v1",
   },
   [ProviderType.Shadcn]: { type: ProviderType.Shadcn, enabled: false, apiKey: "", baseUrl: "", model: "" },
   [ProviderType.Fallback]: { type: ProviderType.Fallback, enabled: false, apiUrl: "/api/ai/generate" },

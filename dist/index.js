@@ -1797,7 +1797,7 @@ ${sseError.message}` : "";
 
 // src/module/adapters/zen.ts
 import OpenAI from "openai";
-var DEFAULT_ZEN_URL = "https://opencode.ai/zen/v1";
+var DEFAULT_ZEN_URL = "/api/zen/v1";
 var STREAM_TIMEOUT_MS = 15 * 60 * 1e3;
 function mapUsage(u) {
   const promptDetails = u.prompt_tokens_details;
@@ -1951,7 +1951,7 @@ var DEFAULT_CONFIGS = {
     type: ProviderType.Zen,
     enabled: false,
     model: "big-pickle",
-    baseUrl: "https://opencode.ai/zen/v1"
+    baseUrl: "/api/zen/v1"
   },
   [ProviderType.Shadcn]: { type: ProviderType.Shadcn, enabled: false, apiKey: "", baseUrl: "", model: "" },
   [ProviderType.Fallback]: { type: ProviderType.Fallback, enabled: false, apiUrl: "/api/ai/generate" }
@@ -1975,12 +1975,12 @@ var PROVIDER_INFO = {
     },
     [ProviderType.Zen]: {
       description: "Gateway de mod\xE8les OpenCode Zen (API OpenAI-compatible)",
-      help: "R\xE9cup\xE8re ta cl\xE9 API sur https://opencode.ai/auth (dashboard Zen).\n\nLe panel appelle directement https://opencode.ai/zen/v1 \u2014 aucun serveur local requis.\n\nAttention : Zen est un gateway chat (pas d'agent) : pas de permissions, questions, tools ni diff.",
+      help: "R\xE9cup\xE8re ta cl\xE9 API sur https://opencode.ai/auth (dashboard Zen).\n\nBase URL par d\xE9faut : /api/zen/v1 (proxy same-origin vers l'endpoint document\xE9 https://opencode.ai/zen/v1/chat/completions). Zen n'autorise pas le CORS navigateur : un proxy c\xF4t\xE9 serveur est requis en navigateur. En usage serveur/CLI, pointe directement sur https://opencode.ai/zen/v1.\n\nAttention : Zen est un gateway chat (pas d'agent) : pas de permissions, questions, tools ni diff.",
       modelPlaceholder: "Mod\xE8le (ex: big-pickle)",
       apiKeyLabel: "Cl\xE9 API",
       apiKeyPlaceholder: "sk-...",
       baseUrlLabel: "URL de base",
-      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" }
       ]
@@ -2027,12 +2027,12 @@ var PROVIDER_INFO = {
     },
     [ProviderType.Zen]: {
       description: "OpenCode Zen model gateway (OpenAI-compatible API)",
-      help: "Get your API key from https://opencode.ai/auth (Zen dashboard).\n\nThe panel calls https://opencode.ai/zen/v1 directly \u2014 no local server required.\n\nNote: Zen is a chat-only gateway (no agent): no permissions, questions, tools or diff.",
+      help: "Get your API key from https://opencode.ai/auth (Zen dashboard).\n\nDefault base URL: /api/zen/v1 (same-origin proxy to the documented endpoint https://opencode.ai/zen/v1/chat/completions). Zen does not allow browser CORS: a server-side proxy is required in the browser. For server/CLI usage, point directly to https://opencode.ai/zen/v1.\n\nNote: Zen is a chat-only gateway (no agent): no permissions, questions, tools or diff.",
       modelPlaceholder: "Model (e.g. big-pickle)",
       apiKeyLabel: "API Key",
       apiKeyPlaceholder: "sk-...",
       baseUrlLabel: "Base URL",
-      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" }
       ]
@@ -2079,12 +2079,12 @@ var PROVIDER_INFO = {
     },
     [ProviderType.Zen]: {
       description: "OpenCode Zen \u30E2\u30C7\u30EB\u30B2\u30FC\u30C8\u30A6\u30A7\u30A4\uFF08OpenAI \u4E92\u63DB API\uFF09",
-      help: "API \u30AD\u30FC\u306F https://opencode.ai/auth\uFF08Zen \u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9\uFF09\u3067\u53D6\u5F97\u3057\u307E\u3059\u3002\n\n\u30D1\u30CD\u30EB\u306F https://opencode.ai/zen/v1 \u3092\u76F4\u63A5\u547C\u3073\u51FA\u3057\u307E\u3059 \u2014 \u30ED\u30FC\u30AB\u30EB\u30B5\u30FC\u30D0\u30FC\u306F\u4E0D\u8981\u3067\u3059\u3002\n\n\u6CE8\u610F\uFF1AZen \u306F\u30C1\u30E3\u30C3\u30C8\u5C02\u7528\u30B2\u30FC\u30C8\u30A6\u30A7\u30A4\uFF08\u30A8\u30FC\u30B8\u30A7\u30F3\u30C8\u306A\u3057\uFF09\uFF1A\u6A29\u9650\u3001\u8CEA\u554F\u3001\u30C4\u30FC\u30EB\u3001diff \u306F\u3042\u308A\u307E\u305B\u3093\u3002",
+      help: "API \u30AD\u30FC\u306F https://opencode.ai/auth\uFF08Zen \u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9\uFF09\u3067\u53D6\u5F97\u3057\u307E\u3059\u3002\n\n\u30C7\u30D5\u30A9\u30EB\u30C8\u306E\u30D9\u30FC\u30B9 URL: /api/zen/v1\uFF08\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8\u8A18\u8F09\u306E\u30A8\u30F3\u30C9\u30DD\u30A4\u30F3\u30C8 https://opencode.ai/zen/v1/chat/completions \u3078\u306E\u540C\u4E00\u30AA\u30EA\u30B8\u30F3\u30FB\u30D7\u30ED\u30AD\u30B7\uFF09\u3002Zen \u306F\u30D6\u30E9\u30A6\u30B6\u30FC CORS \u3092\u8A31\u53EF\u3057\u3066\u3044\u307E\u305B\u3093\uFF1A\u30D6\u30E9\u30A6\u30B6\u30FC\u3067\u306F\u30B5\u30FC\u30D0\u30FC\u5074\u30D7\u30ED\u30AD\u30B7\u304C\u5FC5\u8981\u3067\u3059\u3002\u30B5\u30FC\u30D0\u30FC/CLI \u3067\u306F https://opencode.ai/zen/v1 \u3092\u76F4\u63A5\u6307\u5B9A\u3057\u3066\u304F\u3060\u3055\u3044\u3002\n\n\u6CE8\u610F\uFF1AZen \u306F\u30C1\u30E3\u30C3\u30C8\u5C02\u7528\u30B2\u30FC\u30C8\u30A6\u30A7\u30A4\uFF08\u30A8\u30FC\u30B8\u30A7\u30F3\u30C8\u306A\u3057\uFF09\uFF1A\u6A29\u9650\u3001\u8CEA\u554F\u3001\u30C4\u30FC\u30EB\u3001diff \u306F\u3042\u308A\u307E\u305B\u3093\u3002",
       modelPlaceholder: "\u30E2\u30C7\u30EB\uFF08\u4F8B: big-pickle\uFF09",
       apiKeyLabel: "API \u30AD\u30FC",
       apiKeyPlaceholder: "sk-...",
       baseUrlLabel: "\u30D9\u30FC\u30B9 URL",
-      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "OpenCode Zen \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8", url: "https://opencode.ai/docs/zen" }
       ]
@@ -2131,12 +2131,12 @@ var PROVIDER_INFO = {
     },
     [ProviderType.Zen]: {
       description: "OpenCode Zen \u6A21\u578B\u7F51\u5173\uFF08OpenAI \u517C\u5BB9 API\uFF09",
-      help: "\u5728 https://opencode.ai/auth\uFF08Zen \u4EEA\u8868\u76D8\uFF09\u83B7\u53D6\u4F60\u7684 API \u5BC6\u94A5\u3002\n\n\u9762\u677F\u76F4\u63A5\u8C03\u7528 https://opencode.ai/zen/v1 \u2014\u2014 \u65E0\u9700\u672C\u5730\u670D\u52A1\u5668\u3002\n\n\u6CE8\u610F\uFF1AZen \u4EC5\u63D0\u4F9B\u804A\u5929\u7F51\u5173\uFF08\u65E0\u4EE3\u7406\uFF09\uFF1A\u6CA1\u6709\u6743\u9650\u3001\u95EE\u9898\u3001\u5DE5\u5177\u6216 diff\u3002",
+      help: "\u5728 https://opencode.ai/auth\uFF08Zen \u4EEA\u8868\u76D8\uFF09\u83B7\u53D6\u4F60\u7684 API \u5BC6\u94A5\u3002\n\n\u9ED8\u8BA4\u57FA\u7840 URL\uFF1A/api/zen/v1\uFF08\u6307\u5411\u6587\u6863\u7AEF\u70B9 https://opencode.ai/zen/v1/chat/completions \u7684\u540C\u6E90\u4EE3\u7406\uFF09\u3002Zen \u4E0D\u5141\u8BB8\u6D4F\u89C8\u5668 CORS\uFF1A\u5728\u6D4F\u89C8\u5668\u4E2D\u9700\u8981\u670D\u52A1\u5668\u7AEF\u4EE3\u7406\u3002\u670D\u52A1\u7AEF/CLI \u4F7F\u7528\u65F6\u53EF\u76F4\u63A5\u6307\u5411 https://opencode.ai/zen/v1\u3002\n\n\u6CE8\u610F\uFF1AZen \u4EC5\u63D0\u4F9B\u804A\u5929\u7F51\u5173\uFF08\u65E0\u4EE3\u7406\uFF09\uFF1A\u6CA1\u6709\u6743\u9650\u3001\u95EE\u9898\u3001\u5DE5\u5177\u6216 diff\u3002",
       modelPlaceholder: "\u6A21\u578B\uFF08\u4F8B\u5982 big-pickle\uFF09",
       apiKeyLabel: "API \u5BC6\u94A5",
       apiKeyPlaceholder: "sk-...",
       baseUrlLabel: "\u57FA\u7840 URL",
-      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "OpenCode Zen \u6587\u6863", url: "https://opencode.ai/docs/zen" }
       ]
@@ -2183,12 +2183,12 @@ var PROVIDER_INFO = {
     },
     [ProviderType.Zen]: {
       description: "Gateway de modelos OpenCode Zen (API compatible con OpenAI)",
-      help: "Obt\xE9n tu clave API en https://opencode.ai/auth (panel de Zen).\n\nEl panel llama directamente a https://opencode.ai/zen/v1 \u2014 no se requiere servidor local.\n\nNota: Zen es un gateway solo de chat (sin agente): sin permisos, preguntas, herramientas ni diff.",
+      help: "Obt\xE9n tu clave API en https://opencode.ai/auth (panel de Zen).\n\nURL base por defecto: /api/zen/v1 (proxy same-origin al endpoint documentado https://opencode.ai/zen/v1/chat/completions). Zen no permite CORS de navegador: se requiere un proxy del lado del servidor en el navegador. Para uso servidor/CLI, apunta directamente a https://opencode.ai/zen/v1.\n\nNota: Zen es un gateway solo de chat (sin agente): sin permisos, preguntas, herramientas ni diff.",
       modelPlaceholder: "Modelo (p. ej. big-pickle)",
       apiKeyLabel: "Clave API",
       apiKeyPlaceholder: "sk-...",
       baseUrlLabel: "URL base",
-      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "Documentaci\xF3n de OpenCode Zen", url: "https://opencode.ai/docs/zen" }
       ]
@@ -2235,12 +2235,12 @@ var PROVIDER_INFO = {
     },
     [ProviderType.Zen]: {
       description: "\u0628\u0648\u0627\u0628\u0629 \u0646\u0645\u0627\u0630\u062C OpenCode Zen (\u0648\u0627\u062C\u0647\u0629 \u0645\u062A\u0648\u0627\u0641\u0642\u0629 \u0645\u0639 OpenAI)",
-      help: "\u0627\u062D\u0635\u0644 \u0639\u0644\u0649 \u0645\u0641\u062A\u0627\u062D API \u0645\u0646 https://opencode.ai/auth (\u0644\u0648\u062D\u0629 Zen).\n\n\u0627\u0644\u0644\u0648\u062D\u0629 \u062A\u062A\u0635\u0644 \u0645\u0628\u0627\u0634\u0631\u0629 \u0628\u0640 https://opencode.ai/zen/v1 \u2014 \u0644\u0627 \u062D\u0627\u062C\u0629 \u0644\u062E\u0627\u062F\u0645 \u0645\u062D\u0644\u064A.\n\n\u0645\u0644\u0627\u062D\u0638\u0629: Zen \u0628\u0648\u0627\u0628\u0629 \u0645\u062D\u0627\u062F\u062B\u0629 \u0641\u0642\u0637 (\u0628\u062F\u0648\u0646 \u0648\u0643\u064A\u0644): \u0644\u0627 \u062A\u0648\u062C\u062F \u0623\u0630\u0648\u0646\u0627\u062A \u0623\u0648 \u0623\u0633\u0626\u0644\u0629 \u0623\u0648 \u0623\u062F\u0648\u0627\u062A \u0623\u0648 diff.",
+      help: "\u0627\u062D\u0635\u0644 \u0639\u0644\u0649 \u0645\u0641\u062A\u0627\u062D API \u0645\u0646 https://opencode.ai/auth (\u0644\u0648\u062D\u0629 Zen).\n\n\u0639\u0646\u0648\u0627\u0646 URL \u0627\u0644\u0623\u0633\u0627\u0633\u064A \u0627\u0644\u0627\u0641\u062A\u0631\u0627\u0636\u064A: /api/zen/v1 (\u0628\u0631\u0648\u0643\u0633\u064A same-origin \u0625\u0644\u0649 \u0646\u0642\u0637\u0629 \u0627\u0644\u0646\u0647\u0627\u064A\u0629 \u0627\u0644\u0645\u0648\u062B\u0642\u0629 https://opencode.ai/zen/v1/chat/completions). Zen \u0644\u0627 \u064A\u0633\u0645\u062D \u0628\u0640 CORS \u0645\u0646 \u0627\u0644\u0645\u062A\u0635\u0641\u062D: \u064A\u0644\u0632\u0645 \u0628\u0631\u0648\u0643\u0633\u064A \u0645\u0646 \u062C\u0647\u0629 \u0627\u0644\u062E\u0627\u062F\u0645 \u0641\u064A \u0627\u0644\u0645\u062A\u0635\u0641\u062D. \u0644\u0644\u0627\u0633\u062A\u062E\u062F\u0627\u0645 \u0645\u0646 \u0627\u0644\u062E\u0627\u062F\u0645/CLI\u060C \u0648\u062C\u0651\u0647 \u0645\u0628\u0627\u0634\u0631\u0629 \u0625\u0644\u0649 https://opencode.ai/zen/v1.\n\n\u0645\u0644\u0627\u062D\u0638\u0629: Zen \u0628\u0648\u0627\u0628\u0629 \u0645\u062D\u0627\u062F\u062B\u0629 \u0641\u0642\u0637 (\u0628\u062F\u0648\u0646 \u0648\u0643\u064A\u0644): \u0644\u0627 \u062A\u0648\u062C\u062F \u0623\u0630\u0648\u0646\u0627\u062A \u0623\u0648 \u0623\u0633\u0626\u0644\u0629 \u0623\u0648 \u0623\u062F\u0648\u0627\u062A \u0623\u0648 diff.",
       modelPlaceholder: "\u0627\u0644\u0646\u0645\u0648\u0630\u062C (\u0645\u062B\u0627\u0644: big-pickle)",
       apiKeyLabel: "\u0645\u0641\u062A\u0627\u062D API",
       apiKeyPlaceholder: "sk-...",
       baseUrlLabel: "\u0639\u0646\u0648\u0627\u0646 URL \u0627\u0644\u0623\u0633\u0627\u0633\u064A",
-      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      baseUrlPlaceholder: "/api/zen/v1",
       docLinks: [
         { label: "\u0648\u062B\u0627\u0626\u0642 OpenCode Zen", url: "https://opencode.ai/docs/zen" }
       ]
