@@ -1308,13 +1308,16 @@ var OpenCodeAdapter = class {
     this.runningTools = /* @__PURE__ */ new Map();
     this.seenPermissions = /* @__PURE__ */ new Set();
     this.seenQuestions = /* @__PURE__ */ new Set();
-    this.baseUrl = config.apiUrl ?? DEFAULT_OPENCODE_URL;
+    const raw = config.apiUrl?.trim();
+    const hasUrl = !!raw;
+    const validUrl = hasUrl && /^https?:\/\//i.test(raw);
+    this.baseUrl = validUrl ? raw : DEFAULT_OPENCODE_URL;
     this.modelId = config.model;
-    this.password = config.password;
+    this.password = validUrl ? config.password : hasUrl ? void 0 : config.password;
     this.client = createOpencodeClient({
       baseUrl: this.baseUrl,
       throwOnError: true,
-      headers: config.password ? { Authorization: `Bearer ${config.password}` } : void 0
+      headers: this.password ? { Authorization: `Bearer ${this.password}` } : void 0
     });
   }
   async createSession(directory) {
@@ -1799,6 +1802,13 @@ ${sseError.message}` : "";
 import OpenAI from "openai";
 var DEFAULT_ZEN_URL = "/api/zen/v1";
 var STREAM_TIMEOUT_MS = 15 * 60 * 1e3;
+function resolveZenBaseUrl(baseUrl) {
+  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(baseUrl)) return baseUrl;
+  if (typeof window !== "undefined") {
+    return new URL(baseUrl, window.location.origin).toString();
+  }
+  return baseUrl;
+}
 function mapUsage(u) {
   const promptDetails = u.prompt_tokens_details;
   const completionDetails = u.completion_tokens_details;
@@ -1817,7 +1827,7 @@ var ZenAdapter = class {
     this.modelId = config.model;
     this.client = new OpenAI({
       apiKey: config.apiKey ?? "",
-      baseURL: this.baseUrl,
+      baseURL: resolveZenBaseUrl(this.baseUrl),
       dangerouslyAllowBrowser: true
     });
   }
@@ -4691,14 +4701,37 @@ var INVALID_MODE_NAMES = {
   [AiPanelInvalidMode.Warn]: (labels) => labels.invalidModeWarn,
   [AiPanelInvalidMode.Block]: (labels) => labels.invalidModeBlock
 };
+function seedRecord(initial) {
+  const activeType = initial?.type ?? ProviderType.Opencode;
+  const activeEnabled = initial ? initial.enabled ?? true : true;
+  const record = {};
+  for (const pt of Object.values(ProviderType)) {
+    const base = pt === activeType && initial ? initial : DEFAULT_CONFIGS[pt];
+    record[pt] = { ...base, enabled: pt === activeType ? activeEnabled : false };
+  }
+  return record;
+}
 function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterChange, invalidMode, onInvalidModeChange }) {
-  const [config, setConfig] = useState10(adapter ?? DEFAULT_CONFIGS[ProviderType.Opencode]);
+  const [viewing, setViewing] = useState10(adapter?.type ?? ProviderType.Opencode);
+  const [record, setRecord] = useState10(() => seedRecord(adapter));
+  const config = record[viewing];
   const info = PROVIDER_INFO[language]?.[config.type];
   const meta = PROVIDER_META[config.type];
-  const isEnabled = config.enabled ?? true;
-  function setAndNotify(next) {
-    setConfig(next);
-    onAdapterChange?.(next);
+  const isEnabled = config.enabled ?? false;
+  const activeType = Object.values(ProviderType).find((pt) => record[pt].enabled);
+  function updateViewing(next) {
+    setRecord((prev) => ({ ...prev, [next.type]: next }));
+    if (next.type === activeType) {
+      onAdapterChange?.({ ...next });
+    }
+  }
+  function setEnabled(checked) {
+    const nextRecord = {};
+    for (const pt of Object.values(ProviderType)) {
+      nextRecord[pt] = { ...record[pt], enabled: pt === viewing ? checked : false };
+    }
+    setRecord(nextRecord);
+    onAdapterChange?.({ ...nextRecord[viewing] });
   }
   return /* @__PURE__ */ jsxs15(Sheet, { children: [
     /* @__PURE__ */ jsxs15(SheetTrigger, { render: /* @__PURE__ */ jsx22(Button, { variant: "secondary", size: "sm", className: "gap-1 cursor-pointer" }), children: [
@@ -4739,11 +4772,7 @@ function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterCha
             Select,
             {
               value: config.type,
-              onValueChange: (v) => {
-                const pt = v;
-                const cfg = DEFAULT_CONFIGS[pt];
-                setAndNotify(cfg);
-              },
+              onValueChange: (v) => setViewing(v),
               children: [
                 /* @__PURE__ */ jsx22(SelectTrigger, { className: "h-8 text-xs w-full cursor-pointer", children: meta?.label }),
                 /* @__PURE__ */ jsx22(SelectContent, { children: Object.values(ProviderType).map((pt) => /* @__PURE__ */ jsx22(SelectItem, { value: pt, className: "text-xs cursor-pointer", children: PROVIDER_META[pt]?.label ?? pt }, pt)) })
@@ -4757,9 +4786,7 @@ function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterCha
             Switch,
             {
               checked: isEnabled,
-              onCheckedChange: (checked) => {
-                setAndNotify({ ...config, enabled: checked });
-              }
+              onCheckedChange: setEnabled
             }
           )
         ] }),
@@ -4794,7 +4821,7 @@ function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterCha
               config,
               labels,
               info,
-              onChange: setAndNotify
+              onChange: updateViewing
             }
           ),
           config.type === ProviderType.Zen && /* @__PURE__ */ jsx22(
@@ -4803,7 +4830,7 @@ function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterCha
               config,
               labels,
               info,
-              onChange: setAndNotify
+              onChange: updateViewing
             }
           ),
           config.type === ProviderType.Shadcn && /* @__PURE__ */ jsx22(
@@ -4812,7 +4839,7 @@ function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterCha
               config,
               labels,
               info,
-              onChange: setAndNotify
+              onChange: updateViewing
             }
           ),
           config.type === ProviderType.Fallback && /* @__PURE__ */ jsx22(
@@ -4821,7 +4848,7 @@ function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterCha
               config,
               labels,
               info,
-              onChange: setAndNotify
+              onChange: updateViewing
             }
           )
         ] })

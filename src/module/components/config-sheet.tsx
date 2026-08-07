@@ -47,16 +47,41 @@ interface ConfigSheetProps {
   onInvalidModeChange: (mode: AiPanelInvalidMode) => void
 }
 
-export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterChange, invalidMode, onInvalidModeChange }: ConfigSheetProps) {
-  const [config, setConfig] = useState<AiAdapterConfig>(adapter ?? DEFAULT_CONFIGS[ProviderType.Opencode])
+function seedRecord(initial?: AiAdapterConfig): Record<ProviderType, AiAdapterConfig> {
+  const activeType = initial?.type ?? ProviderType.Opencode
+  const activeEnabled = initial ? (initial.enabled ?? true) : true
+  const record = {} as Record<ProviderType, AiAdapterConfig>
+  for (const pt of Object.values(ProviderType)) {
+    const base = pt === activeType && initial ? initial : DEFAULT_CONFIGS[pt]
+    record[pt] = { ...base, enabled: pt === activeType ? activeEnabled : false }
+  }
+  return record
+}
 
+export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterChange, invalidMode, onInvalidModeChange }: ConfigSheetProps) {
+  const [viewing, setViewing] = useState<ProviderType>(adapter?.type ?? ProviderType.Opencode)
+  const [record, setRecord] = useState<Record<ProviderType, AiAdapterConfig>>(() => seedRecord(adapter))
+
+  const config = record[viewing]
   const info = PROVIDER_INFO[language]?.[config.type]
   const meta = PROVIDER_META[config.type]
-  const isEnabled = config.enabled ?? true
+  const isEnabled = config.enabled ?? false
+  const activeType = Object.values(ProviderType).find((pt) => record[pt].enabled)
 
-  function setAndNotify(next: AiAdapterConfig) {
-    setConfig(next)
-    onAdapterChange?.(next)
+  function updateViewing(next: AiAdapterConfig) {
+    setRecord((prev) => ({ ...prev, [next.type]: next }))
+    if (next.type === activeType) {
+      onAdapterChange?.({ ...next })
+    }
+  }
+
+  function setEnabled(checked: boolean) {
+    const nextRecord = {} as Record<ProviderType, AiAdapterConfig>
+    for (const pt of Object.values(ProviderType)) {
+      nextRecord[pt] = { ...record[pt], enabled: pt === viewing ? checked : false }
+    }
+    setRecord(nextRecord)
+    onAdapterChange?.({ ...nextRecord[viewing] })
   }
 
   return (
@@ -121,11 +146,7 @@ export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAda
               <p className="text-xs text-muted-foreground">{meta?.description}</p>
               <Select
                 value={config.type}
-                onValueChange={(v) => {
-                  const pt = v as ProviderType
-                  const cfg = DEFAULT_CONFIGS[pt]
-                  setAndNotify(cfg)
-                }}
+                onValueChange={(v) => setViewing(v as ProviderType)}
               >
                 <SelectTrigger className="h-8 text-xs w-full cursor-pointer">
                   {meta?.label}
@@ -149,9 +170,7 @@ export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAda
               </div>
               <Switch
                 checked={isEnabled}
-                onCheckedChange={(checked) => {
-                  setAndNotify({ ...config, enabled: checked })
-                }}
+                onCheckedChange={setEnabled}
               />
             </div>
 
@@ -190,7 +209,7 @@ export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAda
                     config={config as OpenCodeAdapterConfig}
                     labels={labels}
                     info={info}
-                    onChange={setAndNotify}
+                    onChange={updateViewing}
                   />
                 )}
 
@@ -199,7 +218,7 @@ export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAda
                     config={config as ZenAdapterConfig}
                     labels={labels}
                     info={info}
-                    onChange={setAndNotify}
+                    onChange={updateViewing}
                   />
                 )}
 
@@ -208,7 +227,7 @@ export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAda
                     config={config as ShadcnAdapterConfig}
                     labels={labels}
                     info={info}
-                    onChange={setAndNotify}
+                    onChange={updateViewing}
                   />
                 )}
 
@@ -217,7 +236,7 @@ export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAda
                     config={config as FallbackAdapterConfig}
                     labels={labels}
                     info={info}
-                    onChange={setAndNotify}
+                    onChange={updateViewing}
                   />
                 )}
               </>
