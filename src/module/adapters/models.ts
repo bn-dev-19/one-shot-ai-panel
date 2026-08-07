@@ -60,7 +60,33 @@ export const ShadcnModels = {
 
 export type ShadcnModel = (typeof ShadcnModels)[keyof typeof ShadcnModels]
 
-export type AiPanelModel = OpenCodeModel | ShadcnModel
+export const ZenModels = {
+  None: "",
+  BigPickle: "big-pickle",
+  DeepSeekV4FlashFree: "deepseek-v4-flash-free",
+  MiMoV25Free: "mimo-v2.5-free",
+  LagunaS21Free: "laguna-s-2.1-free",
+  Ling30TinyFree: "ling-3.0-tiny-free",
+  LongCat20Free: "longcat-2.0-free",
+  NorthMiniCodeFree: "north-mini-code-free",
+  Nemotron3UltraFree: "nemotron-3-ultra-free",
+  DeepSeekV4Pro: "deepseek-v4-pro",
+  DeepSeekV4Flash: "deepseek-v4-flash",
+  MiniMaxM3: "minimax-m3",
+  MiniMaxM27: "minimax-m2.7",
+  MiniMaxM25: "minimax-m2.5",
+  GLM52: "glm-5.2",
+  GLM51: "glm-5.1",
+  GLM5: "glm-5",
+  KimiK25: "kimi-k2.5",
+  KimiK26: "kimi-k2.6",
+  KimiK27Code: "kimi-k2.7-code",
+  KimiK3: "kimi-k3",
+} as const
+
+export type ZenModel = (typeof ZenModels)[keyof typeof ZenModels]
+
+export type AiPanelModel = OpenCodeModel | ShadcnModel | ZenModel
 
 const MODEL_NAMES: Record<Exclude<AiPanelModel, "">, string> = {
   "gpt-4o": "GPT-4o",
@@ -75,7 +101,9 @@ const MODEL_NAMES: Record<Exclude<AiPanelModel, "">, string> = {
   "deepseek-v4-flash-free": "DeepSeek V4 Flash Free",
   "mimo-v2.5-free": "MiMo-V2.5 Free",
   "laguna-s-2.1-free": "Laguna S 2.1 Free",
+  "ling-3.0-tiny-free": "Ling-3.0 Tiny Free",
   "ling-3.0-flash-free": "Ling-3.0 Flash Free",
+  "longcat-2.0-free": "LongCat-2.0 Free",
   "north-mini-code-free": "North Mini Code Free",
   "nemotron-3-ultra-free": "Nemotron 3 Ultra Free",
   "nemotron-3-super-free": "Nemotron 3 Super Free",
@@ -83,8 +111,13 @@ const MODEL_NAMES: Record<Exclude<AiPanelModel, "">, string> = {
   "minimax-m2.7": "MiniMax M2.7",
   "minimax-m2.5": "MiniMax M2.5",
   "minimax-m2.5-free": "MiniMax M2.5 Free",
+  "deepseek-v4-pro": "DeepSeek V4 Pro",
+  "deepseek-v4-flash": "DeepSeek V4 Flash",
+  "kimi-k2.7-code": "Kimi K2.7 Code",
+  "kimi-k3": "Kimi K3",
   "glm-5.2": "GLM 5.2",
   "glm-5.1": "GLM 5.1",
+  "glm-5": "GLM 5",
   "kimi-k2.5": "Kimi K2.5",
   "kimi-k2.6": "Kimi K2.6",
   "kimi-k2-thinking": "Kimi K2 Thinking",

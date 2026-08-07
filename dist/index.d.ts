@@ -308,6 +308,7 @@ declare const translations: Record<AiPanelLanguage, AiPanelLabels>;
 
 declare const ProviderType$1: {
     readonly Opencode: "opencode";
+    readonly Zen: "zen";
     readonly Shadcn: "shadcn";
     readonly Fallback: "fallback";
 };
@@ -345,6 +346,13 @@ interface OpenCodeAdapterConfig {
     model?: string;
     client?: OpencodeClient;
 }
+interface ZenAdapterConfig {
+    type: typeof ProviderType$1.Zen;
+    enabled?: boolean;
+    apiKey?: string;
+    baseUrl?: string;
+    model?: string;
+}
 interface ShadcnAdapterConfig {
     type: typeof ProviderType$1.Shadcn;
     enabled?: boolean;
@@ -357,7 +365,7 @@ interface FallbackAdapterConfig {
     enabled?: boolean;
     apiUrl?: string;
 }
-type AiAdapterConfig = OpenCodeAdapterConfig | ShadcnAdapterConfig | FallbackAdapterConfig;
+type AiAdapterConfig = OpenCodeAdapterConfig | ZenAdapterConfig | ShadcnAdapterConfig | FallbackAdapterConfig;
 type AiPanelSendHandler = ((prompt: string, context?: AiPanelSendContext) => Promise<ReadableStream<Uint8Array>>) & {
     adapter?: AiPanelAdapter;
 };
@@ -418,6 +426,29 @@ declare const ShadcnModels: {
     readonly ClaudeHaiku35: "claude-3.5-haiku";
     readonly Gemini20Flash: "gemini-2.0-flash";
 };
+declare const ZenModels: {
+    readonly None: "";
+    readonly BigPickle: "big-pickle";
+    readonly DeepSeekV4FlashFree: "deepseek-v4-flash-free";
+    readonly MiMoV25Free: "mimo-v2.5-free";
+    readonly LagunaS21Free: "laguna-s-2.1-free";
+    readonly Ling30TinyFree: "ling-3.0-tiny-free";
+    readonly LongCat20Free: "longcat-2.0-free";
+    readonly NorthMiniCodeFree: "north-mini-code-free";
+    readonly Nemotron3UltraFree: "nemotron-3-ultra-free";
+    readonly DeepSeekV4Pro: "deepseek-v4-pro";
+    readonly DeepSeekV4Flash: "deepseek-v4-flash";
+    readonly MiniMaxM3: "minimax-m3";
+    readonly MiniMaxM27: "minimax-m2.7";
+    readonly MiniMaxM25: "minimax-m2.5";
+    readonly GLM52: "glm-5.2";
+    readonly GLM51: "glm-5.1";
+    readonly GLM5: "glm-5";
+    readonly KimiK25: "kimi-k2.5";
+    readonly KimiK26: "kimi-k2.6";
+    readonly KimiK27Code: "kimi-k2.7-code";
+    readonly KimiK3: "kimi-k3";
+};
 declare function modelDisplayName(model: string): string;
 
 declare function register<C extends AiAdapterConfig>(type: ProviderType$1, factory: new (config: C) => AiPanelAdapter): void;
@@ -455,6 +486,28 @@ declare class OpenCodeAdapter implements AiPanelAdapter {
     getContextInfo(): AiPanelContextInfo | undefined;
     private postRaw;
     send(prompt: string, _context?: AiPanelSendContext): Promise<ReadableStream<Uint8Array>>;
+}
+
+/**
+ * Adapter utilisant l'API OpenAI-compatible d'OpenCode Zen
+ * (https://opencode.ai/zen/v1/chat/completions).
+ *
+ * Zen est un gateway de modèles (chat uniquement) : pas de sessions,
+ * de permissions, de questions ni de diff d'agent. Seul le texte
+ * (et le raisonnement le cas échéant) est diffusé.
+ */
+declare class ZenAdapter implements AiPanelAdapter {
+    type: "zen";
+    private client;
+    private baseUrl;
+    private modelId?;
+    private controller?;
+    private lastInfo?;
+    constructor(config: ZenAdapterConfig);
+    abort(): Promise<void>;
+    cancel(): Promise<void>;
+    getContextInfo(): AiPanelContextInfo | undefined;
+    send(prompt: string): Promise<ReadableStream<Uint8Array>>;
 }
 
 /**
@@ -686,8 +739,9 @@ declare const defaultLabels: AiPanelLabels;
 
 declare const ProviderType: {
     readonly Opencode: "opencode";
+    readonly Zen: "zen";
     readonly Shadcn: "shadcn";
     readonly Fallback: "fallback";
 };
 
-export { AI_PANEL_LANGUAGES, AI_PANEL_PROJECT_LINKS, type AiAdapterConfig, type AiPanelAdapter, type AiPanelContextFile, AiPanelInvalidMode, type AiPanelJsonSchema, AiPanelJsonType, type AiPanelLabels, AiPanelLanguage, AiPanelLanguageNames, type AiPanelPendingPermission, type AiPanelPendingQuestion, type AiPanelPermissionResponse, type AiPanelQuestion, type AiPanelQuestionOption, type AiPanelResponse, type AiPanelResponseParser, type AiPanelResponseValidation, type AiPanelSendContext, type AiPanelSendHandler, AiPanelStatus, type AiPanelSubTicket, type AiPanelTicket, type AiPanelTicketValidationError, type AiPanelToolActivity, DEFAULT_CONFIGS, DiffDialog, FallbackAdapter, type FallbackAdapterConfig, FeedbackSection, FilesSection, InfoSheet, OneShotAiPanel, type OneShotAiPanelProps, OpenCodeAdapter, type OpenCodeAdapterConfig, OpenCodeModels, PROVIDER_INFO, PROVIDER_META, PermissionDialog, PromptSection, type ProviderMeta, ProviderType, QuestionDialog, ResponseSection, ShadcnAdapter, type ShadcnAdapterConfig, ShadcnModels, StatusBar, TicketItem, TicketsSection, type UseAiPanelOptions, type UseAiPanelReturn, type UseStreamingReturn, aiPanelLanguageFromLocale, buildSend, defaultLabels, modelDisplayName, register, registerDefaultAdapters, translations, useAiPanel, useStreaming };
+export { AI_PANEL_LANGUAGES, AI_PANEL_PROJECT_LINKS, type AiAdapterConfig, type AiPanelAdapter, type AiPanelContextFile, AiPanelInvalidMode, type AiPanelJsonSchema, AiPanelJsonType, type AiPanelLabels, AiPanelLanguage, AiPanelLanguageNames, type AiPanelPendingPermission, type AiPanelPendingQuestion, type AiPanelPermissionResponse, type AiPanelQuestion, type AiPanelQuestionOption, type AiPanelResponse, type AiPanelResponseParser, type AiPanelResponseValidation, type AiPanelSendContext, type AiPanelSendHandler, AiPanelStatus, type AiPanelSubTicket, type AiPanelTicket, type AiPanelTicketValidationError, type AiPanelToolActivity, DEFAULT_CONFIGS, DiffDialog, FallbackAdapter, type FallbackAdapterConfig, FeedbackSection, FilesSection, InfoSheet, OneShotAiPanel, type OneShotAiPanelProps, OpenCodeAdapter, type OpenCodeAdapterConfig, OpenCodeModels, PROVIDER_INFO, PROVIDER_META, PermissionDialog, PromptSection, type ProviderMeta, ProviderType, QuestionDialog, ResponseSection, ShadcnAdapter, type ShadcnAdapterConfig, ShadcnModels, StatusBar, TicketItem, TicketsSection, type UseAiPanelOptions, type UseAiPanelReturn, type UseStreamingReturn, ZenAdapter, type ZenAdapterConfig, ZenModels, aiPanelLanguageFromLocale, buildSend, defaultLabels, modelDisplayName, register, registerDefaultAdapters, translations, useAiPanel, useStreaming };

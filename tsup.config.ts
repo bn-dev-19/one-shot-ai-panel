@@ -12,6 +12,7 @@ export default defineConfig({
     "react",
     "react-dom",
     "@opencode-ai/sdk",
+    "openai",
     "lucide-react",
     "zod",
     "clsx",

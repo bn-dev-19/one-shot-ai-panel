@@ -1078,6 +1078,29 @@ var ShadcnModels = {
   ClaudeHaiku35: "claude-3.5-haiku",
   Gemini20Flash: "gemini-2.0-flash"
 };
+var ZenModels = {
+  None: "",
+  BigPickle: "big-pickle",
+  DeepSeekV4FlashFree: "deepseek-v4-flash-free",
+  MiMoV25Free: "mimo-v2.5-free",
+  LagunaS21Free: "laguna-s-2.1-free",
+  Ling30TinyFree: "ling-3.0-tiny-free",
+  LongCat20Free: "longcat-2.0-free",
+  NorthMiniCodeFree: "north-mini-code-free",
+  Nemotron3UltraFree: "nemotron-3-ultra-free",
+  DeepSeekV4Pro: "deepseek-v4-pro",
+  DeepSeekV4Flash: "deepseek-v4-flash",
+  MiniMaxM3: "minimax-m3",
+  MiniMaxM27: "minimax-m2.7",
+  MiniMaxM25: "minimax-m2.5",
+  GLM52: "glm-5.2",
+  GLM51: "glm-5.1",
+  GLM5: "glm-5",
+  KimiK25: "kimi-k2.5",
+  KimiK26: "kimi-k2.6",
+  KimiK27Code: "kimi-k2.7-code",
+  KimiK3: "kimi-k3"
+};
 var MODEL_NAMES = {
   "gpt-4o": "GPT-4o",
   "gpt-4o-mini": "GPT-4o Mini",
@@ -1091,7 +1114,9 @@ var MODEL_NAMES = {
   "deepseek-v4-flash-free": "DeepSeek V4 Flash Free",
   "mimo-v2.5-free": "MiMo-V2.5 Free",
   "laguna-s-2.1-free": "Laguna S 2.1 Free",
+  "ling-3.0-tiny-free": "Ling-3.0 Tiny Free",
   "ling-3.0-flash-free": "Ling-3.0 Flash Free",
+  "longcat-2.0-free": "LongCat-2.0 Free",
   "north-mini-code-free": "North Mini Code Free",
   "nemotron-3-ultra-free": "Nemotron 3 Ultra Free",
   "nemotron-3-super-free": "Nemotron 3 Super Free",
@@ -1099,8 +1124,13 @@ var MODEL_NAMES = {
   "minimax-m2.7": "MiniMax M2.7",
   "minimax-m2.5": "MiniMax M2.5",
   "minimax-m2.5-free": "MiniMax M2.5 Free",
+  "deepseek-v4-pro": "DeepSeek V4 Pro",
+  "deepseek-v4-flash": "DeepSeek V4 Flash",
+  "kimi-k2.7-code": "Kimi K2.7 Code",
+  "kimi-k3": "Kimi K3",
   "glm-5.2": "GLM 5.2",
   "glm-5.1": "GLM 5.1",
+  "glm-5": "GLM 5",
   "kimi-k2.5": "Kimi K2.5",
   "kimi-k2.6": "Kimi K2.6",
   "kimi-k2-thinking": "Kimi K2 Thinking",
@@ -1135,6 +1165,7 @@ function modelDisplayName(model) {
 // src/module/adapters/types.ts
 var ProviderType = {
   Opencode: "opencode",
+  Zen: "zen",
   Shadcn: "shadcn",
   Fallback: "fallback"
 };
@@ -1146,6 +1177,15 @@ var PROVIDER_META = {
     models: Object.values(OpenCodeModels).filter(Boolean),
     docLinks: [
       { label: "OpenCode Docs", url: "https://opencode.ai/docs" }
+    ]
+  },
+  [ProviderType.Zen]: {
+    value: ProviderType.Zen,
+    label: "OpenCode Zen",
+    description: "Gateway de mod\xE8les via l'API OpenAI-compatible",
+    models: Object.values(ZenModels).filter(Boolean),
+    docLinks: [
+      { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" }
     ]
   },
   [ProviderType.Shadcn]: {
@@ -1755,12 +1795,151 @@ ${sseError.message}` : "";
   }
 };
 
+// src/module/adapters/zen.ts
+import OpenAI from "openai";
+var DEFAULT_ZEN_URL = "https://opencode.ai/zen/v1";
+var STREAM_TIMEOUT_MS = 15 * 60 * 1e3;
+function mapUsage(u) {
+  const promptDetails = u.prompt_tokens_details;
+  const completionDetails = u.completion_tokens_details;
+  return {
+    input: Number(u.prompt_tokens ?? 0),
+    output: Number(u.completion_tokens ?? 0),
+    reasoning: Number(completionDetails?.reasoning_tokens ?? 0),
+    cacheRead: Number(promptDetails?.cached_tokens ?? 0),
+    cacheWrite: 0
+  };
+}
+var ZenAdapter = class {
+  constructor(config) {
+    this.type = ProviderType.Zen;
+    this.baseUrl = config.baseUrl ?? DEFAULT_ZEN_URL;
+    this.modelId = config.model;
+    this.client = new OpenAI({
+      apiKey: config.apiKey ?? "",
+      baseURL: this.baseUrl,
+      dangerouslyAllowBrowser: true
+    });
+  }
+  async abort() {
+    this.controller?.abort();
+  }
+  async cancel() {
+    this.controller?.abort();
+  }
+  getContextInfo() {
+    return this.lastInfo;
+  }
+  async send(prompt) {
+    const model = this.modelId;
+    if (!model) {
+      throw new Error(
+        "Aucun mod\xE8le s\xE9lectionn\xE9. Choisis un mod\xE8le OpenCode Zen dans les r\xE9glages du panel."
+      );
+    }
+    const abortController = new AbortController();
+    this.controller = abortController;
+    let stream;
+    try {
+      stream = await this.client.chat.completions.create(
+        {
+          model,
+          messages: [{ role: "user", content: prompt }],
+          stream: true
+        },
+        { signal: abortController.signal }
+      );
+    } catch (err) {
+      if (abortController.signal.aborted) {
+        throw new DOMException("Aborted", "AbortError");
+      }
+      const detail = err instanceof Error && err.message ? `
+${err.message}` : "";
+      throw new Error(
+        `Impossible de joindre OpenCode Zen (${this.baseUrl}). V\xE9rifie ta cl\xE9 API et ta connexion.${detail}`
+      );
+    }
+    const encoder = new TextEncoder();
+    const adapter = this;
+    let closed = false;
+    let timeout;
+    let usage = null;
+    return new ReadableStream({
+      async start(streamController) {
+        const emit = (frame) => {
+          if (closed) return;
+          try {
+            streamController.enqueue(encoder.encode(`${JSON.stringify(frame)}
+`));
+          } catch {
+            closed = true;
+          }
+        };
+        const finish = () => {
+          if (closed) return;
+          closed = true;
+          if (timeout) clearTimeout(timeout);
+          try {
+            streamController.close();
+          } catch {
+          }
+        };
+        const fail = (err) => {
+          if (closed) return;
+          closed = true;
+          if (timeout) clearTimeout(timeout);
+          try {
+            streamController.error(err);
+          } catch {
+          }
+        };
+        timeout = setTimeout(() => abortController.abort(), STREAM_TIMEOUT_MS);
+        try {
+          for await (const chunk of stream) {
+            if (closed) return;
+            const delta = chunk.choices?.[0]?.delta;
+            if (delta) {
+              const reasoning = delta.reasoning_content;
+              if (reasoning) emit({ t: "reasoning", d: reasoning });
+              if (delta.content) emit({ t: "text", d: delta.content });
+            }
+            if (chunk.usage) usage = chunk.usage;
+          }
+          if (!closed && usage) {
+            adapter.lastInfo = {
+              sessionID: `zen:${Date.now()}`,
+              modelID: model,
+              providerID: "zen",
+              tokens: mapUsage(usage)
+            };
+            emit({ t: "context", d: adapter.lastInfo });
+          }
+          finish();
+        } catch (err) {
+          if (closed) return;
+          if (abortController.signal.aborted) {
+            fail(new Error("D\xE9lai d'attente d\xE9pass\xE9 pour la r\xE9ponse OpenCode Zen."));
+          } else {
+            fail(err);
+          }
+        }
+      },
+      cancel() {
+        closed = true;
+        if (timeout) clearTimeout(timeout);
+        abortController.abort();
+      }
+    });
+  }
+};
+
 // src/module/adapters/register-defaults.ts
 var registered = false;
 function registerDefaultAdapters() {
   if (registered) return;
   registered = true;
   register(ProviderType.Opencode, OpenCodeAdapter);
+  register(ProviderType.Zen, ZenAdapter);
   register(ProviderType.Fallback, FallbackAdapter);
   register(ProviderType.Shadcn, ShadcnAdapter);
 }
@@ -1768,6 +1947,12 @@ function registerDefaultAdapters() {
 // src/module/adapters/defaults.ts
 var DEFAULT_CONFIGS = {
   [ProviderType.Opencode]: { type: ProviderType.Opencode, enabled: true, model: "big-pickle" },
+  [ProviderType.Zen]: {
+    type: ProviderType.Zen,
+    enabled: false,
+    model: "big-pickle",
+    baseUrl: "https://opencode.ai/zen/v1"
+  },
   [ProviderType.Shadcn]: { type: ProviderType.Shadcn, enabled: false, apiKey: "", baseUrl: "", model: "" },
   [ProviderType.Fallback]: { type: ProviderType.Fallback, enabled: false, apiUrl: "/api/ai/generate" }
 };
@@ -1786,6 +1971,18 @@ var PROVIDER_INFO = {
       docLinks: [
         { label: "Documentation OpenCode", url: "https://opencode.ai/docs" },
         { label: "D\xE9p\xF4t GitHub", url: "https://github.com/anomalyco/opencode" }
+      ]
+    },
+    [ProviderType.Zen]: {
+      description: "Gateway de mod\xE8les OpenCode Zen (API OpenAI-compatible)",
+      help: "R\xE9cup\xE8re ta cl\xE9 API sur https://opencode.ai/auth (dashboard Zen).\n\nLe panel appelle directement https://opencode.ai/zen/v1 \u2014 aucun serveur local requis.\n\nAttention : Zen est un gateway chat (pas d'agent) : pas de permissions, questions, tools ni diff.",
+      modelPlaceholder: "Mod\xE8le (ex: big-pickle)",
+      apiKeyLabel: "Cl\xE9 API",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "URL de base",
+      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      docLinks: [
+        { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" }
       ]
     },
     [ProviderType.Shadcn]: {
@@ -1828,6 +2025,18 @@ var PROVIDER_INFO = {
         { label: "GitHub Repository", url: "https://github.com/anomalyco/opencode" }
       ]
     },
+    [ProviderType.Zen]: {
+      description: "OpenCode Zen model gateway (OpenAI-compatible API)",
+      help: "Get your API key from https://opencode.ai/auth (Zen dashboard).\n\nThe panel calls https://opencode.ai/zen/v1 directly \u2014 no local server required.\n\nNote: Zen is a chat-only gateway (no agent): no permissions, questions, tools or diff.",
+      modelPlaceholder: "Model (e.g. big-pickle)",
+      apiKeyLabel: "API Key",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "Base URL",
+      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      docLinks: [
+        { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" }
+      ]
+    },
     [ProviderType.Shadcn]: {
       description: "Uses the @shadcn/helpers SDK with an AI provider (OpenAI, Anthropic...)",
       help: "Configure an API key from your provider (OpenAI, Anthropic, etc.) and enter it below. The SDK uses the selected model to generate responses.",
@@ -1866,6 +2075,18 @@ var PROVIDER_INFO = {
       docLinks: [
         { label: "OpenCode \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8", url: "https://opencode.ai/docs" },
         { label: "GitHub \u30EA\u30DD\u30B8\u30C8\u30EA", url: "https://github.com/anomalyco/opencode" }
+      ]
+    },
+    [ProviderType.Zen]: {
+      description: "OpenCode Zen \u30E2\u30C7\u30EB\u30B2\u30FC\u30C8\u30A6\u30A7\u30A4\uFF08OpenAI \u4E92\u63DB API\uFF09",
+      help: "API \u30AD\u30FC\u306F https://opencode.ai/auth\uFF08Zen \u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9\uFF09\u3067\u53D6\u5F97\u3057\u307E\u3059\u3002\n\n\u30D1\u30CD\u30EB\u306F https://opencode.ai/zen/v1 \u3092\u76F4\u63A5\u547C\u3073\u51FA\u3057\u307E\u3059 \u2014 \u30ED\u30FC\u30AB\u30EB\u30B5\u30FC\u30D0\u30FC\u306F\u4E0D\u8981\u3067\u3059\u3002\n\n\u6CE8\u610F\uFF1AZen \u306F\u30C1\u30E3\u30C3\u30C8\u5C02\u7528\u30B2\u30FC\u30C8\u30A6\u30A7\u30A4\uFF08\u30A8\u30FC\u30B8\u30A7\u30F3\u30C8\u306A\u3057\uFF09\uFF1A\u6A29\u9650\u3001\u8CEA\u554F\u3001\u30C4\u30FC\u30EB\u3001diff \u306F\u3042\u308A\u307E\u305B\u3093\u3002",
+      modelPlaceholder: "\u30E2\u30C7\u30EB\uFF08\u4F8B: big-pickle\uFF09",
+      apiKeyLabel: "API \u30AD\u30FC",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "\u30D9\u30FC\u30B9 URL",
+      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      docLinks: [
+        { label: "OpenCode Zen \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8", url: "https://opencode.ai/docs/zen" }
       ]
     },
     [ProviderType.Shadcn]: {
@@ -1908,6 +2129,18 @@ var PROVIDER_INFO = {
         { label: "GitHub \u4ED3\u5E93", url: "https://github.com/anomalyco/opencode" }
       ]
     },
+    [ProviderType.Zen]: {
+      description: "OpenCode Zen \u6A21\u578B\u7F51\u5173\uFF08OpenAI \u517C\u5BB9 API\uFF09",
+      help: "\u5728 https://opencode.ai/auth\uFF08Zen \u4EEA\u8868\u76D8\uFF09\u83B7\u53D6\u4F60\u7684 API \u5BC6\u94A5\u3002\n\n\u9762\u677F\u76F4\u63A5\u8C03\u7528 https://opencode.ai/zen/v1 \u2014\u2014 \u65E0\u9700\u672C\u5730\u670D\u52A1\u5668\u3002\n\n\u6CE8\u610F\uFF1AZen \u4EC5\u63D0\u4F9B\u804A\u5929\u7F51\u5173\uFF08\u65E0\u4EE3\u7406\uFF09\uFF1A\u6CA1\u6709\u6743\u9650\u3001\u95EE\u9898\u3001\u5DE5\u5177\u6216 diff\u3002",
+      modelPlaceholder: "\u6A21\u578B\uFF08\u4F8B\u5982 big-pickle\uFF09",
+      apiKeyLabel: "API \u5BC6\u94A5",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "\u57FA\u7840 URL",
+      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      docLinks: [
+        { label: "OpenCode Zen \u6587\u6863", url: "https://opencode.ai/docs/zen" }
+      ]
+    },
     [ProviderType.Shadcn]: {
       description: "\u4F7F\u7528 @shadcn/helpers SDK \u4E0E AI \u63D0\u4F9B\u5546\uFF08OpenAI\u3001Anthropic...\uFF09",
       help: "\u4ECE\u4F60\u7684\u63D0\u4F9B\u5546\uFF08OpenAI\u3001Anthropic \u7B49\uFF09\u914D\u7F6E API \u5BC6\u94A5\u5E76\u5728\u4E0B\u9762\u8F93\u5165\u3002SDK \u4F7F\u7528\u6240\u9009\u6A21\u578B\u751F\u6210\u54CD\u5E94\u3002",
@@ -1948,6 +2181,18 @@ var PROVIDER_INFO = {
         { label: "Repositorio de GitHub", url: "https://github.com/anomalyco/opencode" }
       ]
     },
+    [ProviderType.Zen]: {
+      description: "Gateway de modelos OpenCode Zen (API compatible con OpenAI)",
+      help: "Obt\xE9n tu clave API en https://opencode.ai/auth (panel de Zen).\n\nEl panel llama directamente a https://opencode.ai/zen/v1 \u2014 no se requiere servidor local.\n\nNota: Zen es un gateway solo de chat (sin agente): sin permisos, preguntas, herramientas ni diff.",
+      modelPlaceholder: "Modelo (p. ej. big-pickle)",
+      apiKeyLabel: "Clave API",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "URL base",
+      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      docLinks: [
+        { label: "Documentaci\xF3n de OpenCode Zen", url: "https://opencode.ai/docs/zen" }
+      ]
+    },
     [ProviderType.Shadcn]: {
       description: "Usa el SDK @shadcn/helpers con un proveedor de IA (OpenAI, Anthropic...)",
       help: "Configura una clave API en tu proveedor (OpenAI, Anthropic, etc.) e introd\xFAcela abajo. El SDK usa el modelo seleccionado para generar las respuestas.",
@@ -1986,6 +2231,18 @@ var PROVIDER_INFO = {
       docLinks: [
         { label: "\u0648\u062B\u0627\u0626\u0642 OpenCode", url: "https://opencode.ai/docs" },
         { label: "\u0645\u0633\u062A\u0648\u062F\u0639 GitHub", url: "https://github.com/anomalyco/opencode" }
+      ]
+    },
+    [ProviderType.Zen]: {
+      description: "\u0628\u0648\u0627\u0628\u0629 \u0646\u0645\u0627\u0630\u062C OpenCode Zen (\u0648\u0627\u062C\u0647\u0629 \u0645\u062A\u0648\u0627\u0641\u0642\u0629 \u0645\u0639 OpenAI)",
+      help: "\u0627\u062D\u0635\u0644 \u0639\u0644\u0649 \u0645\u0641\u062A\u0627\u062D API \u0645\u0646 https://opencode.ai/auth (\u0644\u0648\u062D\u0629 Zen).\n\n\u0627\u0644\u0644\u0648\u062D\u0629 \u062A\u062A\u0635\u0644 \u0645\u0628\u0627\u0634\u0631\u0629 \u0628\u0640 https://opencode.ai/zen/v1 \u2014 \u0644\u0627 \u062D\u0627\u062C\u0629 \u0644\u062E\u0627\u062F\u0645 \u0645\u062D\u0644\u064A.\n\n\u0645\u0644\u0627\u062D\u0638\u0629: Zen \u0628\u0648\u0627\u0628\u0629 \u0645\u062D\u0627\u062F\u062B\u0629 \u0641\u0642\u0637 (\u0628\u062F\u0648\u0646 \u0648\u0643\u064A\u0644): \u0644\u0627 \u062A\u0648\u062C\u062F \u0623\u0630\u0648\u0646\u0627\u062A \u0623\u0648 \u0623\u0633\u0626\u0644\u0629 \u0623\u0648 \u0623\u062F\u0648\u0627\u062A \u0623\u0648 diff.",
+      modelPlaceholder: "\u0627\u0644\u0646\u0645\u0648\u0630\u062C (\u0645\u062B\u0627\u0644: big-pickle)",
+      apiKeyLabel: "\u0645\u0641\u062A\u0627\u062D API",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "\u0639\u0646\u0648\u0627\u0646 URL \u0627\u0644\u0623\u0633\u0627\u0633\u064A",
+      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      docLinks: [
+        { label: "\u0648\u062B\u0627\u0626\u0642 OpenCode Zen", url: "https://opencode.ai/docs/zen" }
       ]
     },
     [ProviderType.Shadcn]: {
@@ -4540,6 +4797,15 @@ function ConfigSheet({ labels, language, onLanguageChange, adapter, onAdapterCha
               onChange: setAndNotify
             }
           ),
+          config.type === ProviderType.Zen && /* @__PURE__ */ jsx22(
+            ZenFields,
+            {
+              config,
+              labels,
+              info,
+              onChange: setAndNotify
+            }
+          ),
           config.type === ProviderType.Shadcn && /* @__PURE__ */ jsx22(
             ShadcnFields,
             {
@@ -4607,6 +4873,57 @@ function OpenCodeFields({
             /* @__PURE__ */ jsxs15(SelectContent, { children: [
               /* @__PURE__ */ jsx22(SelectItem, { value: "", className: "text-xs cursor-pointer", children: labels.modelNone }),
               Object.values(OpenCodeModels).filter(Boolean).map((m) => /* @__PURE__ */ jsx22(SelectItem, { value: m, className: "text-xs cursor-pointer", children: modelDisplayName(m) }, m))
+            ] })
+          ]
+        }
+      )
+    ] })
+  ] });
+}
+function ZenFields({
+  config,
+  labels,
+  info,
+  onChange
+}) {
+  return /* @__PURE__ */ jsxs15("div", { className: "space-y-3", children: [
+    /* @__PURE__ */ jsxs15("div", { className: "space-y-1.5", children: [
+      /* @__PURE__ */ jsx22(Label, { className: "text-xs font-medium", children: info.apiKeyLabel }),
+      /* @__PURE__ */ jsx22(
+        Input,
+        {
+          className: "h-8 text-xs",
+          type: "password",
+          placeholder: info.apiKeyPlaceholder,
+          value: config.apiKey ?? "",
+          onChange: (e) => onChange({ ...config, apiKey: e.target.value || void 0 })
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxs15("div", { className: "space-y-1.5", children: [
+      /* @__PURE__ */ jsx22(Label, { className: "text-xs font-medium", children: info.baseUrlLabel }),
+      /* @__PURE__ */ jsx22(
+        Input,
+        {
+          className: "h-8 text-xs",
+          placeholder: info.baseUrlPlaceholder,
+          value: config.baseUrl ?? "",
+          onChange: (e) => onChange({ ...config, baseUrl: e.target.value || void 0 })
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxs15("div", { className: "space-y-1.5", children: [
+      /* @__PURE__ */ jsx22(Label, { className: "text-xs font-medium", children: labels.modelLabel }),
+      /* @__PURE__ */ jsxs15(
+        Select,
+        {
+          value: config.model ?? "",
+          onValueChange: (v) => onChange({ ...config, model: v || void 0 }),
+          children: [
+            /* @__PURE__ */ jsx22(SelectTrigger, { className: "h-8 text-xs w-full cursor-pointer", children: config.model ? modelDisplayName(config.model) : labels.modelNone }),
+            /* @__PURE__ */ jsxs15(SelectContent, { children: [
+              /* @__PURE__ */ jsx22(SelectItem, { value: "", className: "text-xs cursor-pointer", children: labels.modelNone }),
+              Object.values(ZenModels).filter(Boolean).map((m) => /* @__PURE__ */ jsx22(SelectItem, { value: m, className: "text-xs cursor-pointer", children: modelDisplayName(m) }, m))
             ] })
           ]
         }
@@ -5398,6 +5715,8 @@ export {
   StatusBar,
   TicketItem,
   TicketsSection,
+  ZenAdapter,
+  ZenModels,
   aiPanelLanguageFromLocale,
   buildSend,
   defaultLabels,

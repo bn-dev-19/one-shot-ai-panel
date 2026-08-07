@@ -21,10 +21,11 @@ import {
 } from "@/components/ui/sheet"
 import { AiPanelLanguage, PROVIDER_INFO, AiPanelLanguageNames, AI_PANEL_LANGUAGES } from "../i18n"
 import type { ProviderInfo } from "../i18n"
-import { PROVIDER_META, ProviderType, OpenCodeModels, ShadcnModels, modelDisplayName, DEFAULT_CONFIGS } from "../adapters"
+import { PROVIDER_META, ProviderType, OpenCodeModels, ShadcnModels, ZenModels, modelDisplayName, DEFAULT_CONFIGS } from "../adapters"
 import type {
   AiAdapterConfig,
   OpenCodeAdapterConfig,
+  ZenAdapterConfig,
   ShadcnAdapterConfig,
   FallbackAdapterConfig,
 } from "../adapters"
@@ -193,6 +194,15 @@ export function ConfigSheet({ labels, language, onLanguageChange, adapter, onAda
                   />
                 )}
 
+                {config.type === ProviderType.Zen && (
+                  <ZenFields
+                    config={config as ZenAdapterConfig}
+                    labels={labels}
+                    info={info}
+                    onChange={setAndNotify}
+                  />
+                )}
+
                 {config.type === ProviderType.Shadcn && (
                   <ShadcnFields
                     config={config as ShadcnAdapterConfig}
@@ -265,6 +275,56 @@ function OpenCodeFields({
           <SelectContent>
             <SelectItem value="" className="text-xs cursor-pointer">{labels.modelNone}</SelectItem>
             {Object.values(OpenCodeModels).filter(Boolean).map((m) => (
+              <SelectItem key={m} value={m} className="text-xs cursor-pointer">
+                {modelDisplayName(m)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  )
+}
+
+function ZenFields({
+  config,
+  labels,
+  info,
+  onChange,
+}: FieldProps & { config: ZenAdapterConfig; onChange: (c: AiAdapterConfig) => void }) {
+  return (
+    <div className="space-y-3">
+      <div className="space-y-1.5">
+        <Label className="text-xs font-medium">{info.apiKeyLabel}</Label>
+        <Input
+          className="h-8 text-xs"
+          type="password"
+          placeholder={info.apiKeyPlaceholder}
+          value={config.apiKey ?? ""}
+          onChange={(e) => onChange({ ...config, apiKey: e.target.value || undefined })}
+        />
+      </div>
+      <div className="space-y-1.5">
+        <Label className="text-xs font-medium">{info.baseUrlLabel}</Label>
+        <Input
+          className="h-8 text-xs"
+          placeholder={info.baseUrlPlaceholder}
+          value={config.baseUrl ?? ""}
+          onChange={(e) => onChange({ ...config, baseUrl: e.target.value || undefined })}
+        />
+      </div>
+      <div className="space-y-1.5">
+        <Label className="text-xs font-medium">{labels.modelLabel}</Label>
+        <Select
+          value={config.model ?? ""}
+          onValueChange={(v) => onChange({ ...config, model: v || undefined })}
+        >
+          <SelectTrigger className="h-8 text-xs w-full cursor-pointer">
+            {config.model ? modelDisplayName(config.model) : labels.modelNone}
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="" className="text-xs cursor-pointer">{labels.modelNone}</SelectItem>
+            {Object.values(ZenModels).filter(Boolean).map((m) => (
               <SelectItem key={m} value={m} className="text-xs cursor-pointer">
                 {modelDisplayName(m)}
               </SelectItem>

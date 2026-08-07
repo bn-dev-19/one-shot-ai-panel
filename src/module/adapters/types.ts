@@ -1,9 +1,10 @@
 import type { OpencodeClient } from "@opencode-ai/sdk"
 import type { AiPanelContextFile, AiPanelContextInfo, AiPanelPermissionResponse } from "../types"
-import { OpenCodeModels, ShadcnModels } from "./models"
+import { OpenCodeModels, ShadcnModels, ZenModels } from "./models"
 
 export const ProviderType = {
   Opencode: "opencode",
+  Zen: "zen",
   Shadcn: "shadcn",
   Fallback: "fallback",
 } as const
@@ -26,6 +27,15 @@ export const PROVIDER_META: Record<ProviderType, ProviderMeta> = {
     models: Object.values(OpenCodeModels).filter(Boolean),
     docLinks: [
       { label: "OpenCode Docs", url: "https://opencode.ai/docs" },
+    ],
+  },
+  [ProviderType.Zen]: {
+    value: ProviderType.Zen,
+    label: "OpenCode Zen",
+    description: "Gateway de modèles via l'API OpenAI-compatible",
+    models: Object.values(ZenModels).filter(Boolean),
+    docLinks: [
+      { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" },
     ],
   },
   [ProviderType.Shadcn]: {
@@ -73,6 +83,14 @@ export interface OpenCodeAdapterConfig {
   client?: OpencodeClient
 }
 
+export interface ZenAdapterConfig {
+  type: typeof ProviderType.Zen
+  enabled?: boolean
+  apiKey?: string
+  baseUrl?: string
+  model?: string
+}
+
 export interface ShadcnAdapterConfig {
   type: typeof ProviderType.Shadcn
   enabled?: boolean
@@ -87,7 +105,7 @@ export interface FallbackAdapterConfig {
   apiUrl?: string
 }
 
-export type AiAdapterConfig = OpenCodeAdapterConfig | ShadcnAdapterConfig | FallbackAdapterConfig
+export type AiAdapterConfig = OpenCodeAdapterConfig | ZenAdapterConfig | ShadcnAdapterConfig | FallbackAdapterConfig
 
 export type AiPanelSendHandler = ((
   prompt: string,

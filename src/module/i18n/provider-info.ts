@@ -34,6 +34,21 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
         { label: "Dépôt GitHub", url: "https://github.com/anomalyco/opencode" },
       ],
     },
+    [ProviderType.Zen]: {
+      description: "Gateway de modèles OpenCode Zen (API OpenAI-compatible)",
+      help:
+        "Récupère ta clé API sur https://opencode.ai/auth (dashboard Zen).\n\n" +
+        "Le panel appelle directement https://opencode.ai/zen/v1 — aucun serveur local requis.\n\n" +
+        "Attention : Zen est un gateway chat (pas d'agent) : pas de permissions, questions, tools ni diff.",
+      modelPlaceholder: "Modèle (ex: big-pickle)",
+      apiKeyLabel: "Clé API",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "URL de base",
+      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      docLinks: [
+        { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" },
+      ],
+    },
     [ProviderType.Shadcn]: {
       description: "Utilise le SDK @shadcn/helpers avec un provider AI (OpenAI, Anthropic...)",
       help:
@@ -84,6 +99,21 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
       docLinks: [
         { label: "OpenCode Docs", url: "https://opencode.ai/docs" },
         { label: "GitHub Repository", url: "https://github.com/anomalyco/opencode" },
+      ],
+    },
+    [ProviderType.Zen]: {
+      description: "OpenCode Zen model gateway (OpenAI-compatible API)",
+      help:
+        "Get your API key from https://opencode.ai/auth (Zen dashboard).\n\n" +
+        "The panel calls https://opencode.ai/zen/v1 directly — no local server required.\n\n" +
+        "Note: Zen is a chat-only gateway (no agent): no permissions, questions, tools or diff.",
+      modelPlaceholder: "Model (e.g. big-pickle)",
+      apiKeyLabel: "API Key",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "Base URL",
+      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      docLinks: [
+        { label: "OpenCode Zen Docs", url: "https://opencode.ai/docs/zen" },
       ],
     },
     [ProviderType.Shadcn]: {
@@ -138,6 +168,21 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
         { label: "GitHub リポジトリ", url: "https://github.com/anomalyco/opencode" },
       ],
     },
+    [ProviderType.Zen]: {
+      description: "OpenCode Zen モデルゲートウェイ（OpenAI 互換 API）",
+      help:
+        "API キーは https://opencode.ai/auth（Zen ダッシュボード）で取得します。\n\n" +
+        "パネルは https://opencode.ai/zen/v1 を直接呼び出します — ローカルサーバーは不要です。\n\n" +
+        "注意：Zen はチャット専用ゲートウェイ（エージェントなし）：権限、質問、ツール、diff はありません。",
+      modelPlaceholder: "モデル（例: big-pickle）",
+      apiKeyLabel: "API キー",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "ベース URL",
+      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      docLinks: [
+        { label: "OpenCode Zen ドキュメント", url: "https://opencode.ai/docs/zen" },
+      ],
+    },
     [ProviderType.Shadcn]: {
       description: "@shadcn/helpers SDK と AI プロバイダー（OpenAI、Anthropic...）を使用",
       help:
@@ -185,6 +230,21 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
       docLinks: [
         { label: "OpenCode 文档", url: "https://opencode.ai/docs" },
         { label: "GitHub 仓库", url: "https://github.com/anomalyco/opencode" },
+      ],
+    },
+    [ProviderType.Zen]: {
+      description: "OpenCode Zen 模型网关（OpenAI 兼容 API）",
+      help:
+        "在 https://opencode.ai/auth（Zen 仪表盘）获取你的 API 密钥。\n\n" +
+        "面板直接调用 https://opencode.ai/zen/v1 —— 无需本地服务器。\n\n" +
+        "注意：Zen 仅提供聊天网关（无代理）：没有权限、问题、工具或 diff。",
+      modelPlaceholder: "模型（例如 big-pickle）",
+      apiKeyLabel: "API 密钥",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "基础 URL",
+      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      docLinks: [
+        { label: "OpenCode Zen 文档", url: "https://opencode.ai/docs/zen" },
       ],
     },
     [ProviderType.Shadcn]: {
@@ -236,6 +296,21 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
         { label: "Repositorio de GitHub", url: "https://github.com/anomalyco/opencode" },
       ],
     },
+    [ProviderType.Zen]: {
+      description: "Gateway de modelos OpenCode Zen (API compatible con OpenAI)",
+      help:
+        "Obtén tu clave API en https://opencode.ai/auth (panel de Zen).\n\n" +
+        "El panel llama directamente a https://opencode.ai/zen/v1 — no se requiere servidor local.\n\n" +
+        "Nota: Zen es un gateway solo de chat (sin agente): sin permisos, preguntas, herramientas ni diff.",
+      modelPlaceholder: "Modelo (p. ej. big-pickle)",
+      apiKeyLabel: "Clave API",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "URL base",
+      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      docLinks: [
+        { label: "Documentación de OpenCode Zen", url: "https://opencode.ai/docs/zen" },
+      ],
+    },
     [ProviderType.Shadcn]: {
       description: "Usa el SDK @shadcn/helpers con un proveedor de IA (OpenAI, Anthropic...)",
       help:
@@ -283,6 +358,21 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
       docLinks: [
         { label: "وثائق OpenCode", url: "https://opencode.ai/docs" },
         { label: "مستودع GitHub", url: "https://github.com/anomalyco/opencode" },
+      ],
+    },
+    [ProviderType.Zen]: {
+      description: "بوابة نماذج OpenCode Zen (واجهة متوافقة مع OpenAI)",
+      help:
+        "احصل على مفتاح API من https://opencode.ai/auth (لوحة Zen).\n\n" +
+        "اللوحة تتصل مباشرة بـ https://opencode.ai/zen/v1 — لا حاجة لخادم محلي.\n\n" +
+        "ملاحظة: Zen بوابة محادثة فقط (بدون وكيل): لا توجد أذونات أو أسئلة أو أدوات أو diff.",
+      modelPlaceholder: "النموذج (مثال: big-pickle)",
+      apiKeyLabel: "مفتاح API",
+      apiKeyPlaceholder: "sk-...",
+      baseUrlLabel: "عنوان URL الأساسي",
+      baseUrlPlaceholder: "https://opencode.ai/zen/v1",
+      docLinks: [
+        { label: "وثائق OpenCode Zen", url: "https://opencode.ai/docs/zen" },
       ],
     },
     [ProviderType.Shadcn]: {

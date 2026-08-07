@@ -29,10 +29,12 @@ export {
   registerDefaultAdapters,
   DEFAULT_CONFIGS,
   OpenCodeAdapter,
+  ZenAdapter,
   ShadcnAdapter,
   FallbackAdapter,
   OpenCodeModels,
   ShadcnModels,
+  ZenModels,
   modelDisplayName,
 } from "./adapters"
 import { ProviderType as PT } from "./adapters"
@@ -44,6 +46,7 @@ export type {
   AiPanelSendHandler,
   AiPanelSendContext,
   OpenCodeAdapterConfig,
+  ZenAdapterConfig,
   ShadcnAdapterConfig,
   FallbackAdapterConfig,
 } from "./adapters"
