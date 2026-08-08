@@ -6,7 +6,7 @@
 
 ## Integration
 - [Integration modes](https://github.com/bn-dev-19/one-shot-ai-panel/blob/main/README.md): GitHub dependency, shadcn registry (`npx shadcn add bn-dev-19/one-shot-ai-panel/<item>`), CLI installer (`pnpm exec one-shot-ai-panel install`), source copy of `src/module`.
-- [CLI installer options](https://github.com/bn-dev-19/one-shot-ai-panel/blob/main/README.md): `--force`, `--no-install`, `--no-css`, `--no-registry`, `--pm`.
+- [CLI installer options](https://github.com/bn-dev-19/one-shot-ai-panel/blob/main/README.md): `--force`, `--no-install`, `--no-css`, `--no-registry`, `--pm`, `--module-only`, `--proxy-only`, `--no-proxy`.
 - [Integration by project type](https://github.com/bn-dev-19/one-shot-ai-panel/blob/main/README.md): Next.js / Vite + React, with or without shadcn.
 
 ## Usage
@@ -17,7 +17,7 @@
 - [OneShotAiPanel props](https://github.com/bn-dev-19/one-shot-ai-panel/blob/main/README.md): title, systemPrompt, initialUserPrompt, files, tickets, actionLabel, language, labels, onPlug, adapter, onSend, parser, invalidMode, showInfo*.
 - [Response contract](https://github.com/bn-dev-19/one-shot-ai-panel/blob/main/README.md): JSON-only responses, one object per ticket, validated against `responseSchema` with Zod.
 - [Change review](https://github.com/bn-dev-19/one-shot-ai-panel/blob/main/README.md): Identical / Modified / New / Removed statuses + "Diffs" side-by-side dialog, selective plug via `selectedKeys`.
-- [Adapters](https://github.com/bn-dev-19/one-shot-ai-panel/blob/main/README.md): `opencode`, `shadcn`, `fallback` providers + `register()` for custom ones.
+- [Adapters](https://github.com/bn-dev-19/one-shot-ai-panel/blob/main/README.md): `opencode` (local server) and `zen` (OpenCode Zen same-origin proxy) providers + `register()` for custom ones.
 - [Internationalization](https://github.com/bn-dev-19/one-shot-ai-panel/blob/main/README.md): 6 locales (fr, en, ja, zh, es, ar) + per-string overrides via `labels`.
 - [Exports](https://github.com/bn-dev-19/one-shot-ai-panel/blob/main/README.md): OneShotAiPanel, sections, useAiPanel, useStreaming, adapters, types, translations, AI_PANEL_PROJECT_LINKS.
 

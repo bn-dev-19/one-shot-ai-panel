@@ -46,7 +46,7 @@ npx shadcn@latest add bn-dev-19/one-shot-ai-panel/button
 ```bash
 pnpm add github:bn-dev-19/one-shot-ai-panel
 # or: npm install github:bn-dev-19/one-shot-ai-panel / yarn add / bun add
-# pin a release: pnpm add github:bn-dev-19/one-shot-ai-panel#v2.0.1
+# pin a release: pnpm add github:bn-dev-19/one-shot-ai-panel#v2.1.0
 ```
 
 `dist/` is committed to the repository, so no build step runs on your machine — every package manager works out of the box.
@@ -93,6 +93,8 @@ one-shot-ai-panel install --no-css       # do not modify globals.css
 one-shot-ai-panel install --no-registry  # always copy primitives, even with components.json
 one-shot-ai-panel install --pm npm       # force the package manager
 one-shot-ai-panel install --force --module-only  # update ONLY the module source (keeps ui/*, css, deps untouched)
+one-shot-ai-panel install --proxy-only   # compiled mode: generate ONLY the Zen proxy re-export
+one-shot-ai-panel install --no-proxy     # do not generate the Zen same-origin proxy (Next route / Vite snippet)
 ```
 
 > **Source-mode updates:** if `src/external-modules/ai-panel` already exists, the installer **automatically switches to module-only mode** (it never re-runs `shadcn add` over an existing install, so your customized `src/components/ui/*` are never overwritten). To pull the latest module, run `pnpm exec one-shot-ai-panel install --force` — or pass `--module-only` explicitly. This mirrors the source-mode philosophy: the panel code lives in your repository, and updates only refresh the module.
@@ -120,7 +122,7 @@ Then install the primitives listed in [`primitives.json`](./primitives.json) int
 ### Next.js without shadcn
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v2.0.1
+pnpm add github:bn-dev-19/one-shot-ai-panel#v2.1.0
 pnpm exec one-shot-ai-panel install
 ```
 
@@ -129,7 +131,7 @@ The CLI copies the module + primitives + `cn()`, patches `globals.css` (`tw-anim
 ### Next.js with shadcn
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v1.1.0
+pnpm add github:bn-dev-19/one-shot-ai-panel#v2.1.0
 ```
 
 Theme, primitives and dependencies are already present — only add an `@source` directive to `globals.css`:
@@ -149,14 +151,14 @@ Theme, primitives and dependencies are already present — only add an `@source`
 Prefer source mode instead (you own the code)? The CLI installer detects `components.json` and adds the panel primitives via `shadcn add` — it never touches your existing components unless you choose to overwrite:
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v2.0.1
+pnpm add github:bn-dev-19/one-shot-ai-panel#v2.1.0
 pnpm exec one-shot-ai-panel install
 ```
 
 ### Vite + React with shadcn
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v2.0.1
+pnpm add github:bn-dev-19/one-shot-ai-panel#v2.1.0
 ```
 
 The `@` alias is already configured (required by shadcn + Vite). Add `@source` to `src/index.css`:
@@ -170,7 +172,7 @@ The `@` alias is already configured (required by shadcn + Vite). Add `@source` t
 ### Vite + React without shadcn
 
 ```bash
-pnpm add github:bn-dev-19/one-shot-ai-panel#v2.0.1
+pnpm add github:bn-dev-19/one-shot-ai-panel#v2.1.0
 pnpm exec one-shot-ai-panel install
 ```
 
@@ -451,7 +453,7 @@ The module source keeps its `@/` imports: the bundler (tsup) resolves them to `s
 
 ## Exports
 
-`OneShotAiPanel`, `StatusBar`, `PromptSection`, `FilesSection`, `TicketsSection`, `TicketItem`, `ResponseSection`, `FeedbackSection`, `InfoSheet`, `QuestionDialog`, `PermissionDialog`, `useAiPanel`, `useStreaming`, adapters, `DEFAULT_CONFIGS`, `PROVIDER_META`, `ProviderType`, `AiPanelJsonType`, `AiPanelInvalidMode`, `defaultLabels`, `translations`, `AI_PANEL_PROJECT_LINKS`.
+`OneShotAiPanel`, `StatusBar`, `PromptSection`, `FilesSection`, `TicketsSection`, `TicketItem`, `ResponseSection`, `FeedbackSection`, `InfoSheet`, `DiffDialog`, `QuestionDialog`, `PermissionDialog`, `useAiPanel`, `useStreaming`, adapters, `DEFAULT_CONFIGS`, `PROVIDER_META`, `ProviderType`, `AiPanelJsonType`, `AiPanelInvalidMode`, `defaultLabels`, `translations`, `AI_PANEL_PROJECT_LINKS`.
 
 ---
 
