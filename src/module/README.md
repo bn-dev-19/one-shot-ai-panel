@@ -101,7 +101,7 @@ A custom parser can be provided via the `parser` prop; it takes precedence over 
 
 Two adapters provided (`adapters/`): `opencode` (local server, optional Bearer password, default `http://localhost:4096`) and `zen` (OpenCode Zen, OpenAI-compatible gateway, default `baseUrl` `/api/zen/v1`). `register()` lets you add custom providers.
 
-> **Zen same-origin proxy:** Zen (`https://opencode.ai/zen/v1`) does not send browser CORS headers, so from the browser it must be reached through a same-origin hop (`/api/zen/v1`). The CLI installer generates the relay (`app/api/zen/v1/[...path]/route.ts`, copied from the package's `src/next-proxy/zen.ts`) — in compiled/dependency mode you must create it yourself: `cp node_modules/one-shot-ai-panel/src/next-proxy/zen.ts src/app/api/zen/v1/[...path]/route.ts`, or run `pnpm exec one-shot-ai-panel install --module-only` once.
+> **Zen same-origin proxy:** Zen (`https://opencode.ai/zen/v1`) does not send browser CORS headers, so from the browser it must be reached through a same-origin hop (`/api/zen/v1`). In compiled/dependency mode the relay ships in the package dist under the export `one-shot-ai-panel/zen-proxy` — create `app/api/zen/v1/[...path]/route.ts` with a single re-export line (`export { GET, POST, PUT, PATCH, DELETE, OPTIONS } from "one-shot-ai-panel/zen-proxy"`), or run `pnpm exec one-shot-ai-panel install --proxy-only`. In source mode, the CLI installer copies the relay (`src/next-proxy/zen.ts`) for you.
 
 ## Internationalization
 

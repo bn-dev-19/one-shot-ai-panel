@@ -16,7 +16,7 @@ const UPSTREAM = "https://opencode.ai/zen/v1"
 
 const FORWARD_HEADERS = ["authorization", "content-type", "accept"]
 
-type ZenProxyParams = { path: string[] }
+export type ZenProxyParams = { path: string[] }
 
 async function proxy(
   request: Request,

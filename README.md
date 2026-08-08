@@ -138,7 +138,13 @@ Theme, primitives and dependencies are already present — only add an `@source`
 @source "../node_modules/one-shot-ai-panel/dist/index.js";
 ```
 
-> **Compiled mode and the OpenCode Zen proxy:** in dependency mode the CLI installer never runs, so the Zen same-origin proxy is **not** generated for you. To use the Zen provider from the browser, create `app/api/zen/v1/[...path]/route.ts` by copying `node_modules/one-shot-ai-panel/src/next-proxy/zen.ts` (a self-contained relay), or run `pnpm exec one-shot-ai-panel install --module-only` once to generate it. See [OpenCode Zen and the same-origin proxy](#opencode-zen-and-the-same-origin-proxy).
+> **Compiled mode and the OpenCode Zen proxy:** in dependency mode the CLI installer never runs, so the Zen same-origin proxy is **not** generated for you. The proxy ships **in the package dist** as `one-shot-ai-panel/zen-proxy` — create `app/api/zen/v1/[...path]/route.ts` containing only:
+>
+> ```ts
+> export { GET, POST, PUT, PATCH, DELETE, OPTIONS } from "one-shot-ai-panel/zen-proxy"
+> ```
+>
+> That single line re-exports the versioned relay, so it stays in sync with the installed package (no copying). Or run `pnpm exec one-shot-ai-panel install --proxy-only` to generate that file. See [OpenCode Zen and the same-origin proxy](#opencode-zen-and-the-same-origin-proxy).
 
 Prefer source mode instead (you own the code)? The CLI installer detects `components.json` and adds the panel primitives via `shadcn add` — it never touches your existing components unless you choose to overwrite:
 
@@ -159,7 +165,7 @@ The `@` alias is already configured (required by shadcn + Vite). Add `@source` t
 @source "../../node_modules/one-shot-ai-panel/dist/index.js";
 ```
 
-> **Compiled mode and the OpenCode Zen proxy:** in dependency mode the Zen same-origin proxy is **not** generated for you. For Vite, wire the package's `vite.zen-proxy.mjs` snippet into `server.proxy`, or run `pnpm exec one-shot-ai-panel install --module-only` once. See [OpenCode Zen and the same-origin proxy](#opencode-zen-and-the-same-origin-proxy).
+> **Compiled mode and the OpenCode Zen proxy:** in dependency mode the Zen same-origin proxy is **not** generated for you. For Vite, wire the package's `vite.zen-proxy.mjs` snippet into `server.proxy`, or run `pnpm exec one-shot-ai-panel install --proxy-only` once. See [OpenCode Zen and the same-origin proxy](#opencode-zen-and-the-same-origin-proxy).
 
 ### Vite + React without shadcn
 
@@ -357,10 +363,18 @@ The CLI installer handles this for you — zero code to write:
 | **Next.js (App Router)** | `app/api/zen/v1/[...path]/route.ts` — a self-contained relay (copied from the package's `src/next-proxy/zen.ts`, updated on every `install --force`) |
 | **Vite / plain React** | `vite.zen-proxy.mjs` — a dev-server proxy snippet to wire into `server.proxy` (one line). Production still needs your backend to relay `/api/zen` and hold the API key. |
 
-**In compiled/dependency mode** the installer never runs, so the proxy is **not** generated automatically. You have two options:
+**In compiled/dependency mode** the installer never runs, so the proxy is **not** generated automatically. But the relay ships **in the package dist** under the export `one-shot-ai-panel/zen-proxy` — so you only need a one-line route that re-exports it (it always matches the installed package version):
 
-1. Run the installer once (module-only keeps your `src` untouched): `pnpm exec one-shot-ai-panel install --module-only` (Next.js) / `install --module-only --no-registry` (Vite, then wire the snippet).
-2. Copy the template yourself: `cp node_modules/one-shot-ai-panel/src/next-proxy/zen.ts src/app/api/zen/v1/[...path]/route.ts` (Next.js App Router), or copy the `vite.zen-proxy.mjs` snippet from the installer source (`scripts/install.mjs`) into your Vite config.
+```bash
+# Next.js (App Router) — create this file:
+#   app/api/zen/v1/[...path]/route.ts
+export { GET, POST, PUT, PATCH, DELETE, OPTIONS } from "one-shot-ai-panel/zen-proxy"
+
+# …or generate it for you (compiled mode, keeps your src untouched):
+pnpm exec one-shot-ai-panel install --proxy-only
+```
+
+For Vite, `install --proxy-only` writes the `vite.zen-proxy.mjs` snippet to wire into `server.proxy`.
 
 Skip it with `--no-proxy`. If you manage your own relay, just point the Zen `baseUrl` at it (same-origin or CORS-enabled).
 
