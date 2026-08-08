@@ -40,7 +40,8 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
         "Récupère ta clé API sur https://opencode.ai/auth (dashboard Zen).\n\n" +
         "Base URL par défaut : /api/zen/v1 (proxy same-origin vers l'endpoint documenté https://opencode.ai/zen/v1/chat/completions). " +
         "Zen n'autorise pas le CORS navigateur : un proxy côté serveur est requis en navigateur. " +
-        "En usage serveur/CLI, pointe directement sur https://opencode.ai/zen/v1.\n\n" +
+        "En usage serveur/CLI, pointe directement sur https://opencode.ai/zen/v1.\n" +
+        "En mode compilé (dépendance npm), crée toi-même la route : copie src/next-proxy/zen.ts du package vers app/api/zen/v1/[...path]/route.ts, ou lance une fois pnpm exec one-shot-ai-panel install --module-only.\n\n" +
         "Attention : Zen est un gateway chat (pas d'agent) : pas de permissions, questions, tools ni diff.",
       modelPlaceholder: "Modèle (ex: big-pickle)",
       apiKeyLabel: "Clé API",
@@ -79,7 +80,8 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
         "Get your API key from https://opencode.ai/auth (Zen dashboard).\n\n" +
         "Default base URL: /api/zen/v1 (same-origin proxy to the documented endpoint https://opencode.ai/zen/v1/chat/completions). " +
         "Zen does not allow browser CORS: a server-side proxy is required in the browser. " +
-        "For server/CLI usage, point directly to https://opencode.ai/zen/v1.\n\n" +
+        "For server/CLI usage, point directly to https://opencode.ai/zen/v1.\n" +
+        "In compiled mode (npm dependency), create the route yourself: copy the package's src/next-proxy/zen.ts to app/api/zen/v1/[...path]/route.ts, or run pnpm exec one-shot-ai-panel install --module-only once.\n\n" +
         "Note: Zen is a chat-only gateway (no agent): no permissions, questions, tools or diff.",
       modelPlaceholder: "Model (e.g. big-pickle)",
       apiKeyLabel: "API Key",
@@ -117,7 +119,8 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
       help:
         "API キーは https://opencode.ai/auth（Zen ダッシュボード）で取得します。\n\n" +
         "デフォルトのベース URL: /api/zen/v1（ドキュメント記載のエンドポイント https://opencode.ai/zen/v1/chat/completions への同一オリジン・プロキシ）。" +
-        "Zen はブラウザー CORS を許可していません：ブラウザーではサーバー側プロキシが必要です。サーバー/CLI では https://opencode.ai/zen/v1 を直接指定してください。\n\n" +
+        "Zen はブラウザー CORS を許可していません：ブラウザーではサーバー側プロキシが必要です。サーバー/CLI では https://opencode.ai/zen/v1 を直接指定してください。\n" +
+        "コンパイル済みモード（npm 依存）では、ルートを自分で作成します：パッケージの src/next-proxy/zen.ts を app/api/zen/v1/[...path]/route.ts にコピーするか、一度 pnpm exec one-shot-ai-panel install --module-only を実行してください。\n\n" +
         "注意：Zen はチャット専用ゲートウェイ（エージェントなし）：権限、質問、ツール、diff はありません。",
       modelPlaceholder: "モデル（例: big-pickle）",
       apiKeyLabel: "API キー",
@@ -155,7 +158,8 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
       help:
         "在 https://opencode.ai/auth（Zen 仪表盘）获取你的 API 密钥。\n\n" +
         "默认基础 URL：/api/zen/v1（指向文档端点 https://opencode.ai/zen/v1/chat/completions 的同源代理）。" +
-        "Zen 不允许浏览器 CORS：在浏览器中需要服务器端代理。服务端/CLI 使用时可直接指向 https://opencode.ai/zen/v1。\n\n" +
+        "Zen 不允许浏览器 CORS：在浏览器中需要服务器端代理。服务端/CLI 使用时可直接指向 https://opencode.ai/zen/v1。\n" +
+        "在编译模式（npm 依赖）下，请自行创建路由：将包中的 src/next-proxy/zen.ts 复制到 app/api/zen/v1/[...path]/route.ts，或运行一次 pnpm exec one-shot-ai-panel install --module-only。\n\n" +
         "注意：Zen 仅提供聊天网关（无代理）：没有权限、问题、工具或 diff。",
       modelPlaceholder: "模型（例如 big-pickle）",
       apiKeyLabel: "API 密钥",
@@ -194,7 +198,8 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
         "Obtén tu clave API en https://opencode.ai/auth (panel de Zen).\n\n" +
         "URL base por defecto: /api/zen/v1 (proxy same-origin al endpoint documentado https://opencode.ai/zen/v1/chat/completions). " +
         "Zen no permite CORS de navegador: se requiere un proxy del lado del servidor en el navegador. " +
-        "Para uso servidor/CLI, apunta directamente a https://opencode.ai/zen/v1.\n\n" +
+        "Para uso servidor/CLI, apunta directamente a https://opencode.ai/zen/v1.\n" +
+        "En modo compilado (dependencia npm), crea la ruta tú mismo: copia el src/next-proxy/zen.ts del paquete a app/api/zen/v1/[...path]/route.ts, o ejecuta una vez pnpm exec one-shot-ai-panel install --module-only.\n\n" +
         "Nota: Zen es un gateway solo de chat (sin agente): sin permisos, preguntas, herramientas ni diff.",
       modelPlaceholder: "Modelo (p. ej. big-pickle)",
       apiKeyLabel: "Clave API",
@@ -233,7 +238,8 @@ export const PROVIDER_INFO: Record<AiPanelLanguage, Record<ProviderType, Provide
         "احصل على مفتاح API من https://opencode.ai/auth (لوحة Zen).\n\n" +
         "عنوان URL الأساسي الافتراضي: /api/zen/v1 (بروكسي same-origin إلى نقطة النهاية الموثقة https://opencode.ai/zen/v1/chat/completions). " +
         "Zen لا يسمح بـ CORS من المتصفح: يلزم بروكسي من جهة الخادم في المتصفح. " +
-        "للاستخدام من الخادم/CLI، وجّه مباشرة إلى https://opencode.ai/zen/v1.\n\n" +
+        "للاستخدام من الخادم/CLI، وجّه مباشرة إلى https://opencode.ai/zen/v1.\n" +
+        "في الوضع المترجم (اعتماد npm)، أنشئ المسار بنفسك: انسخ src/next-proxy/zen.ts من الحزمة إلى app/api/zen/v1/[...path]/route.ts، أو شغّل مرة واحدة pnpm exec one-shot-ai-panel install --module-only.\n\n" +
         "ملاحظة: Zen بوابة محادثة فقط (بدون وكيل): لا توجد أذونات أو أسئلة أو أدوات أو diff.",
       modelPlaceholder: "النموذج (مثال: big-pickle)",
       apiKeyLabel: "مفتاح API",
